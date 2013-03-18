@@ -47,7 +47,8 @@ public class Card implements Comparable<Card>{
 	{
 		if(other instanceof Card)
 		{
-			if(this.player.getFaction().equals(((Card) other).getFaction()))
+			if(this.player.getFaction().equals
+					(((Card) other).getPlayer().getFaction()))
 			{
 				if(this.value == ((Card) other).value)
 				{
@@ -65,6 +66,35 @@ public class Card implements Comparable<Card>{
 
 	@Override
 	public int compareTo(Card arg0) {
+		
+		if(this.equals(arg0))
+		{
+			return 0;
+		}
+		if(this.value > arg0.value)
+		{
+			return 1;
+		}
+		else if(this.value < arg0.value)
+		{
+			return -1;
+		}
+		else
+		{
+			if(this.silverNum > arg0.silverNum)
+			{
+				return 1;
+			}
+			else if(this.silverNum < arg0.silverNum)
+			{
+				return -1;
+			}
+			else
+			{
+				throw new RuntimeException("two cards have different " +
+						"factions but the same value and silver number");
+			}
+		}
 		
 	}
 
