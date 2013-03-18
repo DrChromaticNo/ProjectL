@@ -2,6 +2,8 @@ package cards;
 
 import java.awt.Color;
 
+import resources.Player;
+
 /**
  * @author Chris
  * Card object to be used in hands, discard, and on the board
@@ -9,26 +11,26 @@ import java.awt.Color;
 
 public class Card implements Comparable<Card>{
 
-	private Color faction;
+	private Player player;
 	private int value;
 	private int silverNum;
 	private boolean dayPhase;
 	private boolean eveningPhase;
 	private boolean nightPhase;
 	
-	public Card (Color faction, int value)
+	public Card (Player player, int value)
 	{
-		this.faction = faction;
+		this.player = player;
 		this.value = value;
-		silverNum = Deck.getSilverNum(faction, value);
+		silverNum = Deck.getSilverNum(player.getFaction(), value);
 		dayPhase = false;
 		eveningPhase = false;
 		nightPhase = false;
 	}
 	
-	public Color getFaction()
+	public Player getPlayer()
 	{
-		return faction;
+		return player;
 	}
 	
 	public int getValue()
@@ -45,7 +47,7 @@ public class Card implements Comparable<Card>{
 	{
 		if(other instanceof Card)
 		{
-			if(this.faction.equals(((Card) other).faction))
+			if(this.player.getFaction().equals(((Card) other).getFaction()))
 			{
 				if(this.value == ((Card) other).value)
 				{
@@ -58,7 +60,7 @@ public class Card implements Comparable<Card>{
 	
 	@Override public int hashCode()
 	{
-		return faction.hashCode() + value;
+		return player.getFaction().hashCode() + value;
 	}
 
 	@Override
