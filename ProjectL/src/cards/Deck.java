@@ -7,11 +7,8 @@ import java.awt.Color;
  * Class to manage the finer points of cards, and to do game state modifications
  */
 
-public class Deck {
+public interface Deck {
 
-	public static int getSilverNum(Color faction, int num)
-	{
-		return 0;
-	}
+	public int getSilverNum(Color faction, int value);
 
 }

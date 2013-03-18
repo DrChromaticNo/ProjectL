@@ -14,15 +14,17 @@ public class Card implements Comparable<Card>{
 	private Player player;
 	private int value;
 	private int silverNum;
+	private Deck deck;
 	private boolean dayPhase;
 	private boolean eveningPhase;
 	private boolean nightPhase;
 	
-	public Card (Player player, int value)
+	public Card (Player player, int value, Deck deck)
 	{
 		this.player = player;
 		this.value = value;
-		silverNum = Deck.getSilverNum(player.getFaction(), value);
+		this.deck = deck;
+		silverNum = deck.getSilverNum(player.getFaction(), value);
 		dayPhase = false;
 		eveningPhase = false;
 		nightPhase = false;
