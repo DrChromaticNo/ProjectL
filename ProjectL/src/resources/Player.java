@@ -30,9 +30,9 @@ public class Player {
 	private Set<Card> den;
 	
 	
-	public Player(Color f)
+	public Player(Color faction)
 	{
-		faction = f;
+		this.faction = faction;
 		CPU = false;
 		score = 0;
 		gold = 0;
@@ -127,6 +127,11 @@ public class Player {
 		return loot;
 	}
 	
+	/**
+	 * Given a Treasure string, modifies the amount of that loot by the mod
+	 * @param treasure String corresponding to the type of treasure
+	 * @param mod how much to increase or decrease the amt of treasure by
+	 */
 	public void addLoot(String treasure, int mod)
 	{
 		if(loot.containsKey(treasure))
