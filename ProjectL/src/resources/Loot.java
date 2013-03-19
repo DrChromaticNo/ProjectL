@@ -24,6 +24,11 @@ public class Loot {
 		}
 	}
 	
+	public Loot(Loot bag)
+	{
+		loot = new HashMap<String, Integer>(bag.getBag());
+	}
+	
 	public HashMap<String, Integer> getBag()
 	{
 		return loot;

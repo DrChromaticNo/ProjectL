@@ -19,6 +19,16 @@ public class GameState {
 		this.board = board;
 	}
 	
+	public GameState(GameState state)
+	{
+		pList = new Player[state.pList.length];
+		for(int i = 0; i < state.pList.length; i++)
+		{
+			pList[i] = new Player(state.pList[i]);
+		}
+		board = new Board(state.board);
+	}
+	
 	public Player[] getPlayerList()
 	{
 		return pList;

@@ -42,6 +42,18 @@ public class Player {
 		den = new HashSet<Card>();
 	}
 	
+	public Player(Player player)
+	{
+		faction = player.faction;
+		CPU = player.CPU;
+		score = player.score;
+		gold = player.gold;
+		loot = player.loot;
+		hand = new HashSet<Card>(player.hand);
+		discard = new HashSet<Card>(player.discard);
+		den = new HashSet<Card>(player.den);
+	}
+	
 	public int getGold()
 	{
 		return gold;

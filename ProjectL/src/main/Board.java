@@ -31,6 +31,16 @@ public class Board {
 		}
 	}
 	
+	public Board(Board board)
+	{
+		deck = new ArrayList<Card>(board.deck);
+		shipLoot = new Loot[6];
+		for(int i = 0; i < shipLoot.length; i++)
+		{
+			shipLoot[i] = new Loot(board.shipLoot[i]);
+		}
+	}
+	
 	public void clearDeck()
 	{
 		deck.clear();

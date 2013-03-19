@@ -11,7 +11,7 @@ import resources.Player;
 
 public class Card implements Comparable<Card>{
 
-	private Player player;
+	private Color faction;
 	private int value;
 	private int silverNum;
 	private Deck deck;
@@ -19,20 +19,20 @@ public class Card implements Comparable<Card>{
 	private boolean eveningPhase;
 	private boolean nightPhase;
 	
-	public Card (Player player, int value, Deck deck)
+	public Card (Color faction, int value, Deck deck)
 	{
-		this.player = player;
+		this.faction = faction;
 		this.value = value;
 		this.deck = deck;
-		silverNum = deck.getSilverNum(player.getFaction(), value);
+		silverNum = deck.getSilverNum(faction, value);
 		dayPhase = false;
 		eveningPhase = false;
 		nightPhase = false;
 	}
 	
-	public Player getPlayer()
+	public Color getFaction()
 	{
-		return player;
+		return faction;
 	}
 	
 	public int getValue()
@@ -49,8 +49,8 @@ public class Card implements Comparable<Card>{
 	{
 		if(other instanceof Card)
 		{
-			if(this.player.getFaction().equals
-					(((Card) other).getPlayer().getFaction()))
+			if(this.faction.equals
+					(((Card) other).faction))
 			{
 				if(this.value == ((Card) other).value)
 				{
@@ -63,7 +63,7 @@ public class Card implements Comparable<Card>{
 	
 	@Override public int hashCode()
 	{
-		return player.getFaction().hashCode() + value;
+		return faction.hashCode() + value;
 	}
 
 	@Override
