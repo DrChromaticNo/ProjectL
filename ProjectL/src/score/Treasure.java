@@ -1,4 +1,4 @@
-package resources;
+package score;
 
 import java.util.HashMap;
 import java.util.Map;

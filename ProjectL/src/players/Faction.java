@@ -1,4 +1,4 @@
-package resources;
+package players;
 
 import java.awt.Color;
 

@@ -1,9 +1,12 @@
-package resources;
+package players;
 
 import java.awt.Color;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import score.Loot;
+import score.Treasure;
 
 import cards.Card;
 

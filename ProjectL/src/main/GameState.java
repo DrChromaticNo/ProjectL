@@ -1,6 +1,6 @@
 package main;
 
-import resources.Player;
+import players.Player;
 
 /**
  * @author Chris

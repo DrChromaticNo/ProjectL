@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import resources.Loot;
-import resources.Treasure;
+import score.Loot;
+import score.Treasure;
+
 
 import cards.Card;
 

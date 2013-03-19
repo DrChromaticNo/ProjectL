@@ -2,7 +2,8 @@ package cards;
 
 import java.awt.Color;
 
-import resources.Player;
+import players.Player;
+
 
 /**
  * @author Chris
