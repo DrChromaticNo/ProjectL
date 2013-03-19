@@ -41,5 +41,18 @@ public class GameState {
 	{
 		return board;
 	}
+	
+	public int getDay()
+	{
+		return day;
+	}
+	
+	public void setDay(int day)
+	{
+		if(day >= 0 && day <= 7)
+		{
+			this.day = day;
+		}
+	}
 
 }
