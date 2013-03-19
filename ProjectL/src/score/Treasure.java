@@ -23,7 +23,7 @@ public class Treasure {
 		treasures[0] = RELIC;
 		int[] values = new int[1];
 		values[0] = 0;
-		Loot map = new Loot(treasures,values);
+		Loot map = new Loot(treasures);
 		return map;
 	}
 

@@ -7,20 +7,15 @@ public class Loot {
 	private HashMap<String, Integer> loot;
 	
 	/**
-	 * Instantiates a loot bag with each treasure having the corresponding index in value's amounts
-	 * They must have the same length
+	 * Instantiates a loot bag with each treasure having a value of 0
 	 * @param treasures all the treasures that the loot contains
-	 * @param values the amt of each loot
 	 */
-	public Loot(String[] treasures, int[] values)
+	public Loot(String[] treasures)
 	{
 		loot = new HashMap<String, Integer>();
-		if(treasures.length == values.length)
+		for(int i = 0; i < treasures.length; i++)
 		{
-			for(int i = 0; i < treasures.length; i++)
-			{
-				loot.put(treasures[i], values[i]);
-			}
+			loot.put(treasures[i], 0);
 		}
 	}
 	
