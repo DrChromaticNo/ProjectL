@@ -12,11 +12,13 @@ public class GameState {
 	//note, the players are ordered in clockwise orientation (the turn order and seating)
 	private Player[] pList;
 	private Board board;
+	private int day;
 	
 	public GameState(Player[] playerlist, Board board)
 	{
 		pList = playerlist;
 		this.board = board;
+		day = 0;
 	}
 	
 	public GameState(GameState state)
@@ -27,6 +29,7 @@ public class GameState {
 			pList[i] = new Player(state.pList[i]);
 		}
 		board = new Board(state.board);
+		day = state.day;
 	}
 	
 	public Player[] getPlayerList()
