@@ -2,6 +2,8 @@ package cards;
 
 import java.awt.Color;
 
+import main.GameState;
+
 import players.Player;
 
 
@@ -98,7 +100,64 @@ public class Card implements Comparable<Card>{
 						"factions but the same value and silver number");
 			}
 		}
-		
+	}
+	
+	/**
+	 * Performs the day action for this card
+	 * @param state the state of the game before the action
+	 * @return the state of the game after the action is performed
+	 */
+	public GameState dayAction(GameState state)
+	{
+		GameState end = deck.dayPhase(this, state);
+		dayPhase = true;
+		return end;
+	}
+	
+	/**
+	 * Performs the night action for this card
+	 * @param state the state of the game before the action
+	 * @return the state of the game after the action is performed
+	 */
+	public GameState eveningAction(GameState state)
+	{
+		GameState end = deck.eveningPhase(this, state);
+		eveningPhase = true;
+		return end;
+	}
+	
+	/**
+	 * Performs the evening action for this card
+	 * @param state the state of the game before the action
+	 * @return the state of the game after the action is performed
+	 */
+	public GameState nightAction(GameState state)
+	{
+		GameState end = deck.nightPhase(this, state);
+		nightPhase = true;
+		return end;
+	}
+	
+	public void resetPhases()
+	{
+		dayPhase = false;
+		eveningPhase = false;
+		nightPhase = false;
+	}
+	
+	public boolean getDayPhase()
+	{
+		return dayPhase;
+	}
+	
+	public boolean getEveningPhase()
+	{
+		return eveningPhase;
+	}
+	
+	public boolean getNightPhase()
+	{
+		return nightPhase;
 	}
 
 }
