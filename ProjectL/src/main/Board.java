@@ -73,6 +73,14 @@ public class Board {
 		throw new RuntimeException("day out of bounds");
 	}
 	
+	public void setLoot(int day, Loot loot)
+	{
+		if(day >= 0 && day <= 5)
+		{
+			shipLoot[day] = loot;
+		}
+	}
+	
 	public Loot[] getAllLoot()
 	{
 		return shipLoot;

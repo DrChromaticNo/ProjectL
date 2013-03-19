@@ -59,7 +59,7 @@ public class GameState {
 	
 	public void setDay(int day)
 	{
-		if(day >= 0 && day <= 7)
+		if(day >= 0 && day <= 6)
 		{
 			this.day = day;
 		}
