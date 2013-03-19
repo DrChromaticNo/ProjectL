@@ -37,6 +37,16 @@ public class GameState {
 		return pList;
 	}
 	
+	public void setPlayerList(Player[] list)
+	{
+		pList = list;
+	}
+	
+	public void setBoard(Board board)
+	{
+		this.board = board;
+	}
+	
 	public Board getBoard()
 	{
 		return board;
