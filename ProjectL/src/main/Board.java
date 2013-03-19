@@ -1,9 +1,11 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import resources.Loot;
+import resources.Treasure;
 
 import cards.Card;
 
@@ -23,6 +25,46 @@ public class Board {
 	{
 		deck = new ArrayList<Card>();
 		shipLoot = new Loot[6];
+		for(int i = 0; i < shipLoot.length; i++)
+		{
+			shipLoot[i] = Treasure.getLoot();
+		}
+	}
+	
+	public void clearDeck()
+	{
+		deck.clear();
+	}
+	
+	public void addCard(Card card)
+	{
+		deck.add(card);
+		Collections.sort(deck);
+	}
+	
+	public void removeCard(Card card)
+	{
+		deck.remove(card);
+		Collections.sort(deck);
+	}
+	
+	public Card[] getDeck()
+	{
+		return (Card[]) deck.toArray();
+	}
+	
+	public Loot getLoot(int day)
+	{
+		if(day >= 0 && day <= 5)
+		{
+			return shipLoot[day];
+		}
+		throw new RuntimeException("day out of bounds");
+	}
+	
+	public Loot[] getAllLoot()
+	{
+		return shipLoot;
 	}
 	
 }

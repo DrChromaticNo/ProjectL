@@ -109,17 +109,17 @@ public class Player {
 	
 	public Set<Card> getHand()
 	{
-		return hand;
+		return new HashSet<Card>(hand);
 	}
 	
 	public Set<Card> getDiscard()
 	{
-		return discard;
+		return new HashSet<Card>(discard);
 	}
 	
 	public Set<Card> getDen()
 	{
-		return den;
+		return new HashSet<Card>(den);
 	}
 	
 	public Loot getLoot()
