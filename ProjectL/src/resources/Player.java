@@ -24,7 +24,7 @@ public class Player {
 	// the players current scored gold
 	private int score;
 	// the players current booty tokens
-	private Map<String, Integer> loot;
+	private Loot loot;
 	private Set<Card> hand;
 	private Set<Card> discard;
 	private Set<Card> den;
@@ -36,7 +36,7 @@ public class Player {
 		CPU = false;
 		score = 0;
 		gold = 0;
-		loot = Treasure.getLootMap();
+		loot = Treasure.getLoot();
 		hand = new HashSet<Card>();
 		discard = new HashSet<Card>();
 		den = new HashSet<Card>();
@@ -122,27 +122,9 @@ public class Player {
 		return den;
 	}
 	
-	public Map<String, Integer> getLoot()
+	public Loot getLoot()
 	{
 		return loot;
-	}
-	
-	/**
-	 * Given a Treasure string, modifies the amount of that loot by the mod
-	 * @param treasure String corresponding to the type of treasure
-	 * @param mod how much to increase or decrease the amt of treasure by
-	 */
-	public void addLoot(String treasure, int mod)
-	{
-		if(loot.containsKey(treasure))
-		{
-			loot.put(treasure, loot.get(treasure)+mod);
-			if(loot.get(treasure) < 0)
-			{
-				throw new RuntimeException("Whomever is playing " + 
-						Faction.getPirateName(faction) + " has negative " + treasure);
-			}
-		}
 	}
 
 }

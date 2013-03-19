@@ -2,6 +2,11 @@ package main;
 
 import resources.Player;
 
+/**
+ * @author Chris
+ * Keeps track of the state of the game
+ */
+
 public class GameState {
 
 	//note, the players are ordered in clockwise orientation (the turn order and seating)
