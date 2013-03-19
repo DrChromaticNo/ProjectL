@@ -21,12 +21,19 @@ public class Loot {
 	
 	public Loot(Loot bag)
 	{
-		loot = new HashMap<String, Integer>(bag.getBag());
+		loot = new HashMap<String, Integer>(bag.loot);
 	}
 	
-	public HashMap<String, Integer> getBag()
+	public int countTreasure(String treasure)
 	{
-		return loot;
+		if(loot.containsKey(treasure))
+		{
+			return loot.get(treasure);
+		}
+		else
+		{
+			throw new RuntimeException("that treasure doesn't exist in this bag!");
+		}
 	}
 	
 	/**

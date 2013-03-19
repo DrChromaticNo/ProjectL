@@ -22,6 +22,12 @@ public class Card implements Comparable<Card>{
 	private boolean eveningPhase;
 	private boolean nightPhase;
 	
+	/**
+	 * Initializes the card with the given faction, value, and deck
+	 * @param faction the faction to associte w/ this card
+	 * @param value the value to associate w/ this card
+	 * @param deck the deck this card "belongs to"
+	 */
 	public Card (Color faction, int value, Deck deck)
 	{
 		this.faction = faction;
@@ -138,6 +144,10 @@ public class Card implements Comparable<Card>{
 		return end;
 	}
 	
+	/**
+	 * Resets all the phases to their default values (used when night phase resets or when card is
+	 * moved to hand from discard or den
+	 */
 	public void resetPhases()
 	{
 		dayPhase = false;

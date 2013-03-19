@@ -2,7 +2,6 @@ package players;
 
 import java.awt.Color;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import score.Loot;
@@ -66,6 +65,10 @@ public class Player {
 	public void addGold(int mod)
 	{
 		gold+=mod;
+		if(gold < 0)
+		{
+			gold = 0;
+		}
 	}
 	
 	public int getScore()
@@ -122,6 +125,8 @@ public class Player {
 	{
 		den.clear();
 	}
+	
+	//NOTE: all three of these are deep copies
 	
 	public Set<Card> getHand()
 	{

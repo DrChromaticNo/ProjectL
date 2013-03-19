@@ -1,8 +1,5 @@
 package score;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author Chris
  * Factory class to provide treasure references and create loot maps
@@ -21,8 +18,6 @@ public class Treasure {
 	{
 		String[] treasures = new String[1];
 		treasures[0] = RELIC;
-		int[] values = new int[1];
-		values[0] = 0;
 		Loot map = new Loot(treasures);
 		return map;
 	}

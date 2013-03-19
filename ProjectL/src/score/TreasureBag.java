@@ -1,5 +1,11 @@
 package score;
 
+/**
+ * Interface designed to represent the bag of treasures that the game pulls from
+ * @author Chris
+ *
+ */
+
 public interface TreasureBag {
 
 	/**

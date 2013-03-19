@@ -16,7 +16,8 @@ import cards.Card;
 
 public class Board {
 
-	//the deck should always be in sorted order
+	//the deck should always be in sorted order (not to be confused with a deck of cards,
+	//this is the deck of the ship
 	private ArrayList<Card> deck;
 	//the ship loot is in order of the days it is accessed in
 	private Loot[] shipLoot;
@@ -31,6 +32,10 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * Deep copy constructor
+	 * @param board
+	 */
 	public Board(Board board)
 	{
 		deck = new ArrayList<Card>(board.deck);
