@@ -28,6 +28,7 @@ public class Player {
 	private int score;
 	// the players current booty tokens
 	private Loot loot;
+	// self-explanatory: the hand, discard, and den
 	private Set<Card> hand;
 	private Set<Card> discard;
 	private Set<Card> den;
