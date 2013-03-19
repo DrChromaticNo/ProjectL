@@ -4,8 +4,6 @@ import java.awt.Color;
 
 import main.GameState;
 
-import players.Player;
-
 
 /**
  * @author Chris
