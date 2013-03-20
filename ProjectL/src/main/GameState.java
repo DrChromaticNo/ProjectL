@@ -13,12 +13,14 @@ public class GameState {
 	private Player[] pList;
 	private Board board;
 	private int day;
+	private int time;
 	
 	public GameState(Player[] playerlist, Board board)
 	{
 		pList = playerlist;
 		this.board = board;
 		day = 0;
+		time = Time.PICK_CARDS;
 	}
 	
 	public GameState(GameState state)
@@ -30,6 +32,7 @@ public class GameState {
 		}
 		board = new Board(state.board);
 		day = state.day;
+		time = state.time;
 	}
 	
 	public Player[] getPlayerList()
@@ -63,6 +66,16 @@ public class GameState {
 		{
 			this.day = day;
 		}
+	}
+	
+	public int getTime()
+	{
+		return time;
+	}
+	
+	public void setTime(int time)
+	{
+		this.time = time;
 	}
 
 }
