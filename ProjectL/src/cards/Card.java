@@ -3,6 +3,7 @@ package cards;
 import java.awt.Color;
 
 import main.GameState;
+import main.Time;
 
 
 /**
@@ -153,19 +154,29 @@ public class Card implements Comparable<Card>{
 		nightPhase = false;
 	}
 	
-	public boolean getDayPhase()
+	/**
+	 * By inputing a time (from the Time class), checks if the card has acted the corresponding phase
+	 * @param time The time corresponding to the phase to check
+	 * @return the boolean corresponding to the phase having acted or not
+	 */
+	public boolean checkPhase(int time)
 	{
-		return dayPhase;
-	}
-	
-	public boolean getEveningPhase()
-	{
-		return eveningPhase;
-	}
-	
-	public boolean getNightPhase()
-	{
-		return nightPhase;
+		if(time == Time.DAY)
+		{
+			return dayPhase;
+		}
+		else if(time == Time.EVENING)
+		{
+			return eveningPhase;
+		}
+		else if(time == Time.NIGHT)
+		{
+			return nightPhase;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 }
