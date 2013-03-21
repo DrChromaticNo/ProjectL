@@ -1,6 +1,7 @@
 package cards;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 import main.GameState;
 
@@ -21,10 +22,9 @@ public interface Deck {
 	
 	/**
 	 * To get the list of all the valid card numbers for this deck
-	 * @return The list of all cards in this deck in an array (sorted in order?)
+	 * @return The list of all cards in this deck in an array
 	 */
-	public int[] allCards();
-	
+	public ArrayList<Integer> allCards();
 	
 	/**
 	 * Performs the given cards' time-phase action (if one exists)

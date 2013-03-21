@@ -12,7 +12,7 @@ public interface TreasureBag {
 	 * removes a random treasure from the bag and returns it
 	 * @return a string corresponding to a treasure
 	 */
-	public String RandomTreasure();
+	public String randomTreasure();
 	
 	/**
 	 * Changes the amt of treasure by the given value
