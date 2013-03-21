@@ -38,6 +38,17 @@ public class Card implements Comparable<Card>{
 		nightPhase = false;
 	}
 	
+	public Card (Card card)
+	{
+		this.faction = card.faction;
+		this.value = card.value;
+		this.deck = card.deck;
+		silverNum = card.silverNum;
+		dayPhase = card.dayPhase;
+		eveningPhase = card.eveningPhase;
+		nightPhase = card.nightPhase;
+	}
+	
 	public Color getFaction()
 	{
 		return faction;

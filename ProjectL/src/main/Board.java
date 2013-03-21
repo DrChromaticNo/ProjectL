@@ -34,11 +34,16 @@ public class Board {
 	
 	/**
 	 * Deep copy constructor
-	 * @param board
+	 * @param board the board to copy
 	 */
 	public Board(Board board)
 	{
-		deck = new ArrayList<Card>(board.deck);
+		deck = new ArrayList<Card>();
+		for(Card c : board.deck)
+		{
+			deck.add(new Card(c));
+		}
+		Collections.sort(deck);
 		shipLoot = new Loot[6];
 		for(int i = 0; i < shipLoot.length; i++)
 		{
@@ -55,6 +60,10 @@ public class Board {
 	{
 		deck.add(card);
 		Collections.sort(deck);
+		if(deck.size() > 6)
+		{
+			throw new RuntimeException("the deck of the board has too many cards!");
+		}
 	}
 	
 	public void removeCard(Card card)
@@ -65,7 +74,13 @@ public class Board {
 	
 	public Card[] getDeck()
 	{
-		return (Card[]) deck.toArray();
+		ArrayList<Card> newDeck = new ArrayList<Card>();
+		for(Card c : deck)
+		{
+			newDeck.add(new Card(c));
+		}
+		Collections.sort(newDeck);
+		return (Card[]) newDeck.toArray();
 	}
 	
 	public Loot getLoot(int day)

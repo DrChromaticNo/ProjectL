@@ -5,13 +5,24 @@
 
 package main;
 
+import score.TreasureBag;
+import cards.Deck;
+
 public class Game {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
+		//create deck and treasurebag to use in game, fill these in later
+		Deck gameDeck = null;
+		
+		TreasureBag gameBag = null;
+		
+		int numPlayers = 2; //assume/require > 1, < 7
+		
+		
 
 	}
 

@@ -51,10 +51,10 @@ public class Player {
 		CPU = player.CPU;
 		score = player.score;
 		gold = player.gold;
-		loot = player.loot;
-		hand = new HashSet<Card>(player.hand);
-		discard = new HashSet<Card>(player.discard);
-		den = new HashSet<Card>(player.den);
+		loot = new Loot(player.loot);
+		hand = new HashSet<Card>(player.getHand());
+		discard = new HashSet<Card>(player.getDiscard());
+		den = new HashSet<Card>(player.getDen());
 	}
 	
 	public int getGold()
@@ -130,17 +130,32 @@ public class Player {
 	
 	public Set<Card> getHand()
 	{
-		return new HashSet<Card>(hand);
+		HashSet<Card> newHand = new HashSet<Card>();
+		for(Card c : hand)
+		{
+			newHand.add(new Card(c));
+		}
+		return newHand;
 	}
 	
 	public Set<Card> getDiscard()
 	{
-		return new HashSet<Card>(discard);
+		HashSet<Card> newDiscard = new HashSet<Card>();
+		for(Card c : discard)
+		{
+			newDiscard.add(new Card(c));
+		}
+		return newDiscard;
 	}
 	
 	public Set<Card> getDen()
 	{
-		return new HashSet<Card>(den);
+		HashSet<Card> newDen = new HashSet<Card>();
+		for(Card c : den)
+		{
+			newDen.add(new Card(c));
+		}
+		return newDen;
 	}
 	
 	public Loot getLoot()
