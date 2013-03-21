@@ -5,7 +5,15 @@
 
 package main;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Random;
+
+import players.Faction;
+import players.Player;
+
 import score.TreasureBag;
+import cards.Card;
 import cards.Deck;
 
 public class Game {
@@ -21,9 +29,27 @@ public class Game {
 		TreasureBag gameBag = null;
 		
 		int numPlayers = 2; //assume/require > 1, < 7
+		Player[] playerList = new Player[numPlayers];
 		
+		ArrayList<Color> factionList = Faction.allFactions();
 		
+		if(factionList.size() > numPlayers)
+		{
+			throw new RuntimeException("there's too many players and not enough factions");
+		}
+		
+		for(int i = 0; i < numPlayers; i++)
+		{
+			playerList[i] = new Player(chooseFaction(factionList));
+		}
 
+	}
+	
+	private static Color chooseFaction(ArrayList<Color> factionList)
+	{
+		Random randomColor = new Random();
+		int choice = randomColor.nextInt(factionList.size());
+		return factionList.remove(choice);
 	}
 
 }
