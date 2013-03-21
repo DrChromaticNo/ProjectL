@@ -38,6 +38,7 @@ public class Game {
 			throw new RuntimeException("there's too many players and not enough factions");
 		}
 		
+		//randomly assign each player a faction
 		for(int i = 0; i < numPlayers; i++)
 		{
 			playerList[i] = new Player(chooseFaction(factionList));
@@ -45,6 +46,11 @@ public class Game {
 
 	}
 	
+	/**
+	 * Given an arraylist of factions, chooses a random one of them
+	 * @param factionList the list of remaining factions
+	 * @return a faction (color)
+	 */
 	private static Color chooseFaction(ArrayList<Color> factionList)
 	{
 		Random randomColor = new Random();
