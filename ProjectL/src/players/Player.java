@@ -175,6 +175,11 @@ public class Player {
 	 */
 	public Card pickCard(GameState state, Deck gameDeck)
 	{
+		if(hand.size() == 0)
+		{
+			return null;
+		}
+		
 		if(CPU)
 		{
 			return null;
