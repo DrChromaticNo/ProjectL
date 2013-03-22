@@ -74,7 +74,8 @@ public class Game {
 	 * @param gameDeck the deck used for the game
 	 * @param gameBag the bag used for the game
 	 */
-	public static void run(GameState state, Deck gameDeck, TreasureBag gameBag, ScoreCounter counter)
+	public static void run(GameState state, Deck gameDeck, TreasureBag gameBag,
+			ScoreCounter counter)
 	{
 		//get the list of all the drawable cards
 		ArrayList<Integer> availibleCards = gameDeck.allCards();
@@ -115,6 +116,12 @@ public class Game {
 				max = p.getScore();
 			}
 		}
+		
+		for(Player p : winners)
+		{
+			System.out.println(Faction.getPirateName(p.getFaction()) + 
+					" won with a score of " + p.getScore() + "!");
+		}
 	}
 	
 	/**
@@ -139,7 +146,8 @@ public class Game {
 	 * @param gameDeck the deck being used for this game
 	 * @param numCards the # of cards to give to each player
 	 */
-	private static void drawCards(GameState state, ArrayList<Integer> availibleCards, int numCards, Deck gameDeck)
+	private static void drawCards(GameState state, ArrayList<Integer> availibleCards, 
+			int numCards, Deck gameDeck)
 	{
 		if(availibleCards.size() > numCards)
 		{
