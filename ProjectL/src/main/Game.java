@@ -132,7 +132,7 @@ public class Game {
 						}
 						else
 						{
-							state = deck[index].dayAction(new GameState(state));
+							state = deck[index].dayAction(new GameState(state), gameBag);
 						}
 					}
 					else if(state.getTime() == Time.EVENING)
@@ -152,7 +152,7 @@ public class Game {
 						}
 						else
 						{
-							state = deck[index].eveningAction(new GameState(state));
+							state = deck[index].eveningAction(new GameState(state), gameBag);
 						}
 					}
 					else //the only other options is it being Time.NIGHT

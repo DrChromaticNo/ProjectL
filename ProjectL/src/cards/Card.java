@@ -2,6 +2,8 @@ package cards;
 
 import java.awt.Color;
 
+import score.TreasureBag;
+
 import main.GameState;
 import main.Time;
 
@@ -121,11 +123,12 @@ public class Card implements Comparable<Card>{
 	/**
 	 * Performs the day action for this card
 	 * @param state the state of the game before the action
+	 * @param bag the treasurebag to use with this phase
 	 * @return the state of the game after the action is performed
 	 */
-	public GameState dayAction(GameState state)
+	public GameState dayAction(GameState state, TreasureBag bag)
 	{
-		GameState end = deck.doPhase(Time.DAY, this, state);
+		GameState end = deck.doPhase(Time.DAY, this, state, bag);
 		dayPhase = true;
 		return end;
 	}
@@ -133,11 +136,12 @@ public class Card implements Comparable<Card>{
 	/**
 	 * Performs the night action for this card
 	 * @param state the state of the game before the action
+	 * @param bag the treasurebag to use with this phase
 	 * @return the state of the game after the action is performed
 	 */
-	public GameState eveningAction(GameState state)
+	public GameState eveningAction(GameState state, TreasureBag bag)
 	{
-		GameState end = deck.doPhase(Time.EVENING, this, state);
+		GameState end = deck.doPhase(Time.EVENING, this, state, bag);
 		eveningPhase = true;
 		return end;
 	}
@@ -149,7 +153,8 @@ public class Card implements Comparable<Card>{
 	 */
 	public GameState nightAction(GameState state)
 	{
-		GameState end = deck.doPhase(Time.NIGHT, this, state);
+		//Note: night actions occur simultaneously so they can never use the bag
+		GameState end = deck.doPhase(Time.NIGHT, this, state, null);
 		nightPhase = true;
 		return end;
 	}

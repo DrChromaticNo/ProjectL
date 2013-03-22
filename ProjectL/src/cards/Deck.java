@@ -3,6 +3,8 @@ package cards;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import score.TreasureBag;
+
 import main.GameState;
 
 /**
@@ -30,10 +32,12 @@ public interface Deck {
 	 * Performs the given cards' time-phase action (if one exists)
 	 * @param time the time corresponding to the phase
 	 * @param card The card
+	 * @param bag the bag to use for this phase
 	 * @param state the state before the action
+	 * 
 	 * @return the state after the action
 	 */
-	public GameState doPhase(int time, Card card, GameState state);
+	public GameState doPhase(int time, Card card, GameState state, TreasureBag bag);
 	
 
 	/**
