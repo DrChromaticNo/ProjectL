@@ -1,5 +1,7 @@
 package main;
 
+import java.awt.Color;
+
 import players.Player;
 
 /**
@@ -43,6 +45,18 @@ public class GameState {
 	public void setPlayerList(Player[] list)
 	{
 		pList = list;
+	}
+	
+	public Player getPlayer(Color faction)
+	{
+		for(Player p : pList)
+		{
+			if(p.getFaction().equals(faction))
+			{
+				return p;
+			}
+		}
+		return null;
 	}
 	
 	public void setBoard(Board board)

@@ -7,6 +7,7 @@ package main;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -80,6 +81,8 @@ public class Game {
 			gameBag.resetBag();
 			placeTreasures(state, gameBag);
 			
+			//this section either draws the initial hand (at the start of the game)
+			//or adds six cards to the existing hands
 			if(week == 1)
 			{
 				drawCards(state, availibleCards, 9, gameDeck);
@@ -110,57 +113,46 @@ public class Game {
 						System.out.println(gameDeck.abbreviatedName(c) + " ");
 					}
 					
+					//this if statement performs either 1 day action or 1 evening action
+					//or all of the night actions (since they happen concurrently)
 					if(state.getTime() == Time.DAY)
 					{
 						Card[] deck = state.getBoard().getDeck();
 						
-						if(deck.length == 0)
+						int index = 0;
+						
+						while(index < deck.length && deck[index].checkPhase(Time.DAY))
+						{
+							index++;
+						}
+						
+						if(index >= deck.length)
 						{
 							state.setTime(Time.EVENING);
 						}
 						else
 						{
-							int index = 0;
-							while(index < deck.length && deck[index].checkPhase(Time.DAY))
-							{
-								index++;
-							}
-							
-							if(index >= deck.length)
-							{
-								state.setTime(Time.EVENING);
-							}
-							else
-							{
-								state = deck[index].dayAction(state);
-							}
+							state = deck[index].dayAction(new GameState(state));
 						}
 					}
 					else if(state.getTime() == Time.EVENING)
 					{
 						Card[] deck = state.getBoard().getDeck();
 						
-						if(deck.length == 0)
+						int index = deck.length-1;
+							
+						while(index >= 0 && deck[index].checkPhase(Time.EVENING))
+						{
+							index--;
+						}
+							
+						if(index < 0)
 						{
 							state.setTime(Time.NIGHT);
 						}
 						else
 						{
-							int index = deck.length-1;
-							
-							while(index >= 0 && deck[index].checkPhase(Time.EVENING))
-							{
-								index--;
-							}
-							
-							if(index < 0)
-							{
-								state.setTime(Time.EVENING);
-							}
-							else
-							{
-								state = deck[index].nightAction(state);
-							}
+							state = deck[index].eveningAction(new GameState(state));
 						}
 					}
 					else //the only other options is it being Time.NIGHT
@@ -170,12 +162,22 @@ public class Game {
 							throw new RuntimeException("Board isn't clear in night phase");
 						}
 						
+						Player[] stateList = state.getPlayerList();
+						Player[] endList = new Player[stateList.length];
 						
+						for(int i = 0; i < stateList.length; i++)
+						{
+							endList[i] = nightPhaseHelper(new GameState(state), stateList[i].getFaction());
+						}
 						
+						state.setPlayerList(endList);
 						
+						state.setTime(Time.PICK_CARDS);
 					}
 				}
 			}
+			
+			
 			
 		}
 	}
@@ -245,6 +247,53 @@ public class Game {
 		{
 			state.getBoard().addCard(c);
 		}
+	}
+	
+	/**
+	 * Helper method to do the night state for one particular player at a time
+	 * @param state the game state at the start of the night phase
+	 * @param faction the faction of the player we're working on
+	 * @return the player after all his night phase actions have been completed
+	 */
+	private static Player nightPhaseHelper(GameState state, Color faction)
+	{
+		for(Player p : state.getPlayerList())
+		{
+			if(p.getFaction().equals(faction))
+			{
+				while(state.getTime() == Time.NIGHT)
+				{
+					Player player = state.getPlayer(faction);
+					
+					if(player != null)
+					{
+						ArrayList<Card> den = new ArrayList<Card>(player.getDen());
+						Collections.sort(den);
+						
+						int index = den.size();
+						
+						while(index >= 0 && den.get(index).checkPhase(Time.NIGHT))
+						{
+							index--;
+						}
+						
+						if(index < 0)
+						{
+							state.setTime(Time.PICK_CARDS);
+						}
+						else
+						{
+							state = den.get(index).nightAction(state);
+						}
+					}
+				}
+				
+				return state.getPlayer(faction);
+				
+			}
+		}
+		
+		return null;
 	}
 
 }
