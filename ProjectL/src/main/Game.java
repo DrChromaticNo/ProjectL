@@ -83,6 +83,7 @@ public class Game {
 		{
 			gameBag.resetBag();
 			placeTreasures(state, gameBag);
+			distributeInitialGold(state, 10);
 			
 			//this section either draws the initial hand (at the start of the game)
 			//or adds six cards to the existing hands
@@ -98,7 +99,22 @@ public class Game {
 			weekLoop(state, gameDeck, gameBag, counter);
 		}
 		
+		int max = Integer.MIN_VALUE;
+		HashSet<Player> winners = new HashSet<Player>();
 		
+		for(Player p : state.getPlayerList())
+		{
+			if(p.getScore() == max)
+			{
+				winners.add(p);
+			}
+			else if(p.getScore() > max)
+			{
+				winners.clear();
+				winners.add(p);
+				max = p.getScore();
+			}
+		}
 	}
 	
 	/**
@@ -333,6 +349,20 @@ public class Game {
 		{
 			p.clearDen();
 			p.clearDiscard();
+		}
+	}
+	
+	/**
+	 * Clears the players' gold and sets a new amount
+	 * @param state the state before the gold is redistributed
+	 * @param gold the gold to distribute to each player
+	 */
+	private static void distributeInitialGold(GameState state, int gold)
+	{
+		for(Player p : state.getPlayerList())
+		{
+			p.addGold(-p.getGold());
+			p.addGold(gold);
 		}
 	}
 
