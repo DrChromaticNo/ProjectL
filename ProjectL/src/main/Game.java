@@ -102,6 +102,40 @@ public class Game {
 				while(state.getTime() != Time.PICK_CARDS)
 				{
 					
+					System.out.println("Board: ");
+					
+					//NOTE: this traversal might be backwards? need to check which way the cards get sorted
+					for(Card c : state.getBoard().getDeck())
+					{
+						System.out.println(gameDeck.abbreviatedName(c) + " ");
+					}
+					
+					if(state.getTime() == Time.DAY)
+					{
+						Card[] deck = state.getBoard().getDeck();
+						
+						if(deck.length == 0)
+						{
+							state.setTime(Time.EVENING);
+						}
+						else
+						{
+							int index = 0;
+							while(index < deck.length && deck[index].checkPhase(Time.DAY))
+							{
+								index++;
+							}
+							
+							if(index >= deck.length)
+							{
+								state.setTime(Time.EVENING);
+							}
+							else
+							{
+								state = deck[index].dayAction(state);
+							}
+						}
+					}
 				}
 			}
 			
