@@ -160,6 +160,16 @@ public class Card implements Comparable<Card>{
 	}
 	
 	/**
+	 * Perform this cards' end of game/score action
+	 * @param state the state before this card has been scored
+	 * @return the change in score based on this card (positive or negative)
+	 */
+	public int score(GameState state)
+	{
+		return deck.scoreCard(this, state);
+	}
+	
+	/**
 	 * Resets all the phases to their default values (used when night phase resets or when card is
 	 * moved to hand from discard or den
 	 */

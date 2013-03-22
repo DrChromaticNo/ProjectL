@@ -14,6 +14,7 @@ import java.util.Random;
 import players.Faction;
 import players.Player;
 
+import score.ScoreCounter;
 import score.TreasureBag;
 import cards.Card;
 import cards.Deck;
@@ -29,6 +30,8 @@ public class Game {
 		Deck gameDeck = null;
 		
 		TreasureBag gameBag = null;
+		
+		ScoreCounter score = null;
 		
 		int numPlayers = 2; //assume/require > 1, < 7
 		Player[] playerList = new Player[numPlayers];
@@ -49,7 +52,7 @@ public class Game {
 		//now, create the gamestate
 		GameState state = new GameState(playerList,new Board());
 		
-		run(state, gameDeck, gameBag);
+		run(state, gameDeck, gameBag, score);
 
 	}
 	
@@ -71,7 +74,7 @@ public class Game {
 	 * @param gameDeck the deck used for the game
 	 * @param gameBag the bag used for the game
 	 */
-	private static void run(GameState state, Deck gameDeck, TreasureBag gameBag)
+	public static void run(GameState state, Deck gameDeck, TreasureBag gameBag, ScoreCounter counter)
 	{
 		//get the list of all the drawable cards
 		ArrayList<Integer> availibleCards = gameDeck.allCards();
@@ -92,94 +95,10 @@ public class Game {
 				drawCards(state, availibleCards, 6, gameDeck);
 			}
 			
-			for(int day = 0; day <= 5; day++)
-			{
-				state.setDay(day);
-				
-				if(state.getTime() == Time.PICK_CARDS)
-				{
-					pickCards(state, gameDeck);
-					state.setTime(Time.DAY);
-				}
-				
-				while(state.getTime() != Time.PICK_CARDS)
-				{
-					
-					System.out.println("Board: ");
-					
-					//NOTE: this traversal might be backwards? need to check which way the cards get sorted
-					for(Card c : state.getBoard().getDeck())
-					{
-						System.out.println(gameDeck.abbreviatedName(c) + " ");
-					}
-					
-					//this if statement performs either 1 day action or 1 evening action
-					//or all of the night actions (since they happen concurrently)
-					if(state.getTime() == Time.DAY)
-					{
-						Card[] deck = state.getBoard().getDeck();
-						
-						int index = 0;
-						
-						while(index < deck.length && deck[index].checkPhase(Time.DAY))
-						{
-							index++;
-						}
-						
-						if(index >= deck.length)
-						{
-							state.setTime(Time.EVENING);
-						}
-						else
-						{
-							state = deck[index].dayAction(new GameState(state), gameBag);
-						}
-					}
-					else if(state.getTime() == Time.EVENING)
-					{
-						Card[] deck = state.getBoard().getDeck();
-						
-						int index = deck.length-1;
-							
-						while(index >= 0 && deck[index].checkPhase(Time.EVENING))
-						{
-							index--;
-						}
-							
-						if(index < 0)
-						{
-							state.setTime(Time.NIGHT);
-						}
-						else
-						{
-							state = deck[index].eveningAction(new GameState(state), gameBag);
-						}
-					}
-					else //the only other options is it being Time.NIGHT
-					{
-						if(state.getBoard().getDeck().length != 0)
-						{
-							throw new RuntimeException("Board isn't clear in night phase");
-						}
-						
-						Player[] stateList = state.getPlayerList();
-						Player[] endList = new Player[stateList.length];
-						
-						for(int i = 0; i < stateList.length; i++)
-						{
-							endList[i] = nightPhaseHelper(new GameState(state), stateList[i].getFaction());
-						}
-						
-						state.setPlayerList(endList);
-						
-						state.setTime(Time.PICK_CARDS);
-					}
-				}
-			}
-			
-			
-			
+			weekLoop(state, gameDeck, gameBag, counter);
 		}
+		
+		
 	}
 	
 	/**
@@ -294,6 +213,127 @@ public class Game {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Performs the actions for one week of play
+	 * @param state the game state at the start of the week
+	 * @param gameDeck the deck to use for this week
+	 * @param gameBag the treasure bag to use for this week
+	 */
+	private static void weekLoop(GameState state, Deck gameDeck, TreasureBag gameBag, ScoreCounter counter)
+	{
+		for(int day = 0; day <= 5; day++)
+		{
+			state.setDay(day);
+			
+			if(state.getTime() == Time.PICK_CARDS)
+			{
+				pickCards(state, gameDeck);
+				state.setTime(Time.DAY);
+			}
+			
+			while(state.getTime() != Time.PICK_CARDS)
+			{
+				oneAction(state, gameDeck, gameBag);
+			}
+		}
+		
+		state = counter.score(new GameState(state));
+		
+		weekendClear(state);
+	}
+	
+	/**
+	 * Performs one action of the game
+	 * @param state the gamestate before the action
+	 * @param gameDeck the deck being used for this action
+	 * @param gameBag the bag being used for this action
+	 */
+	private static void oneAction(GameState state, Deck gameDeck, TreasureBag gameBag)
+	{
+		System.out.println("Board: ");
+		
+		//NOTE: this traversal might be backwards? need to check which way the cards get sorted
+		for(Card c : state.getBoard().getDeck())
+		{
+			System.out.println(gameDeck.abbreviatedName(c) + " ");
+		}
+		
+		//this if statement performs either 1 day action or 1 evening action
+		//or all of the night actions (since they happen concurrently)
+		if(state.getTime() == Time.DAY)
+		{
+			Card[] deck = state.getBoard().getDeck();
+			
+			int index = 0;
+			
+			while(index < deck.length && deck[index].checkPhase(Time.DAY))
+			{
+				index++;
+			}
+			
+			if(index >= deck.length)
+			{
+				state.setTime(Time.EVENING);
+			}
+			else
+			{
+				state = deck[index].dayAction(new GameState(state), gameBag);
+			}
+		}
+		else if(state.getTime() == Time.EVENING)
+		{
+			Card[] deck = state.getBoard().getDeck();
+			
+			int index = deck.length-1;
+				
+			while(index >= 0 && deck[index].checkPhase(Time.EVENING))
+			{
+				index--;
+			}
+				
+			if(index < 0)
+			{
+				state.setTime(Time.NIGHT);
+			}
+			else
+			{
+				state = deck[index].eveningAction(new GameState(state), gameBag);
+			}
+		}
+		else //the only other options is it being Time.NIGHT
+		{
+			if(state.getBoard().getDeck().length != 0)
+			{
+				throw new RuntimeException("Board isn't clear in night phase");
+			}
+			
+			Player[] stateList = state.getPlayerList();
+			Player[] endList = new Player[stateList.length];
+			
+			for(int i = 0; i < stateList.length; i++)
+			{
+				endList[i] = nightPhaseHelper(new GameState(state), stateList[i].getFaction());
+			}
+			
+			state.setPlayerList(endList);
+			
+			state.setTime(Time.PICK_CARDS);
+		}
+	}
+	
+	/**
+	 * Empties the den and discard in preparation for a new week
+	 * @param state the state before the clearing
+	 */
+	private static void weekendClear(GameState state)
+	{
+		for(Player p : state.getPlayerList())
+		{
+			p.clearDen();
+			p.clearDiscard();
+		}
 	}
 
 }
