@@ -7,6 +7,7 @@ package main;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 import players.Faction;
@@ -88,6 +89,22 @@ public class Game {
 				drawCards(state, availibleCards, 6, gameDeck);
 			}
 			
+			for(int day = 0; day <= 5; day++)
+			{
+				state.setDay(day);
+				
+				if(state.getTime() == Time.PICK_CARDS)
+				{
+					pickCards(state, gameDeck);
+					state.setTime(Time.DAY);
+				}
+				
+				while(state.getTime() != Time.PICK_CARDS)
+				{
+					
+				}
+			}
+			
 		}
 	}
 	
@@ -131,6 +148,30 @@ public class Game {
 			{
 				p.addToHand(new Card(p.getFaction(), card, gameDeck));
 			}
+		}
+	}
+	
+	/**
+	 * Gathers cards from the players and puts them on the board
+	 * @param state the current state of the game
+	 * @param gameDeck the deck being used with this game
+	 */
+	private static void pickCards(GameState state, Deck gameDeck)
+	{
+		HashSet<Card> chosenCards = new HashSet<Card>();
+		
+		for(Player p : state.getPlayerList())
+		{
+			Card choice = p.pickCard(state, gameDeck);
+			if(choice != null)
+			{
+				chosenCards.add(choice);
+			}
+		}
+		
+		for(Card c : chosenCards)
+		{
+			state.getBoard().addCard(c);
 		}
 	}
 

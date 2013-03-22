@@ -34,6 +34,14 @@ public interface Deck {
 	 * @return the state after the action
 	 */
 	public GameState doPhase(int time, Card card, GameState state);
+	
+
+	/**
+	 * Gives the shortened form of the card's name
+	 * @param card the card whose name will be shortened
+	 * @return the shortened name
+	 */
+	public String abbreviatedName(Card card);
 
 
 }

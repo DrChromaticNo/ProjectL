@@ -2,12 +2,16 @@ package players;
 
 import java.awt.Color;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
+
+import main.GameState;
 
 import score.Loot;
 import score.Treasure;
 
 import cards.Card;
+import cards.Deck;
 
 /**
  * @author Chris
@@ -161,6 +165,53 @@ public class Player {
 	public Loot getLoot()
 	{
 		return loot;
+	}
+	
+	/**
+	 * Chooses a card to play on the board and returns it
+	 * @param state the current state of the game
+	 * @param gameDeck the deck being used with the game
+	 * @return the card this player wants to play
+	 */
+	public Card pickCard(GameState state, Deck gameDeck)
+	{
+		if(CPU)
+		{
+			return null;
+		}
+		else
+		{
+			Scanner inputScanner = new Scanner(System.in);
+			
+			while(true)
+			{
+				if(hand.size() == 0)
+				{
+					return null;
+				}
+				
+				System.out.println("You have availible cards: ");
+				
+				for(Card c : hand)
+				{
+					System.out.print(gameDeck.abbreviatedName(c) + " ");
+				}
+				
+				System.out.println("Please choose one of these cards");
+				
+				String choice = inputScanner.next();
+				
+				for(Card c : hand)
+				{
+					if(gameDeck.abbreviatedName(c).equals(choice))
+					{
+						inputScanner.close();
+						hand.remove(c);
+						return c;
+					}
+				}
+			}
+		}
 	}
 
 }
