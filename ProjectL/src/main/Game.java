@@ -136,6 +136,44 @@ public class Game {
 							}
 						}
 					}
+					else if(state.getTime() == Time.EVENING)
+					{
+						Card[] deck = state.getBoard().getDeck();
+						
+						if(deck.length == 0)
+						{
+							state.setTime(Time.NIGHT);
+						}
+						else
+						{
+							int index = deck.length-1;
+							
+							while(index >= 0 && deck[index].checkPhase(Time.EVENING))
+							{
+								index--;
+							}
+							
+							if(index < 0)
+							{
+								state.setTime(Time.EVENING);
+							}
+							else
+							{
+								state = deck[index].nightAction(state);
+							}
+						}
+					}
+					else //the only other options is it being Time.NIGHT
+					{
+						if(state.getBoard().getDeck().length != 0)
+						{
+							throw new RuntimeException("Board isn't clear in night phase");
+						}
+						
+						
+						
+						
+					}
 				}
 			}
 			
