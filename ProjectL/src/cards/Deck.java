@@ -43,7 +43,7 @@ public interface Deck {
 	 * Perform the card's end of game/score action
 	 * @param card The card to score with
 	 * @param state the game state before this card has been scored
-	 * @return the change in score based on this card
+	 * @return the change in gold based on the card
 	 */
 	public int scoreCard(Card card, GameState state);
 	

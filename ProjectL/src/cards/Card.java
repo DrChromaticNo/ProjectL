@@ -162,7 +162,7 @@ public class Card implements Comparable<Card>{
 	/**
 	 * Perform this cards' end of game/score action
 	 * @param state the state before this card has been scored
-	 * @return the change in score based on this card (positive or negative)
+	 * @return the change in gold based on this card (positive or negative)
 	 */
 	public int score(GameState state)
 	{
