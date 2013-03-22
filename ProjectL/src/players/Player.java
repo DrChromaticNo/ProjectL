@@ -189,12 +189,7 @@ public class Player {
 			Scanner inputScanner = new Scanner(System.in);
 			
 			while(true)
-			{
-				if(hand.size() == 0)
-				{
-					return null;
-				}
-				
+			{	
 				System.out.println("You have availible cards: ");
 				
 				for(Card c : hand)
