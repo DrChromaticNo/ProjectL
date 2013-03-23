@@ -29,7 +29,7 @@ public class Game {
 		//create deck and treasurebag to use in game, fill these in later
 		Deck gameDeck = null;
 		
-		TreasureBag gameBag = null;
+		TreasureBag gameBag = new StandardTreasureBag();
 		
 		ScoreCounter score = null;
 		
