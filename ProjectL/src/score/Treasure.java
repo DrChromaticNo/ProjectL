@@ -35,5 +35,22 @@ public class Treasure {
 		Loot map = new Loot(treasures);
 		return map;
 	}
+	
+	/**
+	 * Get a list of all the possible treasures
+	 * @return a list of all the possible treasures
+	 */
+	public static String[] allTreasures()
+	{
+		String[] treasures = new String[7];
+		treasures[0] = RELIC;
+		treasures[1] = CHEST;
+		treasures[2] = JEWEL;
+		treasures[3] = GOODS;
+		treasures[4] = OFFICER;
+		treasures[5] = MAP;
+		treasures[6] = SABER;
+		return treasures;
+	}
 
 }
