@@ -151,10 +151,10 @@ public class Card implements Comparable<Card>{
 	 * @param state the state of the game before the action
 	 * @return the state of the game after the action is performed
 	 */
-	public GameState nightAction(GameState state)
+	public GameState nightAction(GameState state, TreasureBag bag)
 	{
 		//Note: night actions occur simultaneously so they can never use the bag
-		GameState end = deck.doPhase(Time.NIGHT, this, state, null);
+		GameState end = deck.doPhase(Time.NIGHT, this, state, bag);
 		nightPhase = true;
 		return end;
 	}

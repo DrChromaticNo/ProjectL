@@ -6,6 +6,11 @@ import score.Loot;
 import score.Treasure;
 import score.TreasureBag;
 
+/**
+ * Treasure bag to use with the unmodified game
+ * @author Chris
+ *
+ */
 public class StandardTreasureBag implements TreasureBag {
 
 	private Loot bag;

@@ -16,6 +16,7 @@ import players.Player;
 
 import score.ScoreCounter;
 import score.TreasureBag;
+import standard.StandardScoreCounter;
 import standard.StandardTreasureBag;
 import cards.Card;
 import cards.Deck;
@@ -32,7 +33,7 @@ public class Game {
 		
 		TreasureBag gameBag = new StandardTreasureBag();
 		
-		ScoreCounter score = null;
+		ScoreCounter score = new StandardScoreCounter();
 		
 		int numPlayers = 2; //assume/require > 1, < 7
 		Player[] playerList = new Player[numPlayers];
@@ -199,7 +200,7 @@ public class Game {
 	 * @param faction the faction of the player we're working on
 	 * @return the player after all his night phase actions have been completed
 	 */
-	private static Player nightPhaseHelper(GameState state, Color faction)
+	private static Player nightPhaseHelper(GameState state, Color faction, TreasureBag bag)
 	{
 		for(Player p : state.getPlayerList())
 		{
@@ -227,7 +228,7 @@ public class Game {
 						}
 						else
 						{
-							state = den.get(index).nightAction(state);
+							state = den.get(index).nightAction(state, bag);
 						}
 					}
 				}
@@ -339,7 +340,7 @@ public class Game {
 			
 			for(int i = 0; i < stateList.length; i++)
 			{
-				endList[i] = nightPhaseHelper(new GameState(state), stateList[i].getFaction());
+				endList[i] = nightPhaseHelper(new GameState(state), stateList[i].getFaction(), gameBag);
 			}
 			
 			state.setPlayerList(endList);
