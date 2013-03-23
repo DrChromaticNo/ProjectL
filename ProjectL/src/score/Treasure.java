@@ -7,8 +7,16 @@ package score;
 
 public class Treasure {
 
-	//as an example, need to implement the rest
-	public static final String RELIC = "relic";
+	//once again, could be expanded to have more options but make sure
+	//the deck/treasurebag you're using supports them
+	public static final String RELIC = "cursed relic(s)";
+	public static final String CHEST = "chest(s)";
+	public static final String JEWEL = "jewel(s)";
+	public static final String GOODS = "barrel(s) of goods";
+	public static final String OFFICER = "spanish officer(s)";
+	public static final String MAP = "treasure map(s)";
+	public static final String SABER = "saber(s)";
+	
 	
 	/**
 	 * Returns a map of strings to loot with every value set to 0
@@ -16,8 +24,14 @@ public class Treasure {
 	 */
 	public static Loot getLoot()
 	{
-		String[] treasures = new String[1];
+		String[] treasures = new String[7];
 		treasures[0] = RELIC;
+		treasures[1] = CHEST;
+		treasures[2] = JEWEL;
+		treasures[3] = GOODS;
+		treasures[4] = OFFICER;
+		treasures[5] = MAP;
+		treasures[6] = SABER;
 		Loot map = new Loot(treasures);
 		return map;
 	}
