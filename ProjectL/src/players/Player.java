@@ -213,5 +213,10 @@ public class Player {
 			}
 		}
 	}
+	
+	public boolean checkCPU()
+	{
+		return CPU;
+	}
 
 }

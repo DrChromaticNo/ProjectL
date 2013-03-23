@@ -32,7 +32,7 @@ public class Loot {
 		}
 		else
 		{
-			throw new RuntimeException("that treasure doesn't exist in this bag!");
+			return 0;
 		}
 	}
 	
