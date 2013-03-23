@@ -16,6 +16,7 @@ import players.Player;
 
 import score.ScoreCounter;
 import score.TreasureBag;
+import standard.StandardTreasureBag;
 import cards.Card;
 import cards.Deck;
 
