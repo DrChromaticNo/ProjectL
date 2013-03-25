@@ -36,6 +36,11 @@ public class Loot {
 		}
 	}
 	
+	public void emptyBag()
+	{
+		loot.clear();
+	}
+	
 	/**
 	 * Given a Treasure string, modifies the amount of that loot by the mod
 	 * @param treasure String corresponding to the type of treasure

@@ -14,7 +14,9 @@ import java.util.Random;
 import players.Faction;
 import players.Player;
 
+import score.Loot;
 import score.ScoreCounter;
+import score.Treasure;
 import score.TreasureBag;
 import standard.StandardScoreCounter;
 import standard.StandardTreasureBag;
@@ -134,6 +136,7 @@ public class Game {
 	 */
 	private static void placeTreasures(GameState state, TreasureBag gameBag)
 	{
+		resetBoardLoot(state);
 		for(int i = 0; i < 6; i++)
 		{
 			for(Player p : state.getPlayerList())
@@ -371,6 +374,7 @@ public class Game {
 			for(int i = 0; i < stateList.length; i++)
 			{
 				endList[i] = nightPhaseHelper(new GameState(state), stateList[i].getFaction(), gameBag);
+				System.out.println(i);
 			}
 			
 			state.setPlayerList(endList);
@@ -391,6 +395,7 @@ public class Game {
 		{
 			p.clearDen();
 			p.clearDiscard();
+			p.getLoot().emptyBag();
 		}
 	}
 	
@@ -405,6 +410,14 @@ public class Game {
 		{
 			p.addGold(-p.getGold());
 			p.addGold(gold);
+		}
+	}
+	
+	private static void resetBoardLoot(GameState state)
+	{
+		for(int day = 0; day <=5; day++)
+		{
+			state.getBoard().setLoot(day, Treasure.getLoot());
 		}
 	}
 
