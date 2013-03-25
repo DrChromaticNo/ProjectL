@@ -87,6 +87,7 @@ public class TestDeck implements Deck {
 		
 		if(card.getValue() == 9)
 		{
+			System.out.println(Faction.getPirateName(card.getFaction()) + " got 10 gold from his Carpenter!");
 			return 10;
 		}
 		
