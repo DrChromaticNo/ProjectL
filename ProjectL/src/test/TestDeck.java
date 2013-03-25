@@ -3,6 +3,7 @@ package test;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 
 import players.Faction;
@@ -70,7 +71,7 @@ public class TestDeck implements Deck {
 			}
 			else if(time == Time.EVENING)
 			{
-				state = chooseTreasure(state, card.getFaction());
+				state = chooseTreasure(state, card.getFaction(), card);
 			}
 			else //it is night phase
 			{
@@ -159,7 +160,7 @@ public class TestDeck implements Deck {
 	 * @param state the state of the game before the treasure is chosen
 	 * @param faction the faction of the player accessing the treasure
 	 */
-	private GameState chooseTreasure(GameState state, Color faction)
+	private GameState chooseTreasure(GameState state, Color faction, Card card)
 	{
 		if(!state.getPlayer(faction).checkCPU())
 		{
@@ -199,9 +200,111 @@ public class TestDeck implements Deck {
 			state.getBoard().setLoot(state.getDay(), bag);
 			state.getPlayer(faction).getLoot().addLoot(choice, 1);
 			System.out.println(Faction.getPirateName(faction) + " chose " + choice);
+			
+			if(choice.equals(Treasure.OFFICER))
+			{
+				System.out.println("The Spanish officer killed the ");
+				state.getBoard().removeCard(card);
+				state.getPlayer(faction).addToDiscard(card);
+			}
+			else if(choice.equals(Treasure.SABER))
+			{
+				
+			}
 		}
 		return state;
 	}
 	
+	private GameState saberAction(GameState state, Color faction)
+	{
+		if(!state.getPlayer(faction).checkCPU())
+		{
+			int playerIndex = 0;
+			for(int i = 0; i < state.getPlayerList().length; i++)
+			{
+				if(state.getPlayerList()[i].getFaction().equals(faction))
+				{
+					playerIndex = i;
+				}
+			}
+			
+			Player leftP = null;
+			if(playerIndex-1 >= 0)
+			{
+				leftP = state.getPlayerList()[playerIndex-1];
+			}
+			
+			Player rightP = null;
+			if(playerIndex+1 < state.getPlayerList().length)
+			{
+				rightP = state.getPlayerList()[playerIndex+1];
+			}
+			
+			if(leftP != null && rightP != null)
+			{
+				String choice = "";
+				while(true)
+				{
+					HashSet<Card> leftSet = new HashSet<Card>();
+					if(leftP != null)
+					{
+						System.out.println(Faction.getPirateName(leftP.getFaction()) + " has ");
+						for(Card c : leftP.getDen())
+						{
+							System.out.print(" " + abbreviatedName(c) + " ");
+							leftSet.add(c);
+						}
+					}
+					
+					HashSet<Card> rightSet = new HashSet<Card>();
+					if(rightP != null && !leftP.getFaction().equals(rightP.getFaction()))
+					{
+						System.out.println(Faction.getPirateName(rightP.getFaction()) + " has ");
+						for(Card c : rightP.getDen())
+						{
+							System.out.print(" " + abbreviatedName(c) + " ");
+							rightSet.add(c);
+						}
+					}
+					
+					if(leftSet.isEmpty() && rightSet.isEmpty())
+					{
+						return state;
+					}
+					
+					System.out.println("Choose a pirate to kill: ");
+					
+					Scanner inputScanner = new Scanner(System.in);
+					
+					choice = inputScanner.next();
+					
+					for(Card c : leftSet)
+					{
+						if(abbreviatedName(c).equals(choice))
+						{
+							state.getPlayer(leftP.getFaction()).removeFromDen(c);
+							state.getPlayer(leftP.getFaction()).addToDiscard(c);
+							return state;
+						}
+					}
+					
+					for(Card c : rightSet)
+					{
+						if(abbreviatedName(c).equals(choice))
+						{
+							state.getPlayer(rightP.getFaction()).removeFromDen(c);
+							state.getPlayer(rightP.getFaction()).addToDiscard(c);
+							return state;
+						}
+					}
+				}
+			}
+			throw new RuntimeException("for some reason, there is only one player!");
+		}
+		else
+		{
+			return state;
+		}
+	}
 
 }

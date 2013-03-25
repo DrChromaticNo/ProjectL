@@ -376,7 +376,6 @@ public class Game {
 			for(int i = 0; i < stateList.length; i++)
 			{
 				endList[i] = nightPhaseHelper(new GameState(state), stateList[i].getFaction(), gameBag);
-				System.out.println(i);
 			}
 			
 			state.setPlayerList(endList);
