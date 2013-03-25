@@ -102,7 +102,7 @@ public class Game {
 				drawCards(state, availibleCards, 6, gameDeck);
 			}
 			
-			weekLoop(state, gameDeck, gameBag, counter);
+			state = weekLoop(state, gameDeck, gameBag, counter);
 		}
 		
 		int max = Integer.MIN_VALUE;
@@ -262,7 +262,7 @@ public class Game {
 	 * @param gameDeck the deck to use for this week
 	 * @param gameBag the treasure bag to use for this week
 	 */
-	private static void weekLoop(GameState state, Deck gameDeck, TreasureBag gameBag, ScoreCounter counter)
+	private static GameState weekLoop(GameState state, Deck gameDeck, TreasureBag gameBag, ScoreCounter counter)
 	{
 		for(int day = 0; day <= 5; day++)
 		{
@@ -286,6 +286,8 @@ public class Game {
 		state = counter.score(new GameState(state));
 		
 		weekendClear(state);
+		
+		return state;
 	}
 	
 	/**
