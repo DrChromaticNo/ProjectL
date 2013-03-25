@@ -210,7 +210,7 @@ public class TestDeck implements Deck {
 			}
 			else if(choice.equals(Treasure.SABER))
 			{
-				
+				state = saberAction(state, faction);
 			}
 		}
 		return state;
