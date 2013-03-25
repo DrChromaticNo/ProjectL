@@ -129,7 +129,6 @@ public class Card implements Comparable<Card>{
 	public GameState dayAction(GameState state, TreasureBag bag)
 	{
 		GameState end = deck.doPhase(Time.DAY, this, state, bag);
-		dayPhase = true;
 		return end;
 	}
 	
@@ -142,7 +141,6 @@ public class Card implements Comparable<Card>{
 	public GameState eveningAction(GameState state, TreasureBag bag)
 	{
 		GameState end = deck.doPhase(Time.EVENING, this, state, bag);
-		eveningPhase = true;
 		return end;
 	}
 	
@@ -155,7 +153,6 @@ public class Card implements Comparable<Card>{
 	{
 		//Note: night actions occur simultaneously so they can never use the bag
 		GameState end = deck.doPhase(Time.NIGHT, this, state, bag);
-		nightPhase = true;
 		return end;
 	}
 	
@@ -204,5 +201,24 @@ public class Card implements Comparable<Card>{
 			return false;
 		}
 	}
-
+	
+	/**
+	 * 
+	 */
+	public void setTrue(int time)
+	{
+		if(time == Time.DAY)
+		{
+			dayPhase = true;
+		}
+		else if(time == Time.EVENING)
+		{
+			eveningPhase = true;
+		}
+		else if(time == Time.NIGHT)
+		{
+			nightPhase = true;
+		}
+	}
+	
 }

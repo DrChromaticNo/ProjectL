@@ -49,10 +49,10 @@ public class TestDeck implements Deck {
 
 	@Override
 	public ArrayList<Integer> allCards() {
-		ArrayList<Integer> cards = new ArrayList<Integer>(40);
+		ArrayList<Integer> cards = new ArrayList<Integer>(30);
 		for(int i = 0; i < 30; i++)
 		{
-			cards.add(9);
+			cards.add(new Integer(9));
 		}
 		
 		return cards;
@@ -66,11 +66,11 @@ public class TestDeck implements Deck {
 		{
 			if(time == Time.DAY)
 			{
-				carpenterDay(state, card.getFaction());
+				state = carpenterDay(state, card.getFaction());
 			}
 			else if(time == Time.EVENING)
 			{
-				chooseTreasure(state, card.getFaction());
+				state = chooseTreasure(state, card.getFaction());
 			}
 			else //it is night phase
 			{
@@ -143,15 +143,23 @@ public class TestDeck implements Deck {
 	 * @param state the state before the action
 	 * @param faction the faction of the carpenter card
 	 */
-	private static void carpenterDay(GameState state, Color faction)
+	private GameState carpenterDay(GameState state, Color faction)
 	{
 		Player player = state.getPlayer(faction);
+		System.out.println();
 		System.out.println(Faction.getPirateName(faction) + " lost " + player.getGold()/2 + 
 				" gold due to their Carpenter!");
+		System.out.println();
 		player.addGold(-player.getGold()/2);
+		return state;
 	}
 	
-	private static void chooseTreasure(GameState state, Color faction)
+	/**
+	 * Chooses a treasure from the day's remaining treasures
+	 * @param state the state of the game before the treasure is chosen
+	 * @param faction the faction of the player accessing the treasure
+	 */
+	private GameState chooseTreasure(GameState state, Color faction)
 	{
 		if(!state.getPlayer(faction).checkCPU())
 		{
@@ -163,28 +171,36 @@ public class TestDeck implements Deck {
 			while(bag.countTreasure(choice) == 0 && !allZero)
 			{
 				allZero = true;
+				int treasureMap = 0;
+				HashMap<Integer, String> tMap = new HashMap<Integer, String>();
+				
 				System.out.println("The following treasures are availible: ");
+				
 				for(String s : Treasure.allTreasures())
 				{
 					if(bag.countTreasure(s) != 0)
 					{
 						allZero = false;
-						System.out.println(" " + s + " x" + bag.countTreasure(s));
+						System.out.println(treasureMap + ": " + s + " x" + bag.countTreasure(s));
+						tMap.put(treasureMap, s);
+						treasureMap++;
 					}
 				}
 				
 				if(!allZero)
 				{
-					System.out.println("Please choice one treasure:");
-					choice = inputScanner.next();
+					System.out.println("Please choose one treasure:");
+					int pick = inputScanner.nextInt();
+					choice = tMap.get(pick);
 				}
 			}
 			
-			inputScanner.close();
 			bag.addLoot(choice, -1);
+			state.getBoard().setLoot(state.getDay(), bag);
 			state.getPlayer(faction).getLoot().addLoot(choice, 1);
 			System.out.println(Faction.getPirateName(faction) + " chose " + choice);
 		}
+		return state;
 	}
 	
 

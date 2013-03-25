@@ -18,6 +18,7 @@ import score.ScoreCounter;
 import score.TreasureBag;
 import standard.StandardScoreCounter;
 import standard.StandardTreasureBag;
+import test.TestDeck;
 import cards.Card;
 import cards.Deck;
 
@@ -28,8 +29,8 @@ public class Game {
 	 */
 	public static void main(String[] args) {
 		
-		//create deck and treasurebag to use in game, fill these in later
-		Deck gameDeck = null;
+		//create deck and treasurebag and score class to use with this game
+		Deck gameDeck = new TestDeck();
 		
 		TreasureBag gameBag = new StandardTreasureBag();
 		
@@ -40,7 +41,7 @@ public class Game {
 		
 		ArrayList<Color> factionList = Faction.allFactions();
 		
-		if(factionList.size() > numPlayers)
+		if(factionList.size() < numPlayers)
 		{
 			throw new RuntimeException("there's too many players and not enough factions");
 		}
@@ -151,7 +152,7 @@ public class Game {
 	private static void drawCards(GameState state, ArrayList<Integer> availibleCards, 
 			int numCards, Deck gameDeck)
 	{
-		if(availibleCards.size() > numCards)
+		if(availibleCards.size() < numCards)
 		{
 			throw new RuntimeException("not enough cards to draw from the deck!");
 		}
@@ -215,7 +216,7 @@ public class Game {
 						ArrayList<Card> den = new ArrayList<Card>(player.getDen());
 						Collections.sort(den);
 						
-						int index = den.size();
+						int index = den.size()-1;
 						
 						while(index >= 0 && den.get(index).checkPhase(Time.NIGHT))
 						{
@@ -228,13 +229,24 @@ public class Game {
 						}
 						else
 						{
-							state = den.get(index).nightAction(state, bag);
+							state = den.get(index).nightAction(new GameState(state), bag);
+							
+							state.getPlayer(faction).removeFromDen(den.get(index));
+							
+							Card replacement = den.get(index);
+							replacement.setTrue(Time.NIGHT);
+							state.getPlayer(faction).addToDen(den.get(index));
 						}
 					}
 				}
 				
-				return state.getPlayer(faction);
-				
+				for(Card c : state.getPlayer(faction).getDen())
+				{
+					state.getPlayer(faction).removeFromDen(c);
+					c.resetPhases();
+					state.getPlayer(faction).addToDen(c);
+				}
+				return state.getPlayer(faction);	
 			}
 		}
 		
@@ -256,12 +268,15 @@ public class Game {
 			if(state.getTime() == Time.PICK_CARDS)
 			{
 				pickCards(state, gameDeck);
+				System.out.println(" ");
+				System.out.println("~DAY PHASE~");
+				System.out.println(" ");
 				state.setTime(Time.DAY);
 			}
 			
 			while(state.getTime() != Time.PICK_CARDS)
 			{
-				oneAction(state, gameDeck, gameBag);
+				state = oneAction(state, gameDeck, gameBag);
 			}
 		}
 		
@@ -276,14 +291,14 @@ public class Game {
 	 * @param gameDeck the deck being used for this action
 	 * @param gameBag the bag being used for this action
 	 */
-	private static void oneAction(GameState state, Deck gameDeck, TreasureBag gameBag)
+	private static GameState oneAction(GameState state, Deck gameDeck, TreasureBag gameBag)
 	{
 		System.out.println("Board: ");
 		
 		//NOTE: this traversal might be backwards? need to check which way the cards get sorted
 		for(Card c : state.getBoard().getDeck())
 		{
-			System.out.println(gameDeck.abbreviatedName(c) + " ");
+			System.out.print(gameDeck.abbreviatedName(c) + " ");
 		}
 		
 		//this if statement performs either 1 day action or 1 evening action
@@ -301,11 +316,15 @@ public class Game {
 			
 			if(index >= deck.length)
 			{
+				System.out.println(" ");
+				System.out.println("~DUSK PHASE~");
+				System.out.println(" ");
 				state.setTime(Time.EVENING);
 			}
 			else
 			{
 				state = deck[index].dayAction(new GameState(state), gameBag);
+				state.getBoard().getDeck()[index].setTrue(Time.DAY);
 			}
 		}
 		else if(state.getTime() == Time.EVENING)
@@ -321,11 +340,22 @@ public class Game {
 				
 			if(index < 0)
 			{
+				//clears the cards from the deck in preparation for the night phase
+				for(Card c : state.getBoard().getDeck())
+				{
+					state.getPlayer(c.getFaction()).addToDen(c);
+				}
+				state.getBoard().clearDeck();
+				
+				System.out.println(" ");
+				System.out.println("~NIGHT PHASE~");
+				System.out.println(" ");
 				state.setTime(Time.NIGHT);
 			}
 			else
 			{
 				state = deck[index].eveningAction(new GameState(state), gameBag);
+				state.getBoard().getDeck()[index].setTrue(Time.EVENING);
 			}
 		}
 		else //the only other options is it being Time.NIGHT
@@ -347,6 +377,8 @@ public class Game {
 			
 			state.setTime(Time.PICK_CARDS);
 		}
+		
+		return state;
 	}
 	
 	/**

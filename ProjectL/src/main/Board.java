@@ -74,13 +74,12 @@ public class Board {
 	
 	public Card[] getDeck()
 	{
-		ArrayList<Card> newDeck = new ArrayList<Card>();
-		for(Card c : deck)
+		Card[] newDeck = new Card[deck.size()];
+		for(int i = 0; i < deck.size(); i++)
 		{
-			newDeck.add(new Card(c));
+			newDeck[i] = deck.get(i);
 		}
-		Collections.sort(newDeck);
-		return (Card[]) newDeck.toArray();
+		return newDeck;
 	}
 	
 	public Loot getLoot(int day)

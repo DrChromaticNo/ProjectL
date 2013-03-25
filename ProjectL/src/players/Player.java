@@ -197,6 +197,7 @@ public class Player {
 					System.out.print(gameDeck.abbreviatedName(c) + " ");
 				}
 				
+				System.out.println();
 				System.out.println("Please choose one of these cards");
 				
 				String choice = inputScanner.next();
@@ -205,7 +206,6 @@ public class Player {
 				{
 					if(gameDeck.abbreviatedName(c).equals(choice))
 					{
-						inputScanner.close();
 						hand.remove(c);
 						return c;
 					}
