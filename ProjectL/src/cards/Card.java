@@ -66,6 +66,11 @@ public class Card implements Comparable<Card>{
 		return silverNum;
 	}
 	
+	public String abbreviate()
+	{
+		return deck.abbreviatedName(this);
+	}
+	
 	@Override public boolean equals(Object other)
 	{
 		if(other instanceof Card)
