@@ -46,7 +46,7 @@ public class StandardTreasureBag implements TreasureBag {
 
 	@Override
 	public void resetBag() {
-		/*bag.addLoot(Treasure.CHEST, -bag.countTreasure(Treasure.CHEST));
+		bag.addLoot(Treasure.CHEST, -bag.countTreasure(Treasure.CHEST));
 		bag.addLoot(Treasure.CHEST, 4);
 		
 		bag.addLoot(Treasure.JEWEL, -bag.countTreasure(Treasure.JEWEL));
@@ -57,16 +57,16 @@ public class StandardTreasureBag implements TreasureBag {
 		
 		bag.addLoot(Treasure.OFFICER, -bag.countTreasure(Treasure.OFFICER));
 		bag.addLoot(Treasure.OFFICER, 6);
-		*/
+		
 		bag.addLoot(Treasure.SABER, -bag.countTreasure(Treasure.SABER));
-		bag.addLoot(Treasure.SABER, 40);
-		/*
+		bag.addLoot(Treasure.SABER, 6);
+		
 		bag.addLoot(Treasure.MAP, -bag.countTreasure(Treasure.MAP));
 		bag.addLoot(Treasure.MAP, 8);
 		
 		bag.addLoot(Treasure.RELIC, -bag.countTreasure(Treasure.RELIC));
 		bag.addLoot(Treasure.RELIC, 10);
-		*/
+		
 		totalTreasures = 40;
 	}
 
