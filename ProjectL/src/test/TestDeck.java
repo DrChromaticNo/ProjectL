@@ -14,6 +14,8 @@ import main.Time;
 import score.Loot;
 import score.Treasure;
 import score.TreasureBag;
+import standard.Carpenter;
+import cards.Action;
 import cards.Card;
 import cards.Deck;
 
@@ -26,11 +28,13 @@ public class TestDeck implements Deck {
 
 	private HashMap<Color, String> abbrvMap;
 	private HashMap<Integer, HashMap<Color, Integer>> silverMap;
+	private HashMap<Integer, Action> actionMap;
 	
 	public TestDeck()
 	{
 		abbrvMap = createAbbrvMap();
 		silverMap = createSilverMap();
+		actionMap = createCardActionMap();
 	}
 	
 	@Override
@@ -63,35 +67,24 @@ public class TestDeck implements Deck {
 	public GameState doPhase(int time, Card card, GameState state,
 			TreasureBag bag) {
 		
-		if(card.getValue() == 9)
+		if(actionMap.containsKey(card.getValue()))
 		{
-			if(time == Time.DAY)
-			{
-				state = carpenterDay(state, card.getFaction());
-			}
-			else if(time == Time.EVENING)
-			{
-				state = chooseTreasure(state, card.getFaction(), card);
-			}
-			else //it is night phase
-			{
-				//Do nothing
-			}
+			state = actionMap.get(card.getValue()).doAction(state, card, bag, time);
 		}
-		
 		return state;
 	}
 
 	@Override
 	public int scoreCard(Card card, GameState state) {
-		
-		if(card.getValue() == 9)
+
+		if(actionMap.containsKey(card.getValue()))
 		{
-			System.out.println(Faction.getPirateName(card.getFaction()) + " got 10 gold from his Carpenter!");
-			return 10;
+			return actionMap.get(card.getValue()).score(state, card);
 		}
-		
-		return 0;
+		else
+		{
+			return 0;
+		}
 	}
 
 	@Override
@@ -140,172 +133,12 @@ public class TestDeck implements Deck {
 		return map;
 	}
 	
-	/**
-	 * Performs the day action for the carpenter
-	 * @param state the state before the action
-	 * @param faction the faction of the carpenter card
-	 */
-	private GameState carpenterDay(GameState state, Color faction)
+	private static HashMap<Integer, Action> createCardActionMap()
 	{
-		Player player = state.getPlayer(faction);
-		System.out.println();
-		System.out.println(Faction.getPirateName(faction) + " lost " + player.getGold()/2 + 
-				" gold due to their Carpenter!");
-		System.out.println();
-		player.addGold(-player.getGold()/2);
-		return state;
+		HashMap<Integer, Action> map = new HashMap<Integer, Action>();
+		
+		map.put(9, new Carpenter());
+		
+		return map;
 	}
-	
-	/**
-	 * Chooses a treasure from the day's remaining treasures
-	 * @param state the state of the game before the treasure is chosen
-	 * @param faction the faction of the player accessing the treasure
-	 */
-	private GameState chooseTreasure(GameState state, Color faction, Card card)
-	{
-		if(!state.getPlayer(faction).checkCPU())
-		{
-			Scanner inputScanner = new Scanner(System.in);
-			
-			String choice = "";
-			Loot bag = state.getBoard().getLoot(state.getDay());
-			boolean allZero = false;
-			while(bag.countTreasure(choice) == 0 && !allZero)
-			{
-				allZero = true;
-				int treasureMap = 0;
-				HashMap<Integer, String> tMap = new HashMap<Integer, String>();
-				
-				System.out.println("The following treasures are availible: ");
-				
-				for(String s : Treasure.allTreasures())
-				{
-					if(bag.countTreasure(s) != 0)
-					{
-						allZero = false;
-						System.out.println(treasureMap + ": " + s + " x" + bag.countTreasure(s));
-						tMap.put(treasureMap, s);
-						treasureMap++;
-					}
-				}
-				
-				if(!allZero)
-				{
-					System.out.println("Please choose one treasure:");
-					int pick = inputScanner.nextInt();
-					choice = tMap.get(pick);
-				}
-			}
-			
-			bag.addLoot(choice, -1);
-			state.getBoard().setLoot(state.getDay(), bag);
-			state.getPlayer(faction).getLoot().addLoot(choice, 1);
-			System.out.println(Faction.getPirateName(faction) + " chose " + choice);
-			
-			if(choice.equals(Treasure.OFFICER))
-			{
-				System.out.println("The Spanish officer killed the ");
-				state.getBoard().removeCard(card);
-				state.getPlayer(faction).addToDiscard(card);
-			}
-			else if(choice.equals(Treasure.SABER))
-			{
-				state = saberAction(state, faction);
-			}
-		}
-		return state;
-	}
-	
-	private GameState saberAction(GameState state, Color faction)
-	{
-		if(!state.getPlayer(faction).checkCPU())
-		{
-			int playerIndex = 0;
-			for(int i = 0; i < state.getPlayerList().length; i++)
-			{
-				if(state.getPlayerList()[i].getFaction().equals(faction))
-				{
-					playerIndex = i;
-				}
-			}
-			
-			Player leftP = null;
-			if(playerIndex-1 >= 0)
-			{
-				leftP = state.getPlayerList()[playerIndex-1];
-			}
-			
-			Player rightP = null;
-			if(playerIndex+1 < state.getPlayerList().length)
-			{
-				rightP = state.getPlayerList()[playerIndex+1];
-			}
-			
-			if(leftP != null && rightP != null)
-			{
-				String choice = "";
-				while(true)
-				{
-					HashSet<Card> leftSet = new HashSet<Card>();
-					if(leftP != null)
-					{
-						System.out.println(Faction.getPirateName(leftP.getFaction()) + " has ");
-						for(Card c : leftP.getDen())
-						{
-							System.out.print(" " + abbreviatedName(c) + " ");
-							leftSet.add(c);
-						}
-					}
-					
-					HashSet<Card> rightSet = new HashSet<Card>();
-					if(rightP != null && !leftP.getFaction().equals(rightP.getFaction()))
-					{
-						System.out.println(Faction.getPirateName(rightP.getFaction()) + " has ");
-						for(Card c : rightP.getDen())
-						{
-							System.out.print(" " + abbreviatedName(c) + " ");
-							rightSet.add(c);
-						}
-					}
-					
-					if(leftSet.isEmpty() && rightSet.isEmpty())
-					{
-						return state;
-					}
-					
-					System.out.println("Choose a pirate to kill: ");
-					
-					Scanner inputScanner = new Scanner(System.in);
-					
-					choice = inputScanner.next();
-					
-					for(Card c : leftSet)
-					{
-						if(abbreviatedName(c).equals(choice))
-						{
-							state.getPlayer(leftP.getFaction()).removeFromDen(c);
-							state.getPlayer(leftP.getFaction()).addToDiscard(c);
-							return state;
-						}
-					}
-					
-					for(Card c : rightSet)
-					{
-						if(abbreviatedName(c).equals(choice))
-						{
-							state.getPlayer(rightP.getFaction()).removeFromDen(c);
-							state.getPlayer(rightP.getFaction()).addToDiscard(c);
-							return state;
-						}
-					}
-				}
-			}
-			throw new RuntimeException("for some reason, there is only one player!");
-		}
-		else
-		{
-			return state;
-		}
-	}
-
 }

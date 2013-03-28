@@ -67,7 +67,7 @@ public class PickTreasure implements Action {
 			
 			if(choice.equals(Treasure.OFFICER))
 			{
-				System.out.println("The Spanish officer killed the ");
+				System.out.println("A Spanish officer killed the ");
 				state.getBoard().removeCard(card);
 				state.getPlayer(faction).addToDiscard(card);
 			}
