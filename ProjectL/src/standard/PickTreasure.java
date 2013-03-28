@@ -104,7 +104,7 @@ public class PickTreasure implements Action {
 				rightP = state.getPlayerList()[playerIndex+1];
 			}
 			
-			if(leftP != null && rightP != null)
+			if(leftP != null || rightP != null)
 			{
 				String choice = "";
 				while(true)
@@ -121,7 +121,8 @@ public class PickTreasure implements Action {
 					}
 					
 					HashSet<Card> rightSet = new HashSet<Card>();
-					if(rightP != null && !leftP.getFaction().equals(rightP.getFaction()))
+					if(leftP == null || 
+							(rightP != null && !leftP.getFaction().equals(rightP.getFaction())))
 					{
 						System.out.println(Faction.getPirateName(rightP.getFaction()) + " has ");
 						for(Card c : rightP.getDen())
