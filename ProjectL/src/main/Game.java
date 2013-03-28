@@ -234,11 +234,15 @@ public class Game {
 						{
 							state = den.get(index).nightAction(new GameState(state), bag);
 							
-							state.getPlayer(faction).removeFromDen(den.get(index));
-							
-							Card replacement = den.get(index);
-							replacement.setTrue(Time.NIGHT);
-							state.getPlayer(faction).addToDen(den.get(index));
+							//Gotta make sure to check if the card is still in play or not
+							if(state.getPlayer(faction).getDen().contains(den.get(index)))
+							{
+								state.getPlayer(faction).removeFromDen(den.get(index));
+								
+								Card replacement = den.get(index);
+								replacement.setTrue(Time.NIGHT);
+								state.getPlayer(faction).addToDen(den.get(index));
+							}
 						}
 					}
 				}
@@ -298,7 +302,7 @@ public class Game {
 	 */
 	private static GameState oneAction(GameState state, Deck gameDeck, TreasureBag gameBag)
 	{
-		System.out.println("Board: ");
+		System.out.print("Board: ");
 		
 		//NOTE: this traversal might be backwards? need to check which way the cards get sorted
 		for(Card c : state.getBoard().getDeck())
@@ -328,8 +332,15 @@ public class Game {
 			}
 			else
 			{
+				Card actionCard = deck[index];
 				state = deck[index].dayAction(new GameState(state), gameBag);
-				state.getBoard().getDeck()[index].setTrue(Time.DAY);
+				
+				//Check to make sure the card is still in play
+				if(state.getBoard().getDeck().length > index 
+						&& state.getBoard().getDeck()[index].equals(actionCard))
+				{
+					state.getBoard().getDeck()[index].setTrue(Time.DAY);
+				}
 			}
 		}
 		else if(state.getTime() == Time.EVENING)
@@ -359,8 +370,15 @@ public class Game {
 			}
 			else
 			{
+				Card actionCard = deck[index];
 				state = deck[index].eveningAction(new GameState(state), gameBag);
-				state.getBoard().getDeck()[index].setTrue(Time.EVENING);
+				
+				//Check to make sure the card is still in play
+				if(state.getBoard().getDeck().length > index 
+						&& state.getBoard().getDeck()[index].equals(actionCard))
+				{
+					state.getBoard().getDeck()[index].setTrue(Time.EVENING);
+				}
 			}
 		}
 		else //the only other options is it being Time.NIGHT
