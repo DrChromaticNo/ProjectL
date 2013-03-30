@@ -197,7 +197,7 @@ public class Player {
 			Card[] cards = new Card[hand.size()];
 			cards = hand.toArray(cards);
 			
-			Card chosenCard = ai.chooseCard(cards, new GameState(state), gameDeck);
+			Card chosenCard = ai.chooseCard(this, cards, new GameState(state), gameDeck);
 			hand.remove(chosenCard);
 			return chosenCard;
 		}
@@ -233,7 +233,7 @@ public class Player {
 	
 	public GameState chooseState(GameState[] states, Deck deck, TreasureBag bag, ScoreCounter counter)
 	{
-		return ai.choose(states, deck, bag, counter);
+		return ai.choose(this, states, deck, bag, counter);
 	}
 	
 	public boolean checkCPU()
