@@ -81,13 +81,11 @@ public class PickTreasure implements Action {
 		else //if the player is a CPU, we generate all possible outcomes for treasure choice
 		{
 			Loot Lbag = state.getBoard().getLoot(state.getDay());
-			boolean allZero = true;
 			HashMap<GameState, String> choiceMap = new HashMap<GameState, String>();
 			for(String s : Treasure.allTreasures())
 			{
 				if(Lbag.countTreasure(s) != 0)
 				{
-					allZero = false;
 					GameState tempState = new GameState(state);
 					Lbag = tempState.getBoard().getLoot(state.getDay());
 					Lbag.addLoot(s, -1);
