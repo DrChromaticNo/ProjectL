@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
+import ai.AI;
+
 import main.GameState;
 
 import score.Loot;
@@ -35,6 +37,7 @@ public class Player {
 	private Set<Card> hand;
 	private Set<Card> discard;
 	private Set<Card> den;
+	private AI ai;
 	
 	
 	public Player(Color faction)
@@ -47,6 +50,13 @@ public class Player {
 		hand = new HashSet<Card>();
 		discard = new HashSet<Card>();
 		den = new HashSet<Card>();
+	}
+	
+	public Player(Color faction, AI ai)
+	{
+		this(faction);
+		CPU = true;
+		this.ai = ai;
 	}
 	
 	public Player(Player player)
@@ -175,14 +185,19 @@ public class Player {
 	 */
 	public Card pickCard(GameState state, Deck gameDeck)
 	{
-		if(hand.size() == 0)
+		if(hand.isEmpty())
 		{
 			return null;
 		}
 		
 		if(CPU)
 		{
-			return null;
+			Card[] cards = new Card[hand.size()];
+			cards = hand.toArray(cards);
+			
+			Card chosenCard = ai.chooseCard(cards, new GameState(state), gameDeck);
+			hand.remove(chosenCard);
+			return chosenCard;
 		}
 		else
 		{
