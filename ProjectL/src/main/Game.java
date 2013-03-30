@@ -396,6 +396,13 @@ public class Game {
 		}
 		else //the only other options is it being Time.NIGHT
 		{
+			//Since all these actions occur simultaineously
+			//we get each player's response and then
+			//update each of the player's states at once.
+			
+			//It is important to note a night phase action
+			//CANNOT modify the state of other players or anything about the game
+			//besides ADDING TO the treasure bag
 			if(state.getBoard().getDeck().length != 0)
 			{
 				throw new RuntimeException("Board isn't clear in night phase");
