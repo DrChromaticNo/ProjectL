@@ -202,9 +202,11 @@ public class Game {
 	 * Helper method to do the night state for one particular player at a time
 	 * @param state the game state at the start of the night phase
 	 * @param faction the faction of the player we're working on
+	 * @param counter the scorecounter being used in this game
 	 * @return the player after all his night phase actions have been completed
 	 */
-	private static Player nightPhaseHelper(GameState state, Color faction, TreasureBag bag)
+	private static Player nightPhaseHelper(GameState state, Color faction, 
+			TreasureBag bag, ScoreCounter counter)
 	{
 		for(Player p : state.getPlayerList())
 		{
@@ -232,7 +234,7 @@ public class Game {
 						}
 						else
 						{
-							state = den.get(index).nightAction(new GameState(state), bag);
+							state = den.get(index).nightAction(new GameState(state), bag, counter);
 							
 							//Gotta make sure to check if the card is still in play or not
 							if(state.getPlayer(faction).getDen().contains(den.get(index)))
@@ -264,9 +266,11 @@ public class Game {
 	 * Performs the actions for one week of play
 	 * @param state the game state at the start of the week
 	 * @param gameDeck the deck to use for this week
+	 * @param counter the scorecounter being used in this game
 	 * @param gameBag the treasure bag to use for this week
 	 */
-	private static GameState weekLoop(GameState state, Deck gameDeck, TreasureBag gameBag, ScoreCounter counter)
+	private static GameState weekLoop(GameState state, Deck gameDeck, 
+			TreasureBag gameBag, ScoreCounter counter)
 	{
 		for(int day = 0; day <= 5; day++)
 		{
@@ -283,7 +287,7 @@ public class Game {
 			
 			while(state.getTime() != Time.PICK_CARDS)
 			{
-				state = oneAction(state, gameDeck, gameBag);
+				state = oneAction(state, gameDeck, gameBag, counter);
 			}
 		}
 		
@@ -298,9 +302,11 @@ public class Game {
 	 * Performs one action of the game
 	 * @param state the gamestate before the action
 	 * @param gameDeck the deck being used for this action
+	 * @param counter the scorecounter being used in this game
 	 * @param gameBag the bag being used for this action
 	 */
-	private static GameState oneAction(GameState state, Deck gameDeck, TreasureBag gameBag)
+	private static GameState oneAction(GameState state, Deck gameDeck, 
+			TreasureBag gameBag, ScoreCounter counter)
 	{
 		System.out.print("Board: ");
 		
@@ -333,7 +339,7 @@ public class Game {
 			else
 			{
 				Card actionCard = deck[index];
-				state = deck[index].dayAction(new GameState(state), gameBag);
+				state = deck[index].dayAction(new GameState(state), gameBag, counter);
 				
 				//Check to make sure the card is still in play
 				if(state.getBoard().getDeck().length > index 
@@ -371,7 +377,7 @@ public class Game {
 			else
 			{
 				Card actionCard = deck[index];
-				state = deck[index].eveningAction(new GameState(state), gameBag);
+				state = deck[index].eveningAction(new GameState(state), gameBag, counter);
 				
 				//Check to make sure the card is still in play
 				if(state.getBoard().getDeck().length > index 
@@ -393,7 +399,8 @@ public class Game {
 			
 			for(int i = 0; i < stateList.length; i++)
 			{
-				endList[i] = nightPhaseHelper(new GameState(state), stateList[i].getFaction(), gameBag);
+				endList[i] = nightPhaseHelper(new GameState(state), stateList[i].getFaction(), 
+						gameBag, counter);
 			}
 			
 			state.setPlayerList(endList);

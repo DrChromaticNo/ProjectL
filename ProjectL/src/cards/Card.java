@@ -2,6 +2,7 @@ package cards;
 
 import java.awt.Color;
 
+import score.ScoreCounter;
 import score.TreasureBag;
 
 import main.GameState;
@@ -129,11 +130,12 @@ public class Card implements Comparable<Card>{
 	 * Performs the day action for this card
 	 * @param state the state of the game before the action
 	 * @param bag the treasurebag to use with this phase
+	 * @param counter the score counter being used in this game
 	 * @return the state of the game after the action is performed
 	 */
-	public GameState dayAction(GameState state, TreasureBag bag)
+	public GameState dayAction(GameState state, TreasureBag bag, ScoreCounter counter)
 	{
-		GameState end = deck.doPhase(Time.DAY, this, state, bag);
+		GameState end = deck.doPhase(Time.DAY, this, state, bag, counter);
 		return end;
 	}
 	
@@ -141,23 +143,26 @@ public class Card implements Comparable<Card>{
 	 * Performs the night action for this card
 	 * @param state the state of the game before the action
 	 * @param bag the treasurebag to use with this phase
+	 * @param counter the score counter being used in this game
 	 * @return the state of the game after the action is performed
 	 */
-	public GameState eveningAction(GameState state, TreasureBag bag)
+	public GameState eveningAction(GameState state, TreasureBag bag, ScoreCounter counter)
 	{
-		GameState end = deck.doPhase(Time.EVENING, this, state, bag);
+		GameState end = deck.doPhase(Time.EVENING, this, state, bag, counter);
 		return end;
 	}
 	
 	/**
 	 * Performs the evening action for this card
 	 * @param state the state of the game before the action
+	 * @param bag the treasurebag to use with this phase
+	 * @param counter the score counter being used in this game
 	 * @return the state of the game after the action is performed
 	 */
-	public GameState nightAction(GameState state, TreasureBag bag)
+	public GameState nightAction(GameState state, TreasureBag bag, ScoreCounter counter)
 	{
 		//Note: night actions occur simultaneously so they can never use the bag
-		GameState end = deck.doPhase(Time.NIGHT, this, state, bag);
+		GameState end = deck.doPhase(Time.NIGHT, this, state, bag, counter);
 		return end;
 	}
 	

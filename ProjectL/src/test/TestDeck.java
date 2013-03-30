@@ -12,6 +12,7 @@ import players.Player;
 import main.GameState;
 import main.Time;
 import score.Loot;
+import score.ScoreCounter;
 import score.Treasure;
 import score.TreasureBag;
 import standard.Carpenter;
@@ -65,11 +66,11 @@ public class TestDeck implements Deck {
 
 	@Override
 	public GameState doPhase(int time, Card card, GameState state,
-			TreasureBag bag) {
+			TreasureBag bag, ScoreCounter counter) {
 		
 		if(actionMap.containsKey(card.getValue()))
 		{
-			state = actionMap.get(card.getValue()).doAction(state, card, bag, time);
+			state = actionMap.get(card.getValue()).doAction(state, card, bag, this, counter, time);
 		}
 		return state;
 	}

@@ -1,5 +1,6 @@
 package ai;
 
+import score.ScoreCounter;
 import score.TreasureBag;
 import cards.Card;
 import cards.Deck;
@@ -19,7 +20,7 @@ public interface AI {
 	 * @param bag the bag being used for this game
 	 * @return the one to play
 	 */
-	public GameState choose(GameState[] states, Deck deck, TreasureBag bag);
+	public GameState choose(GameState[] states, Deck deck, TreasureBag bag, ScoreCounter counter);
 	
 	/**
 	 * Given a hand, choose a card from it to play

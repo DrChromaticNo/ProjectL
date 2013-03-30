@@ -10,7 +10,9 @@ import ai.AI;
 import main.GameState;
 
 import score.Loot;
+import score.ScoreCounter;
 import score.Treasure;
+import score.TreasureBag;
 
 import cards.Card;
 import cards.Deck;
@@ -227,6 +229,11 @@ public class Player {
 				}
 			}
 		}
+	}
+	
+	public GameState chooseState(GameState[] states, Deck deck, TreasureBag bag, ScoreCounter counter)
+	{
+		return ai.choose(states, deck, bag, counter);
 	}
 	
 	public boolean checkCPU()

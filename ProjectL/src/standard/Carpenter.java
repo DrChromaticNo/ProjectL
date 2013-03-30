@@ -6,9 +6,11 @@ import players.Faction;
 import players.Player;
 import main.GameState;
 import main.Time;
+import score.ScoreCounter;
 import score.TreasureBag;
 import cards.Action;
 import cards.Card;
+import cards.Deck;
 
 /**
  * The class that represents the carpenter card
@@ -18,8 +20,8 @@ import cards.Card;
 public class Carpenter implements Action {
 
 	@Override
-	public GameState doAction(GameState state, Card card, TreasureBag bag,
-			int time) 
+	public GameState doAction(GameState state, Card card, TreasureBag bag, 
+			Deck deck, ScoreCounter counter, int time) 
 	{
 		if(time == Time.DAY)
 		{
@@ -28,7 +30,7 @@ public class Carpenter implements Action {
 		else if(time == Time.EVENING)
 		{
 			PickTreasure pick = new PickTreasure();
-			state = pick.doAction(state, card, bag, time);
+			state = pick.doAction(state, card, bag, deck, counter, time);
 		}
 		else if(time == Time.NIGHT)
 		{
