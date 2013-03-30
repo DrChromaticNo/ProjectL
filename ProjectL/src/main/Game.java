@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
 
+import ai.SimpleAI;
+
 import players.Faction;
 import players.Player;
 

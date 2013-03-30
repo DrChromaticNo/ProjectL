@@ -71,6 +71,7 @@ public class Player {
 		hand = new HashSet<Card>(player.getHand());
 		discard = new HashSet<Card>(player.getDiscard());
 		den = new HashSet<Card>(player.getDen());
+		ai = player.ai;
 	}
 	
 	public int getGold()
