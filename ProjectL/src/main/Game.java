@@ -194,8 +194,13 @@ public class Game {
 			}
 		}
 		
+		//Now that we've collected all the cards, remove them from the players' hands and
+		//put them on the board
 		for(Card c : chosenCards)
 		{
+			Player player = state.getPlayer(c.getFaction());
+			player.removeFromHand(c);
+			
 			state.getBoard().addCard(c);
 		}
 	}

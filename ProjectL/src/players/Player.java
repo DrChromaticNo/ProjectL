@@ -199,7 +199,6 @@ public class Player {
 			cards = hand.toArray(cards);
 			
 			Card chosenCard = ai.chooseCard(this, cards, new GameState(state), gameDeck);
-			hand.remove(chosenCard);
 			return chosenCard;
 		}
 		else
@@ -224,7 +223,6 @@ public class Player {
 				{
 					if(gameDeck.abbreviatedName(c).equals(choice))
 					{
-						hand.remove(c);
 						return c;
 					}
 				}
