@@ -54,17 +54,19 @@ public class FullAI implements AI {
 	/**
 	 * Controls which alpha beta routine to call
 	 * @param state the game's state at this point
-	 * @param alpha 
-	 * @param beta
-	 * @param faction
-	 * @param deck
-	 * @param bag
-	 * @param counter
-	 * @return
+	 * @param alpha the alpha for alpha/beta pruning
+	 * @param beta the beta for alpha/beta pruning
+	 * @param faction the faction of the player whose score we want to maximize
+	 * @param deck the deck being used in this game
+	 * @param bag the treasure bag being used in this game
+	 * @param counter the score counter being used in this game
+	 * @return alpha if the player matches the player doing the action, beta otherwise
 	 */
 	private int alphabeta(GameState state, int alpha, int beta, Color faction, 
 			Deck deck, TreasureBag bag, ScoreCounter counter)
 	{
+		//If we need to choose cards to play on the board we go to the
+		//"choosing cards" routine
 		if(state.getTime() == Time.PICK_CARDS)
 		{
 			ArrayList<Color> playerList = new ArrayList<Color>();
@@ -75,7 +77,7 @@ public class FullAI implements AI {
 			return alphabetaCardPicking(state, playerList,
 					new ArrayList<Card>(), alpha, beta, faction, deck, bag.copy(), counter);
 		}
-		else
+		else //if we need to do an action or score, we go to the action or score routine
 		{	
 			return ABactionOrScore(state, alpha, beta, 
 					faction, deck, bag, counter);
@@ -101,11 +103,13 @@ public class FullAI implements AI {
 		int maxScore = Integer.MIN_VALUE;
 		for(Player p : state.getPlayerList())
 		{
+			//determine the player's score
 			if(p.getFaction().equals(faction))
 			{
 				playerScore = p.getScore();
 			}
 			
+			//determine the best score
 			if(p.getScore() >= maxScore)
 			{
 				maxScore = p.getScore();
@@ -138,6 +142,18 @@ public class FullAI implements AI {
 		}
 	}
 	
+	/**
+	 * Figures out which the next action in the day is and scores the board if it's time to be scored,
+	 * otherwise figures out the next action and does it
+	 * @param state the state of the game to be analyzed at this point
+	 * @param alpha the alpha for alpha/beta pruning
+	 * @param beta the beta for alpha/beta pruning
+	 * @param faction the faction of the player whose score we are trying to maximize
+	 * @param deck the deck being used for this game
+	 * @param bag the treasure bag being used for this game
+	 * @param counter the score counter being used for this game
+	 * @return alpha if the player matches the player doing the action, beta otherwise 
+	 */
 	private int ABactionOrScore (GameState state, int alpha, int beta, 
 	Color faction, Deck deck, TreasureBag bag, ScoreCounter counter)
 	{
@@ -349,12 +365,25 @@ public class FullAI implements AI {
 			{
 				state.setTime(Time.PICK_CARDS);
 				state.setDay(state.getDay()+1);
-				alphabeta(state, alpha, beta, faction, deck, bag, counter);
+				return alphabeta(state, alpha, beta, faction, deck, bag, counter);
 			}
 		}
-		return 0; //should never reach here
+		throw new RuntimeException("should never reach here in a/b pruning");
 	}
 	
+	/**
+	 * Iterates through all possible cards to select
+	 * @param state the state before cards have been selected
+	 * @param playerList the players yet to choose cards
+	 * @param choiceList the cards which have been chosen so far
+	 * @param alpha alpha for alpha/beta pruning
+	 * @param beta beta for alpha/beta pruning
+	 * @param faction the faction of the player whose score we are trying to maximize
+	 * @param deck the deck being used for this game
+	 * @param bag the treasure bag being used for this game
+	 * @param counter the score counter being used for this game
+	 * @return alpha if the player matches the player doing the action, beta otherwise 
+	 */
 	private int alphabetaCardPicking(GameState state, 
 			ArrayList<Color> playerList, ArrayList<Card> choiceList, int alpha, int beta,
 			Color faction, Deck deck, TreasureBag bag, ScoreCounter counter)
@@ -446,10 +475,7 @@ public class FullAI implements AI {
 				choice = card;
 			}
 		}
-		
 		return choice;
-		
-		
 	}
 	
 	

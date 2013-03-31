@@ -79,42 +79,9 @@ public class PickTreasure implements Action {
 			}
 		}
 		else //if the player is a CPU, we generate all possible outcomes for treasure choice
-		{
-			Loot Lbag = state.getBoard().getLoot(state.getDay());
-			HashMap<GameState, String> choiceMap = new HashMap<GameState, String>();
-			for(String s : Treasure.allTreasures())
-			{
-				if(Lbag.countTreasure(s) != 0)
-				{
-					GameState tempState = new GameState(state);
-					Lbag = tempState.getBoard().getLoot(state.getDay());
-					Lbag.addLoot(s, -1);
-					tempState.getBoard().setLoot(tempState.getDay(), Lbag);
-					tempState.getPlayer(faction).getLoot().addLoot(s, 1);
-					
-					if(s.equals(Treasure.OFFICER))
-					{
-						tempState.getBoard().removeCard(card);
-						tempState.getPlayer(faction).addToDiscard(card);
-						choiceMap.put(tempState, s);
-					}
-					else if(tempState.equals(Treasure.SABER))
-					{
-						for(GameState g : saberActionCPU(tempState, faction))
-						{
-							choiceMap.put(g, s);
-						}
-					}
-					else
-					{
-						choiceMap.put(tempState, s);
-					}
-				}
-			}
-			
-			//Now that we've found all possible choices, we have the ai choose one
-			
-			return state.getPlayer(faction).chooseState(choiceMap.keySet().toArray(new GameState[0]),
+		{	
+			return state.getPlayer(faction).chooseState(
+					allActions(new GameState(state), card, bag, deck, counter, time),
 					deck, bag, counter);
 		}
 		return state;
@@ -280,12 +247,52 @@ public class PickTreasure implements Action {
 			choices.add(tempState);
 		}
 		
-		return choices.toArray(new GameState[0]);
+		return choices.toArray(new GameState[choices.size()]);
 	}
 
 	@Override
 	public int score(GameState state, Card card) {
 		return 0;
+	}
+
+	@Override
+	public GameState[] allActions(GameState state, Card card, TreasureBag bag,
+			Deck deck, ScoreCounter counter, int time) {
+		
+		Color faction = card.getFaction();
+		Loot Lbag = state.getBoard().getLoot(state.getDay());
+		HashSet<GameState> choiceSet = new HashSet<GameState>();
+		for(String s : Treasure.allTreasures())
+		{
+			if(Lbag.countTreasure(s) != 0)
+			{
+				GameState tempState = new GameState(state);
+				Lbag = tempState.getBoard().getLoot(state.getDay());
+				Lbag.addLoot(s, -1);
+				tempState.getBoard().setLoot(tempState.getDay(), Lbag);
+				tempState.getPlayer(faction).getLoot().addLoot(s, 1);
+				
+				if(s.equals(Treasure.OFFICER))
+				{
+					tempState.getBoard().removeCard(card);
+					tempState.getPlayer(faction).addToDiscard(card);
+					choiceSet.add(tempState);
+				}
+				else if(tempState.equals(Treasure.SABER))
+				{
+					for(GameState g : saberActionCPU(tempState, faction))
+					{
+						choiceSet.add(g);
+					}
+				}
+				else
+				{
+					choiceSet.add(tempState);
+				}
+			}
+		}
+		
+		return choiceSet.toArray(new GameState[choiceSet.size()]);
 	}
 
 

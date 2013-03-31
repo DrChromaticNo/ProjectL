@@ -59,4 +59,28 @@ public class Carpenter implements Action {
 		return 10;
 	}
 
+	@Override
+	public GameState[] allActions(GameState state, Card card, TreasureBag bag,
+			Deck deck, ScoreCounter counter, int time) {
+		
+		GameState[] states = new GameState[1];
+		states[1] = state;
+		
+		if(time == Time.DAY)
+		{
+			states[1] = doAction(new GameState(state), card, bag.copy(), deck, counter, time);
+		}
+		else if(time == Time.EVENING)
+		{
+			PickTreasure temp = new PickTreasure();
+			states = temp.allActions(new GameState(state), card, bag.copy(), deck, counter, time);
+		}
+		else if(time == Time.NIGHT)
+		{
+			//Nothing to do
+		}
+		
+		return states;
+	}
+
 }
