@@ -46,6 +46,8 @@ public class FullAI implements AI {
 			int check = alphabeta(new GameState(s), alpha, beta, 
 					player.getFaction(), deck, bag.copy(), counter);
 			
+			System.out.println("check: " + check);
+			
 			//Check to see if this state is better
 			if(check > alpha)
 			{
@@ -127,11 +129,8 @@ public class FullAI implements AI {
 		}
 		//Okay, now we need to figure out if the player had the best score or not
 		if(maxPlayer != null)
-		{
-			return playerScore - maxScore; //should always be a negative value
-		}
-		else //otherwise, we need to find the player in 2nd place
-		{
+		{	
+			//we need to find the player in 2nd place
 			maxScore = Integer.MIN_VALUE;
 			for(Player p : state.getPlayerList())
 			{
@@ -145,6 +144,10 @@ public class FullAI implements AI {
 			}
 			
 			return playerScore - maxScore; //should always be a positive value
+		}
+		else
+		{	
+			return playerScore - maxScore; //should always be a negative value or 0
 		}
 	}
 	
