@@ -416,6 +416,7 @@ public class FullAI implements AI {
 			ArrayList<Color> playerList, ArrayList<Card> choiceList, int alpha, int beta,
 			Color faction, Deck deck, TreasureBag bag, ScoreCounter counter)
 	{
+		//Base case, if there aren't any more players we go to the first action
 		if(playerList.size() == 0)
 		{
 			GameState tempState = new GameState(state);
@@ -431,6 +432,7 @@ public class FullAI implements AI {
 		}
 		else
 		{
+			//otherwise, we iterate through all the possibilities of a given player's card choices
 			Color pColor = playerList.remove(0);
 			if(faction.equals(pColor))
 			{
@@ -446,6 +448,7 @@ public class FullAI implements AI {
 					if(alpha >= beta)
 						return alpha;
 				}
+				//we also need to check if they have no cards in their hand
 				if(state.getPlayer(pColor).getHand().isEmpty())
 				{
 					alpha = Math.max(alpha, alphabetaCardPicking(state, new ArrayList<Color>(playerList), 
