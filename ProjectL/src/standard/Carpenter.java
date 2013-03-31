@@ -55,7 +55,6 @@ public class Carpenter implements Action {
 	@Override
 	public int score(GameState state, Card card) 
 	{
-		System.out.println(Faction.getPirateName(card.getFaction()) + " got 10 gold from his Carpenter!");
 		return 10;
 	}
 
@@ -64,7 +63,7 @@ public class Carpenter implements Action {
 			Deck deck, ScoreCounter counter, int time) {
 		
 		GameState[] states = new GameState[1];
-		states[1] = state;
+		states[0] = state;
 		
 		if(time == Time.DAY)
 		{

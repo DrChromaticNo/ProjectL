@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
 
+import ai.FullAI;
 import ai.SimpleAI;
 
 import players.Faction;
@@ -51,10 +52,14 @@ public class Game {
 		}
 		
 		//randomly assign each player a faction
-		for(int i = 0; i < numPlayers; i++)
+	/*	for(int i = 0; i < numPlayers; i++)
 		{
 			playerList[i] = new Player(chooseFaction(factionList));
 		}
+	*/
+		
+		playerList[0] = new Player(chooseFaction(factionList));
+		playerList[1] = new Player(chooseFaction(factionList), new FullAI());
 		
 		//now, create the gamestate
 		GameState state = new GameState(playerList,new Board());

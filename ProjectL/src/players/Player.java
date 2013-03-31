@@ -14,6 +14,7 @@ import score.ScoreCounter;
 import score.Treasure;
 import score.TreasureBag;
 
+import cards.Action;
 import cards.Card;
 import cards.Deck;
 
@@ -230,9 +231,10 @@ public class Player {
 		}
 	}
 	
-	public GameState chooseState(GameState[] states, Deck deck, TreasureBag bag, ScoreCounter counter)
+	public GameState chooseState(GameState[] states, Card card, 
+			Deck deck, TreasureBag bag, ScoreCounter counter)
 	{
-		return ai.choose(this, states, deck, bag, counter);
+		return ai.choose(this, states, card, deck, bag, counter);
 	}
 	
 	public boolean checkCPU()

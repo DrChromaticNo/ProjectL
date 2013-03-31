@@ -6,6 +6,7 @@ import main.GameState;
 import players.Player;
 import score.ScoreCounter;
 import score.TreasureBag;
+import cards.Action;
 import cards.Card;
 import cards.Deck;
 
@@ -17,8 +18,8 @@ import cards.Deck;
 public class SimpleAI implements AI {
 
 	@Override
-	public GameState choose(Player player, GameState[] states, Deck deck,
-			TreasureBag bag, ScoreCounter counter) {
+	public GameState choose(Player player, GameState[] states, Card card, 
+			Deck deck, TreasureBag bag, ScoreCounter counter) {
 		
 		Random choice = new Random();
 		return states[choice.nextInt(states.length)];

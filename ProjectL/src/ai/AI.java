@@ -16,14 +16,15 @@ public interface AI {
 
 	/**
 	 * Given a set of possible moves, select one to play
-	 * @param states the set of potential moves
+	 * @param states the move from which all the other moves will happen
 	 * @param deck the deck being used for this game
 	 * @param bag the bag being used for this game
 	 * @param bag the bag being used for this game
 	 * @param counter the scorecounter being used to score this games
 	 * @return the one to play
 	 */
-	public GameState choose(Player player, GameState[] states, Deck deck, TreasureBag bag, ScoreCounter counter);
+	public GameState choose(Player player, GameState[] states, Card card, 
+			Deck deck, TreasureBag bag, ScoreCounter counter);
 	
 	/**
 	 * Given a hand, choose a card from it to play

@@ -9,6 +9,7 @@ import main.Time;
 import players.Player;
 import score.ScoreCounter;
 import score.TreasureBag;
+import cards.Action;
 import cards.Card;
 import cards.Deck;
 
@@ -20,8 +21,13 @@ import cards.Deck;
 public class FullAI implements AI {
 
 	@Override
-	public GameState choose(Player player, GameState[] states, Deck deck,
-			TreasureBag bag, ScoreCounter counter) {
+	public GameState choose(Player player, GameState[] states, Card card, 
+			Deck deck, TreasureBag bag, ScoreCounter counter) {
+		
+		for(GameState s : states)
+		{
+			s = findSetToTrue(s,card);
+		}
 		
 		//If there's only one choice, we have no choice but to do it
 		if(states.length == 1)
@@ -35,16 +41,16 @@ public class FullAI implements AI {
 		
 		//We perform alpha beta search on each state to see if
 		//it's the best
-		for(GameState state : states)
+		for(GameState s : states)
 		{
-			int check = alphabeta(new GameState(state), alpha, beta, 
+			int check = alphabeta(new GameState(s), alpha, beta, 
 					player.getFaction(), deck, bag.copy(), counter);
 			
 			//Check to see if this state is better
 			if(check > alpha)
 			{
 				alpha = check;
-				choice = state;
+				choice = s;
 			}
 		}
 		
@@ -171,6 +177,7 @@ public class FullAI implements AI {
 			if(index >= shipDeck.length)
 			{
 				state.setTime(Time.EVENING);
+				return alphabeta(state, alpha, beta, faction, deck, bag, counter);
 			}
 			else
 			{
@@ -234,6 +241,7 @@ public class FullAI implements AI {
 				state.getBoard().clearDeck();
 				
 				state.setTime(Time.NIGHT);
+				return alphabeta(state, alpha, beta, faction, deck, bag, counter);
 			}
 			else
 			{
@@ -368,7 +376,6 @@ public class FullAI implements AI {
 				return alphabeta(state, alpha, beta, faction, deck, bag, counter);
 			}
 		}
-		throw new RuntimeException("should never reach here in a/b pruning");
 	}
 	
 	/**
@@ -418,6 +425,12 @@ public class FullAI implements AI {
 					if(alpha >= beta)
 						return alpha;
 				}
+				if(state.getPlayer(pColor).getHand().isEmpty())
+				{
+					alpha = Math.max(alpha, alphabetaCardPicking(state, new ArrayList<Color>(playerList), 
+							new ArrayList<Card>(choiceList), alpha, beta, 
+							faction, deck, bag.copy(), counter));
+				}
 				return alpha;
 			}
 			else
@@ -432,6 +445,12 @@ public class FullAI implements AI {
 							faction, deck, bag.copy(), counter));
 					if(alpha >= beta)
 						return beta;
+				}
+				if(state.getPlayer(pColor).getHand().isEmpty())
+				{
+					beta = Math.min(beta, alphabetaCardPicking(state, new ArrayList<Color>(playerList), 
+							new ArrayList<Card>(choiceList), alpha, beta, 
+							faction, deck, bag.copy(), counter));
 				}
 				return beta;
 			}
@@ -476,6 +495,61 @@ public class FullAI implements AI {
 			}
 		}
 		return choice;
+	}
+	
+	/**
+	 * Searches through the state to find the card and sets the time on it to true
+	 * @param state the state to search through
+	 * @param card the card who needs to have its state changed
+	 * @return the state after you flip the card
+	 */
+	private GameState findSetToTrue(GameState state, Card card)
+	{
+		//Check the hand
+		for(Card c : state.getPlayer(card.getFaction()).getHand())
+		{
+			if(c.equals(card))
+			{
+				state.getPlayer(card.getFaction()).removeFromHand(c);
+				c.setTrue(state.getTime());
+				state.getPlayer(card.getFaction()).addToHand(c);
+			}
+		}
+		
+		//Check the discard
+		for(Card c : state.getPlayer(card.getFaction()).getDiscard())
+		{
+			if(c.equals(card))
+			{
+				state.getPlayer(card.getFaction()).removeFromDiscard(c);
+				c.setTrue(state.getTime());
+				state.getPlayer(card.getFaction()).addToDiscard(c);
+			}
+		}
+		
+		//Check the den
+		for(Card c : state.getPlayer(card.getFaction()).getDen())
+		{
+			if(c.equals(card))
+			{
+				state.getPlayer(card.getFaction()).removeFromDen(c);
+				c.setTrue(state.getTime());
+				state.getPlayer(card.getFaction()).addToDen(c);
+			}
+		}
+		
+		//Check the board
+		for(Card c : state.getBoard().getDeck())
+		{
+			if(c.equals(card))
+			{
+				state.getBoard().removeCard(c);
+				c.setTrue(state.getTime());
+				state.getBoard().addCard(c);
+			}
+		}
+		
+		return state;
 	}
 	
 	

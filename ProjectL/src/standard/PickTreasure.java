@@ -82,7 +82,7 @@ public class PickTreasure implements Action {
 		{	
 			return state.getPlayer(faction).chooseState(
 					allActions(new GameState(state), card, bag, deck, counter, time),
-					deck, bag, counter);
+					card, deck, bag, counter);
 		}
 		return state;
 	}
