@@ -142,4 +142,17 @@ public class TestDeck implements Deck {
 		
 		return map;
 	}
+
+	@Override
+	public GameState[] getPossiblePhases(int time, Card card, GameState state,
+			TreasureBag bag, ScoreCounter counter) {
+		
+		GameState[] states = new GameState[1];
+		states[0] = state;
+		if(actionMap.containsKey(card.getValue()))
+		{
+			states = actionMap.get(card.getValue()).allActions(state, card, bag, this, counter, time);
+		}
+		return states;
+	}
 }

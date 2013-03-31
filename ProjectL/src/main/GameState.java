@@ -16,12 +16,14 @@ public class GameState {
 	private Board board;
 	private int day;
 	private int time;
+	private int week;
 	
 	public GameState(Player[] playerlist, Board board)
 	{
 		pList = playerlist;
 		this.board = board;
 		day = 0;
+		week = 0;
 		time = Time.PICK_CARDS;
 	}
 	
@@ -35,6 +37,7 @@ public class GameState {
 		board = new Board(state.board);
 		day = state.day;
 		time = state.time;
+		week = state.week;
 	}
 	
 	public Player[] getPlayerList()
@@ -80,6 +83,16 @@ public class GameState {
 		{
 			this.day = day;
 		}
+	}
+	
+	public int getWeek()
+	{
+		return week;
+	}
+	
+	public void setWeek(int week)
+	{
+		this.week = week;
 	}
 	
 	public int getTime()

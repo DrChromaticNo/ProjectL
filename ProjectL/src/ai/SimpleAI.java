@@ -26,7 +26,7 @@ public class SimpleAI implements AI {
 
 	@Override
 	public Card chooseCard(Player player, Card[] cards, GameState state,
-			Deck deck) {
+			Deck deck, TreasureBag bag, ScoreCounter counter) {
 		
 		Random choice = new Random();
 		return cards[choice.nextInt(cards.length)];

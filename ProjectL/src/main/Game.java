@@ -89,6 +89,7 @@ public class Game {
 		
 		for(int week = 1; week <= 3; week++)
 		{
+			state.setWeek(week);
 			gameBag.resetBag();
 			placeTreasures(state, gameBag);
 			distributeInitialGold(state, 10);
@@ -181,13 +182,13 @@ public class Game {
 	 * @param state the current state of the game
 	 * @param gameDeck the deck being used with this game
 	 */
-	private static void pickCards(GameState state, Deck gameDeck)
+	private static void pickCards(GameState state, Deck gameDeck, TreasureBag bag, ScoreCounter counter)
 	{
 		HashSet<Card> chosenCards = new HashSet<Card>();
 		
 		for(Player p : state.getPlayerList())
 		{
-			Card choice = p.pickCard(state, gameDeck);
+			Card choice = p.pickCard(state, gameDeck, bag, counter);
 			if(choice != null)
 			{
 				chosenCards.add(choice);
@@ -285,7 +286,7 @@ public class Game {
 			
 			if(state.getTime() == Time.PICK_CARDS)
 			{
-				pickCards(state, gameDeck);
+				pickCards(state, gameDeck, gameBag, counter);
 				System.out.println(" ");
 				System.out.println("~DAY PHASE~");
 				System.out.println(" ");

@@ -19,6 +19,8 @@ public interface AI {
 	 * @param states the set of potential moves
 	 * @param deck the deck being used for this game
 	 * @param bag the bag being used for this game
+	 * @param bag the bag being used for this game
+	 * @param counter the scorecounter being used to score this games
 	 * @return the one to play
 	 */
 	public GameState choose(Player player, GameState[] states, Deck deck, TreasureBag bag, ScoreCounter counter);
@@ -28,7 +30,9 @@ public interface AI {
 	 * @param cards the cards to choose from
 	 * @param state the state before all cards have been picked
 	 * @param deck the deck being used for this game
+	 * @param bag the bag being used for this game
+	 * @param counter the scorecounter being used to score this games
 	 * @return the card chosen to play
 	 */
-	public Card chooseCard(Player player, Card[] cards, GameState state, Deck deck);
+	public Card chooseCard(Player player, Card[] cards, GameState state, Deck deck, TreasureBag bag, ScoreCounter counter);
 }

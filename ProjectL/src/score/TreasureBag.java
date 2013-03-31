@@ -26,4 +26,10 @@ public interface TreasureBag {
 	 */
 	public void resetBag();
 	
+	/**
+	 * Make a deep copy of this treasurebag
+	 * @return a deep copy of this treasurebag
+	 */
+	public TreasureBag copy();
+	
 }

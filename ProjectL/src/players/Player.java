@@ -186,7 +186,7 @@ public class Player {
 	 * @param gameDeck the deck being used with the game
 	 * @return the card this player wants to play
 	 */
-	public Card pickCard(GameState state, Deck gameDeck)
+	public Card pickCard(GameState state, Deck gameDeck, TreasureBag bag, ScoreCounter counter)
 	{
 		if(hand.isEmpty())
 		{
@@ -198,7 +198,7 @@ public class Player {
 			Card[] cards = new Card[hand.size()];
 			cards = hand.toArray(cards);
 			
-			Card chosenCard = ai.chooseCard(this, cards, new GameState(state), gameDeck);
+			Card chosenCard = ai.chooseCard(this, cards, new GameState(state), gameDeck, bag, counter);
 			return chosenCard;
 		}
 		else

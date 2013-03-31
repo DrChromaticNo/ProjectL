@@ -22,6 +22,12 @@ public class StandardTreasureBag implements TreasureBag {
 		resetBag();
 	}
 	
+	public StandardTreasureBag(StandardTreasureBag tBag)
+	{
+		bag = new Loot(tBag.bag);
+		totalTreasures = tBag.totalTreasures;
+	}
+	
 	@Override
 	public String randomTreasure() {
 		Random random = new Random();
@@ -68,6 +74,11 @@ public class StandardTreasureBag implements TreasureBag {
 		bag.addLoot(Treasure.RELIC, 10);
 		
 		totalTreasures = 40;
+	}
+
+	@Override
+	public TreasureBag copy() {
+		return new StandardTreasureBag(this);
 	}
 
 

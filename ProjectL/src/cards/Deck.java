@@ -41,6 +41,17 @@ public interface Deck {
 	public GameState doPhase(int time, Card card, GameState state, TreasureBag bag, ScoreCounter counter);
 	
 	/**
+	 * Get all the possible phases for this action at this time
+	 * @param time the time corresponding to the phase
+	 * @param card The card
+	 * @param bag the bag to use for this phase
+	 * @param state the state before the action
+	 * @param counter the scorecounter being used for this game
+	 * @return an array of all the possible resulting states from this action
+	 */
+	public GameState[] getPossiblePhases(int time, Card card, GameState state, TreasureBag bag, ScoreCounter counter);
+	
+	/**
 	 * Perform the card's end of game/score action
 	 * @param card The card to score with
 	 * @param state the game state before this card has been scored
