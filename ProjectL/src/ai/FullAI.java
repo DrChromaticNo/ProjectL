@@ -3,6 +3,8 @@ package ai;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import main.GameState;
 import main.Time;
@@ -20,6 +22,8 @@ import cards.Deck;
  */
 public class FullAI implements AI {
 
+	private Map<GameState, Integer> cache; 
+	
 	@Override
 	public GameState choose(Player player, GameState[] states, Card card, 
 			Deck deck, TreasureBag bag, ScoreCounter counter) {
@@ -73,6 +77,16 @@ public class FullAI implements AI {
 	private int alphabeta(GameState state, int alpha, int beta, Color faction, 
 			Deck deck, TreasureBag bag, ScoreCounter counter)
 	{
+		
+		//If we have the cached value for this spot, return it without
+		//doing more calculations
+		if(cache.containsKey(state))
+		{
+			return cache.get(state);
+		}
+		
+		int val = 0;
+		
 		//If we need to choose cards to play on the board we go to the
 		//"choosing cards" routine
 		if(state.getTime() == Time.PICK_CARDS)
@@ -82,14 +96,18 @@ public class FullAI implements AI {
 			{
 				playerList.add(p.getFaction());
 			}
-			return alphabetaCardPicking(state, playerList,
+			
+			val = alphabetaCardPicking(new GameState(state), playerList,
 					new ArrayList<Card>(), alpha, beta, faction, deck, bag.copy(), counter);
 		}
 		else //if we need to do an action or score, we go to the action or score routine
 		{	
-			return ABactionOrScore(state, alpha, beta, 
+			val = ABactionOrScore(new GameState(state), alpha, beta, 
 					faction, deck, bag, counter);
 		}
+		
+		cache.put(state, val);
+		return val;
 	}
 	
 	/**
@@ -464,6 +482,13 @@ public class FullAI implements AI {
 	@Override
 	public Card chooseCard(Player player, Card[] cards, GameState state,
 			Deck deck, TreasureBag bag, ScoreCounter counter) {
+		
+		//If it's the start of a new week, we need a fresh cache
+		if(state.getDay() == 0)
+		{
+			cache = new HashMap<GameState, Integer>();
+		}
+		
 		//If there's only one choice, we have no choice but to do it
 		if(cards.length == 1)
 		{
