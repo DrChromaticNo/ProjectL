@@ -3,7 +3,6 @@ package standard;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Scanner;
 
 import players.Faction;
 import players.Player;
@@ -12,6 +11,7 @@ import score.Loot;
 import score.ScoreCounter;
 import score.Treasure;
 import score.TreasureBag;
+import test.DebugMenu;
 import cards.Action;
 import cards.Card;
 import cards.Deck;
@@ -29,9 +29,7 @@ public class PickTreasure implements Action {
 	{
 		Color faction = card.getFaction();
 		if(!state.getPlayer(faction).checkCPU())
-		{
-			Scanner inputScanner = new Scanner(System.in);
-			
+		{	
 			String choice = "";
 			Loot Lbag = state.getBoard().getLoot(state.getDay());
 			boolean allZero = false;
@@ -57,7 +55,8 @@ public class PickTreasure implements Action {
 				if(!allZero)
 				{
 					System.out.println("Please choose one treasure:");
-					int pick = inputScanner.nextInt();
+					DebugMenu menu = new DebugMenu();
+					int pick = Integer.parseInt(menu.launch(state));
 					choice = tMap.get(pick);
 				}
 			}
@@ -147,9 +146,9 @@ public class PickTreasure implements Action {
 					
 					System.out.println("Choose a pirate to kill: ");
 					
-					Scanner inputScanner = new Scanner(System.in);
+					DebugMenu menu = new DebugMenu();
 					
-					choice = inputScanner.next();
+					choice = menu.launch(state);
 					
 					for(Card c : leftSet)
 					{

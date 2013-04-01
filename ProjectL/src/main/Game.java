@@ -17,7 +17,6 @@ import ai.SimpleAI;
 import players.Faction;
 import players.Player;
 
-import score.Loot;
 import score.ScoreCounter;
 import score.Treasure;
 import score.TreasureBag;

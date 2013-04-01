@@ -6,7 +6,6 @@ import main.GameState;
 import players.Player;
 import score.ScoreCounter;
 import score.TreasureBag;
-import cards.Action;
 import cards.Card;
 import cards.Deck;
 

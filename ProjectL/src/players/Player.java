@@ -2,7 +2,6 @@ package players;
 
 import java.awt.Color;
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
 
 import ai.AI;
@@ -13,8 +12,8 @@ import score.Loot;
 import score.ScoreCounter;
 import score.Treasure;
 import score.TreasureBag;
+import test.DebugMenu;
 
-import cards.Action;
 import cards.Card;
 import cards.Deck;
 
@@ -203,9 +202,7 @@ public class Player {
 			return chosenCard;
 		}
 		else
-		{
-			Scanner inputScanner = new Scanner(System.in);
-			
+		{	
 			while(true)
 			{	
 				System.out.println("You have availible cards: ");
@@ -218,7 +215,9 @@ public class Player {
 				System.out.println();
 				System.out.println("Please choose one of these cards");
 				
-				String choice = inputScanner.next();
+				DebugMenu menu = new DebugMenu();
+				
+				String choice = menu.launch(state);
 				
 				for(Card c : hand)
 				{

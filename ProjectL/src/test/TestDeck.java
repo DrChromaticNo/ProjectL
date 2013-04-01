@@ -3,17 +3,11 @@ package test;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
 
 import players.Faction;
-import players.Player;
 
 import main.GameState;
-import main.Time;
-import score.Loot;
 import score.ScoreCounter;
-import score.Treasure;
 import score.TreasureBag;
 import standard.Carpenter;
 import cards.Action;
