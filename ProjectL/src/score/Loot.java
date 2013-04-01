@@ -38,7 +38,10 @@ public class Loot {
 	
 	public void emptyBag()
 	{
-		loot.clear();
+		for(String s : loot.keySet())
+		{
+			loot.put(s, 0);
+		}
 	}
 	
 	/**
