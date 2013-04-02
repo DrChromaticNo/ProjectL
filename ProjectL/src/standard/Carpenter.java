@@ -51,6 +51,7 @@ public class Carpenter implements Action {
 		return state;
 	}
 	
+	//The only difference here is no text output
 	private GameState carpenterDayAll(GameState state, Card card)
 	{
 		Color faction = card.getFaction();

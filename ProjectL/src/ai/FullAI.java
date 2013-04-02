@@ -148,10 +148,14 @@ public class FullAI implements AI {
 				}
 			}
 			
+			System.out.println("score: " + (playerScore - maxScore));
+			
 			return playerScore - maxScore; //should always be a positive value
 		}
 		else
 		{	
+			System.out.println("score: " + (playerScore - maxScore));
+			
 			return playerScore - maxScore; //should always be a negative value or 0
 		}
 	}
