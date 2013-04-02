@@ -45,10 +45,16 @@ public class Carpenter implements Action {
 	{
 		Color faction = card.getFaction();
 		Player player = state.getPlayer(faction);
-		System.out.println();
-//		System.out.println(Faction.getPirateName(faction) + " lost " + player.getGold()/2 + 
-//				" gold due to their Carpenter!");
-		System.out.println();
+		System.out.println("\n" + Faction.getPirateName(faction) + " lost " + player.getGold()/2 + 
+				" gold due to their Carpenter!\n");
+		player.addGold(-player.getGold()/2);
+		return state;
+	}
+	
+	private GameState carpenterDayAll(GameState state, Card card)
+	{
+		Color faction = card.getFaction();
+		Player player = state.getPlayer(faction);
 		player.addGold(-player.getGold()/2);
 		return state;
 	}
@@ -67,7 +73,7 @@ public class Carpenter implements Action {
 		
 		if(time == Time.DAY)
 		{
-			states[0] = doAction(new GameState(state), card, time);
+			states[0] = carpenterDayAll(new GameState(state), card);
 		}
 		else if(time == Time.EVENING)
 		{

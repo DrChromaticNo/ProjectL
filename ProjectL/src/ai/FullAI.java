@@ -45,7 +45,7 @@ public class FullAI implements AI {
 			int check = alphabeta(new GameState(s), alpha, beta, 
 					player.getFaction());
 			
-			System.out.println("check: " + check);
+			System.out.println("\ncheck: " + check);
 			
 			//Check to see if this state is better
 			if(check > alpha)
@@ -498,7 +498,7 @@ public class FullAI implements AI {
 					new ArrayList<Color>(playerList), new ArrayList<Card>(), alpha, beta, 
 					player.getFaction());
 			
-			System.out.print("check: " + check);
+			System.out.println("\ncheck: " + check);
 			
 			//Check to see if this state is better
 			if(check > alpha)

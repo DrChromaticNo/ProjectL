@@ -86,8 +86,53 @@ public class Monkey implements Action {
 			state.getPlayer(faction).getLoot().addLoot(Treasure.RELIC, -relics);
 			state.getPlayer(leftP.getFaction()).getLoot().addLoot(Treasure.RELIC, relics);
 			
-//			System.out.println(Faction.getPirateName(faction) +  " transferred " + relics + 
-//					" relics to " + Faction.getPirateName(leftP.getFaction()));
+			System.out.println("\n" + Faction.getPirateName(faction) +  " transferred " + relics + 
+					" relics to " + Faction.getPirateName(leftP.getFaction()) + "\n");
+		}
+		
+		return state;
+	}
+	
+	/**
+	 * Transfers cursed relics from your den to the den to your left with NO text output
+	 * @param state the state of the game before this action
+	 * @param card the card doing this action
+	 * @return the state after the relics have been transferred
+	 */
+	private GameState monkeyDayAll(GameState state, Card card)
+	{
+		Color faction = card.getFaction();
+		//get the players' index
+		int playerIndex = 0;
+		for(int i = 0; i < state.getPlayerList().length; i++)
+		{
+			if(state.getPlayerList()[i].getFaction().equals(faction))
+			{
+				playerIndex = i;
+			}
+		}
+		
+		//Determine left neighbor
+		
+		Player leftP = null;
+		if(playerIndex-1 >= 0)
+		{
+			leftP = state.getPlayerList()[playerIndex-1];
+		}
+		else
+		{
+			leftP = state.getPlayerList()[state.getPlayerList().length-1];
+		}
+		
+		if(leftP.getFaction().equals(faction))
+		{
+			throw new RuntimeException("only one player!");
+		}
+		else //transfer relics to the left
+		{
+			int relics = state.getPlayer(faction).getLoot().countTreasure(Treasure.RELIC);
+			state.getPlayer(faction).getLoot().addLoot(Treasure.RELIC, -relics);
+			state.getPlayer(leftP.getFaction()).getLoot().addLoot(Treasure.RELIC, relics);
 		}
 		
 		return state;
@@ -101,7 +146,7 @@ public class Monkey implements Action {
 		
 		if(time == Time.DAY)
 		{
-			states[0] = doAction(new GameState(state), card, time);
+			states[0] = monkeyDayAll(new GameState(state), card);
 		}
 		else if(time == Time.EVENING)
 		{
