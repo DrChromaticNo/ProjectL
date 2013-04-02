@@ -150,8 +150,7 @@ public class Game {
 		{
 			for(Player p : state.getPlayerList())
 			{
-				String s = state.getBag().randomTreasure();
-				state.getBoard().getLoot(i).addLoot(s, 1);
+				state.getBoard().getLoot(i).addLoot(state.getBag().randomTreasure(), 1);
 			}
 		}
 	}
