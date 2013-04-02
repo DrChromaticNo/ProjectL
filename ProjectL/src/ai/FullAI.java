@@ -166,6 +166,7 @@ public class FullAI implements AI {
 	 */
 	private int ABactionOrScore (GameState state, int alpha, int beta, Color faction)
 	{
+		//iterate through normal game "actions" until we find the next action
 		if(state.getTime() == Time.DAY)
 		{
 			Card[] shipDeck = state.getBoard().getDeck();
@@ -177,12 +178,12 @@ public class FullAI implements AI {
 				index++;
 			}
 			
-			if(index >= shipDeck.length)
+			if(index >= shipDeck.length) //this means all day actions have been completed
 			{
 				state.setTime(Time.EVENING);
 				return alphabeta(state, alpha, beta, faction);
 			}
-			else
+			else //we case on the next day action
 			{
 				Card actionCard = shipDeck[index];
 				
@@ -199,6 +200,7 @@ public class FullAI implements AI {
 					}
 				}
 				
+				//the "meat" of the alpha beta pruning happens in this next section
 				if(faction.equals(actionCard.getFaction()))
 				{
 					for(GameState s : states)
@@ -234,7 +236,7 @@ public class FullAI implements AI {
 				index--;
 			}
 				
-			if(index < 0)
+			if(index < 0) //this means all the dusk/evening actions have been completed
 			{
 				//clears the cards from the deck in preparation for the night phase
 				for(Card c : state.getBoard().getDeck())
@@ -246,7 +248,7 @@ public class FullAI implements AI {
 				state.setTime(Time.NIGHT);
 				return alphabeta(state, alpha, beta, faction);
 			}
-			else
+			else //we case on the next dusk/evening action
 			{
 				Card actionCard = shipDeck[index];
 				
@@ -314,7 +316,7 @@ public class FullAI implements AI {
 					index--;
 				}
 				
-				if(index >= 0)
+				if(index >= 0) //this means that there some night actions left to do for this player
 				{
 					GameState[] states = den.get(index)
 							.possibleNightActions(new GameState(state));
@@ -359,7 +361,7 @@ public class FullAI implements AI {
 				}
 			}
 			
-			
+			//once we're done doing all the night cases, we reset the states on all the cards
 			for(Player p : state.getPlayerList())
 			{
 				for(Card c : p.getDen())
@@ -368,11 +370,11 @@ public class FullAI implements AI {
 				}
 			}
 			
-			if(state.getDay() == 5)
+			if(state.getDay() == 5) //this means we're at the end of the week
 			{
 				return alphabetaScore(new GameState(state), faction);
 			}
-			else
+			else //otherwise we go to the next day's cases
 			{
 				state.setTime(Time.PICK_CARDS);
 				state.setDay(state.getDay()+1);
