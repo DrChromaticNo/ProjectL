@@ -12,6 +12,11 @@ import cards.Card;
 /**
  * The class that represents the carpenter card
  * @author Chris
+ * 
+ * Day: Lose half your gold
+ * Dusk: Choose 1 treasure
+ * Night: N/A
+ * End: Score 10 gold
  *
  */
 public class Carpenter implements Action {

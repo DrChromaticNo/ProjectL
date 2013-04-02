@@ -10,6 +10,7 @@ import main.GameState;
 import score.ScoreCounter;
 import score.TreasureBag;
 import standard.Carpenter;
+import standard.Monkey;
 import cards.Action;
 import cards.Card;
 import cards.Deck;
@@ -52,7 +53,7 @@ public class TestDeck implements Deck {
 		ArrayList<Integer> cards = new ArrayList<Integer>(30);
 		for(int i = 0; i < 30; i++)
 		{
-			cards.add(new Integer(9));
+			cards.add(new Integer(2));
 		}
 		
 		return cards;
@@ -156,6 +157,7 @@ public class TestDeck implements Deck {
 	{
 		HashMap<Integer, Action> map = new HashMap<Integer, Action>();
 		
+		map.put(2, new Monkey());
 		map.put(9, new Carpenter());
 		
 		return map;
