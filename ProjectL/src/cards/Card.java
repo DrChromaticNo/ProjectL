@@ -2,8 +2,6 @@ package cards;
 
 import java.awt.Color;
 
-import score.ScoreCounter;
-import score.TreasureBag;
 
 import main.GameState;
 import main.Time;
@@ -129,79 +127,67 @@ public class Card implements Comparable<Card>{
 	/**
 	 * Performs the day action for this card
 	 * @param state the state of the game before the action
-	 * @param bag the treasurebag to use with this phase
-	 * @param counter the score counter being used in this game
 	 * @return the state of the game after the action is performed
 	 */
-	public GameState dayAction(GameState state, TreasureBag bag, ScoreCounter counter)
+	public GameState dayAction(GameState state)
 	{
-		GameState end = deck.doPhase(Time.DAY, this, state, bag, counter);
+		GameState end = deck.doPhase(Time.DAY, this, state);
 		return end;
 	}
 	
 	/**
 	 * Get all the possible day states for this card
 	 * @param state the state before the action
-	 * @param bag the treasurebag to use with this action
-	 * @param counter the score counter being used int his game
 	 * @return the states of the game after this action is performed
 	 */
-	public GameState[] possibleDayActions(GameState state, TreasureBag bag, ScoreCounter counter)
+	public GameState[] possibleDayActions(GameState state)
 	{
-		GameState[] states = deck.getPossiblePhases(Time.DAY, this, state, bag, counter);
+		GameState[] states = deck.getPossiblePhases(Time.DAY, this, state);
 		return states;
 	}
 	
 	/**
 	 * Performs the night action for this card
 	 * @param state the state of the game before the action
-	 * @param bag the treasurebag to use with this phase
-	 * @param counter the score counter being used in this game
 	 * @return the state of the game after the action is performed
 	 */
-	public GameState eveningAction(GameState state, TreasureBag bag, ScoreCounter counter)
+	public GameState eveningAction(GameState state)
 	{
-		GameState end = deck.doPhase(Time.EVENING, this, state, bag, counter);
+		GameState end = deck.doPhase(Time.EVENING, this, state);
 		return end;
 	}
 	
 	/**
 	 * Get all the possible day states for this card
 	 * @param state the state before the action
-	 * @param bag the treasurebag to use with this action
-	 * @param counter the score counter being used int his game
 	 * @return the states of the game after this action is performed
 	 */
-	public GameState[] possibleEveningActions(GameState state, TreasureBag bag, ScoreCounter counter)
+	public GameState[] possibleEveningActions(GameState state)
 	{
-		GameState[] states = deck.getPossiblePhases(Time.EVENING, this, state, bag, counter);
+		GameState[] states = deck.getPossiblePhases(Time.EVENING, this, state);
 		return states;
 	}
 	
 	/**
 	 * Performs the night action for this card
 	 * @param state the state of the game before the action
-	 * @param bag the treasurebag to use with this phase
-	 * @param counter the score counter being used in this game
 	 * @return the state of the game after the action is performed
 	 */
-	public GameState nightAction(GameState state, TreasureBag bag, ScoreCounter counter)
+	public GameState nightAction(GameState state)
 	{
 		//Note: night actions occur simultaneously so they can never use the bag
-		GameState end = deck.doPhase(Time.NIGHT, this, state, bag, counter);
+		GameState end = deck.doPhase(Time.NIGHT, this, state);
 		return end;
 	}
 	
 	/**
 	 * Get all the possible night states for this card
 	 * @param state the state before the action
-	 * @param bag the treasurebag to use with this action
-	 * @param counter the score counter being used int his game
 	 * @return the states of the game after this action is performed
 	 */
-	public GameState[] possibleNightActions(GameState state, TreasureBag bag, ScoreCounter counter)
+	public GameState[] possibleNightActions(GameState state)
 	{
-		GameState[] states = deck.getPossiblePhases(Time.NIGHT, this, state, bag, counter);
+		GameState[] states = deck.getPossiblePhases(Time.NIGHT, this, state);
 		return states;
 	}
 	

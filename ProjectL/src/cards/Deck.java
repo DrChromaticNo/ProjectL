@@ -3,9 +3,6 @@ package cards;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import score.ScoreCounter;
-import score.TreasureBag;
-
 import main.GameState;
 
 /**
@@ -33,23 +30,19 @@ public interface Deck {
 	 * Performs the given cards' time-phase action (if one exists)
 	 * @param time the time corresponding to the phase
 	 * @param card The card
-	 * @param bag the bag to use for this phase
 	 * @param state the state before the action
-	 * @param counter the scorecounter being used for this game
 	 * @return the state after the action
 	 */
-	public GameState doPhase(int time, Card card, GameState state, TreasureBag bag, ScoreCounter counter);
+	public GameState doPhase(int time, Card card, GameState state);
 	
 	/**
 	 * Get all the possible phases for this action at this time
 	 * @param time the time corresponding to the phase
 	 * @param card The card
-	 * @param bag the bag to use for this phase
 	 * @param state the state before the action
-	 * @param counter the scorecounter being used for this game
 	 * @return an array of all the possible resulting states from this action
 	 */
-	public GameState[] getPossiblePhases(int time, Card card, GameState state, TreasureBag bag, ScoreCounter counter);
+	public GameState[] getPossiblePhases(int time, Card card, GameState state);
 	
 	/**
 	 * Perform the card's end of game/score action

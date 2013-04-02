@@ -9,13 +9,10 @@ import ai.AI;
 import main.GameState;
 
 import score.Loot;
-import score.ScoreCounter;
 import score.Treasure;
-import score.TreasureBag;
 import test.DebugMenu;
 
 import cards.Card;
-import cards.Deck;
 
 /**
  * @author Chris
@@ -186,7 +183,7 @@ public class Player {
 	 * @param gameDeck the deck being used with the game
 	 * @return the card this player wants to play
 	 */
-	public Card pickCard(GameState state, Deck gameDeck, TreasureBag bag, ScoreCounter counter)
+	public Card pickCard(GameState state)
 	{
 		if(hand.isEmpty())
 		{
@@ -198,7 +195,7 @@ public class Player {
 			Card[] cards = new Card[hand.size()];
 			cards = hand.toArray(cards);
 			
-			Card chosenCard = ai.chooseCard(this, cards, new GameState(state), gameDeck, bag, counter);
+			Card chosenCard = ai.chooseCard(this, cards, new GameState(state));
 			return chosenCard;
 		}
 		else
@@ -209,7 +206,7 @@ public class Player {
 				
 				for(Card c : hand)
 				{
-					System.out.print(gameDeck.abbreviatedName(c) + " ");
+					System.out.print(state.getDeck().abbreviatedName(c) + " ");
 				}
 				
 				System.out.println();
@@ -221,7 +218,7 @@ public class Player {
 				
 				for(Card c : hand)
 				{
-					if(gameDeck.abbreviatedName(c).equals(choice))
+					if(state.getDeck().abbreviatedName(c).equals(choice))
 					{
 						return c;
 					}
@@ -230,10 +227,9 @@ public class Player {
 		}
 	}
 	
-	public GameState chooseState(GameState[] states, Card card, 
-			Deck deck, TreasureBag bag, ScoreCounter counter)
+	public GameState chooseState(GameState[] states, Card card)
 	{
-		return ai.choose(this, states, card, deck, bag, counter);
+		return ai.choose(this, states, card);
 	}
 	
 	public boolean checkCPU()

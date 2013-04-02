@@ -9,10 +9,7 @@ import java.util.Map;
 import main.GameState;
 import main.Time;
 import players.Player;
-import score.ScoreCounter;
-import score.TreasureBag;
 import cards.Card;
-import cards.Deck;
 
 /**
  * This AI class does FULL alpha beta pruning to discover the best move
@@ -24,8 +21,7 @@ public class FullAI implements AI {
 	private Map<GameState, Integer> cache; 
 	
 	@Override
-	public GameState choose(Player player, GameState[] states, Card card, 
-			Deck deck, TreasureBag bag, ScoreCounter counter) {
+	public GameState choose(Player player, GameState[] states, Card card) {
 		
 		for(GameState s : states)
 		{
@@ -47,7 +43,7 @@ public class FullAI implements AI {
 		for(GameState s : states)
 		{
 			int check = alphabeta(new GameState(s), alpha, beta, 
-					player.getFaction(), deck, bag.copy(), counter);
+					player.getFaction());
 			
 			System.out.println("check: " + check);
 			
@@ -68,13 +64,9 @@ public class FullAI implements AI {
 	 * @param alpha the alpha for alpha/beta pruning
 	 * @param beta the beta for alpha/beta pruning
 	 * @param faction the faction of the player whose score we want to maximize
-	 * @param deck the deck being used in this game
-	 * @param bag the treasure bag being used in this game
-	 * @param counter the score counter being used in this game
 	 * @return alpha if the player matches the player doing the action, beta otherwise
 	 */
-	private int alphabeta(GameState state, int alpha, int beta, Color faction, 
-			Deck deck, TreasureBag bag, ScoreCounter counter)
+	private int alphabeta(GameState state, int alpha, int beta, Color faction)
 	{
 		
 		//If we have the cached value for this spot, return it without
@@ -97,12 +89,11 @@ public class FullAI implements AI {
 			}
 			
 			val = alphabetaCardPicking(new GameState(state), playerList,
-					new ArrayList<Card>(), alpha, beta, faction, deck, bag.copy(), counter);
+					new ArrayList<Card>(), alpha, beta, faction);
 		}
 		else //if we need to do an action or score, we go to the action or score routine
 		{	
-			val = ABactionOrScore(new GameState(state), alpha, beta, 
-					faction, deck, bag, counter);
+			val = ABactionOrScore(new GameState(state), alpha, beta, faction);
 		}
 		
 		cache.put(state, val);
@@ -113,15 +104,11 @@ public class FullAI implements AI {
 	 * Called to determine the heuristic value of a given end state
 	 * @param state the state being scored
 	 * @param faction the faction of the player who we care about
-	 * @param deck the deck being used in this game
-	 * @param bag the treasure bag at this point in time
-	 * @param counter the scoring device for this game
 	 * @return the value of the position for the player
 	 */
-	private int alphabetaScore(GameState state, Color faction, 
-			Deck deck, TreasureBag bag, ScoreCounter counter)
+	private int alphabetaScore(GameState state, Color faction)
 	{
-		state = counter.score(state);
+		state = state.getCounter().score(state);
 		
 		int playerScore = 0;
 		Color maxPlayer = null;
@@ -175,13 +162,9 @@ public class FullAI implements AI {
 	 * @param alpha the alpha for alpha/beta pruning
 	 * @param beta the beta for alpha/beta pruning
 	 * @param faction the faction of the player whose score we are trying to maximize
-	 * @param deck the deck being used for this game
-	 * @param bag the treasure bag being used for this game
-	 * @param counter the score counter being used for this game
 	 * @return alpha if the player matches the player doing the action, beta otherwise 
 	 */
-	private int ABactionOrScore (GameState state, int alpha, int beta, 
-	Color faction, Deck deck, TreasureBag bag, ScoreCounter counter)
+	private int ABactionOrScore (GameState state, int alpha, int beta, Color faction)
 	{
 		if(state.getTime() == Time.DAY)
 		{
@@ -197,14 +180,14 @@ public class FullAI implements AI {
 			if(index >= shipDeck.length)
 			{
 				state.setTime(Time.EVENING);
-				return alphabeta(state, alpha, beta, faction, deck, bag, counter);
+				return alphabeta(state, alpha, beta, faction);
 			}
 			else
 			{
 				Card actionCard = shipDeck[index];
 				
 				GameState[] states = shipDeck[index]
-						.possibleDayActions(new GameState(state), bag.copy(), counter);
+						.possibleDayActions(new GameState(state));
 				
 				for(GameState s : states)
 				{
@@ -221,7 +204,7 @@ public class FullAI implements AI {
 					for(GameState s : states)
 					{
 						alpha = Math.max(alpha, 
-								alphabeta(s, alpha, beta, faction, deck, bag.copy(), counter));
+								alphabeta(s, alpha, beta, faction));
 						if(alpha >= beta)
 							return alpha;
 					}
@@ -232,7 +215,7 @@ public class FullAI implements AI {
 					for(GameState s : states)
 					{
 						beta = Math.min(beta, 
-								alphabeta(s, alpha, beta, faction, deck, bag.copy(), counter));
+								alphabeta(s, alpha, beta, faction));
 						if(alpha >= beta)
 							return beta;
 					}
@@ -261,14 +244,14 @@ public class FullAI implements AI {
 				state.getBoard().clearDeck();
 				
 				state.setTime(Time.NIGHT);
-				return alphabeta(state, alpha, beta, faction, deck, bag, counter);
+				return alphabeta(state, alpha, beta, faction);
 			}
 			else
 			{
 				Card actionCard = shipDeck[index];
 				
 				GameState[] states = shipDeck[index]
-						.possibleEveningActions(new GameState(state), bag.copy(), counter);
+						.possibleEveningActions(new GameState(state));
 				
 				for(GameState s : states)
 				{
@@ -286,7 +269,7 @@ public class FullAI implements AI {
 					for(GameState s : states)
 					{
 						alpha = Math.max(alpha, 
-								alphabeta(s, alpha, beta, faction, deck, bag.copy(), counter));
+								alphabeta(s, alpha, beta, faction));
 						if(alpha >= beta)
 							return alpha;
 					}
@@ -297,7 +280,7 @@ public class FullAI implements AI {
 					for(GameState s : states)
 					{
 						beta = Math.min(beta, 
-								alphabeta(s, alpha, beta, faction, deck, bag.copy(), counter));
+								alphabeta(s, alpha, beta, faction));
 						if(alpha >= beta)
 							return beta;
 					}
@@ -334,7 +317,7 @@ public class FullAI implements AI {
 				if(index >= 0)
 				{
 					GameState[] states = den.get(index)
-							.possibleNightActions(new GameState(state), bag, counter);
+							.possibleNightActions(new GameState(state));
 					
 					Color cardFaction = den.get(index).getFaction();
 					for(GameState s : states)
@@ -356,7 +339,7 @@ public class FullAI implements AI {
 						for(GameState s : states)
 						{
 							alpha = Math.max(alpha, 
-									alphabeta(s, alpha, beta, faction, deck, bag.copy(), counter));
+									alphabeta(s, alpha, beta, faction));
 							if(alpha >= beta)
 								return alpha;
 						}
@@ -367,7 +350,7 @@ public class FullAI implements AI {
 						for(GameState s : states)
 						{
 							beta = Math.min(beta, 
-									alphabeta(s, alpha, beta, faction, deck, bag.copy(), counter));
+									alphabeta(s, alpha, beta, faction));
 							if(alpha >= beta)
 								return beta;
 						}
@@ -387,13 +370,13 @@ public class FullAI implements AI {
 			
 			if(state.getDay() == 5)
 			{
-				return alphabetaScore(new GameState(state), faction, deck, bag.copy(), counter);
+				return alphabetaScore(new GameState(state), faction);
 			}
 			else
 			{
 				state.setTime(Time.PICK_CARDS);
 				state.setDay(state.getDay()+1);
-				return alphabeta(state, alpha, beta, faction, deck, bag, counter);
+				return alphabeta(state, alpha, beta, faction);
 			}
 		}
 	}
@@ -406,14 +389,10 @@ public class FullAI implements AI {
 	 * @param alpha alpha for alpha/beta pruning
 	 * @param beta beta for alpha/beta pruning
 	 * @param faction the faction of the player whose score we are trying to maximize
-	 * @param deck the deck being used for this game
-	 * @param bag the treasure bag being used for this game
-	 * @param counter the score counter being used for this game
 	 * @return alpha if the player matches the player doing the action, beta otherwise 
 	 */
 	private int alphabetaCardPicking(GameState state, 
-			ArrayList<Color> playerList, ArrayList<Card> choiceList, int alpha, int beta,
-			Color faction, Deck deck, TreasureBag bag, ScoreCounter counter)
+			ArrayList<Color> playerList, ArrayList<Card> choiceList, int alpha, int beta, Color faction)
 	{
 		//Base case, if there aren't any more players we go to the first action
 		if(playerList.size() == 0)
@@ -427,7 +406,7 @@ public class FullAI implements AI {
 			
 			tempState.setTime(Time.DAY);
 			
-			return alphabeta(tempState, alpha, beta, faction, deck, bag.copy(), counter);
+			return alphabeta(tempState, alpha, beta, faction);
 		}
 		else
 		{
@@ -442,7 +421,7 @@ public class FullAI implements AI {
 					
 					alpha = Math.max(alpha, alphabetaCardPicking(state, new ArrayList<Color>(playerList), 
 							tempChoice, alpha, beta, 
-							faction, deck, bag.copy(), counter));
+							faction));
 					
 					if(alpha >= beta)
 						return alpha;
@@ -452,7 +431,7 @@ public class FullAI implements AI {
 				{
 					alpha = Math.max(alpha, alphabetaCardPicking(state, new ArrayList<Color>(playerList), 
 							new ArrayList<Card>(choiceList), alpha, beta, 
-							faction, deck, bag.copy(), counter));
+							faction));
 				}
 				return alpha;
 			}
@@ -465,7 +444,7 @@ public class FullAI implements AI {
 					
 					beta = Math.min(beta, alphabetaCardPicking(state, 
 							new ArrayList<Color>(playerList), tempChoice, alpha, beta,
-							faction, deck, bag.copy(), counter));
+							faction));
 					if(alpha >= beta)
 						return beta;
 				}
@@ -473,7 +452,7 @@ public class FullAI implements AI {
 				{
 					beta = Math.min(beta, alphabetaCardPicking(state, new ArrayList<Color>(playerList), 
 							new ArrayList<Card>(choiceList), alpha, beta, 
-							faction, deck, bag.copy(), counter));
+							faction));
 				}
 				return beta;
 			}
@@ -482,8 +461,7 @@ public class FullAI implements AI {
 	}
 
 	@Override
-	public Card chooseCard(Player player, Card[] cards, GameState state,
-			Deck deck, TreasureBag bag, ScoreCounter counter) {
+	public Card chooseCard(Player player, Card[] cards, GameState state) {
 		
 		//If it's the start of a new week, we need a fresh cache
 		if(state.getDay() == 0)
@@ -515,7 +493,7 @@ public class FullAI implements AI {
 			
 			int check = alphabetaCardPicking(new GameState(state), 
 					new ArrayList<Color>(playerList), new ArrayList<Card>(), alpha, beta, 
-					player.getFaction(), deck, bag.copy(), counter);
+					player.getFaction());
 			
 			//Check to see if this state is better
 			if(check > alpha)

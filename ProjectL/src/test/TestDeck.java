@@ -59,12 +59,11 @@ public class TestDeck implements Deck {
 	}
 
 	@Override
-	public GameState doPhase(int time, Card card, GameState state,
-			TreasureBag bag, ScoreCounter counter) {
+	public GameState doPhase(int time, Card card, GameState state) {
 		
 		if(actionMap.containsKey(card.getValue()))
 		{
-			state = actionMap.get(card.getValue()).doAction(state, card, bag, this, counter, time);
+			state = actionMap.get(card.getValue()).doAction(state, card, time);
 		}
 		return state;
 	}
@@ -138,14 +137,13 @@ public class TestDeck implements Deck {
 	}
 
 	@Override
-	public GameState[] getPossiblePhases(int time, Card card, GameState state,
-			TreasureBag bag, ScoreCounter counter) {
+	public GameState[] getPossiblePhases(int time, Card card, GameState state) {
 		
 		GameState[] states = new GameState[1];
 		states[0] = state;
 		if(actionMap.containsKey(card.getValue()))
 		{
-			states = actionMap.get(card.getValue()).allActions(state, card, bag, this, counter, time);
+			states = actionMap.get(card.getValue()).allActions(state, card, time);
 		}
 		return states;
 	}

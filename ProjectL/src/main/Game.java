@@ -70,9 +70,9 @@ public class Game {
 		System.out.println(playerList[2].getFaction());
 		
 		//now, create the gamestate
-		GameState state = new GameState(playerList,new Board());
+		GameState state = new GameState(playerList,new Board(), gameDeck, gameBag, score);
 		
-		run(state, gameDeck, gameBag, score);
+		run(state);
 
 	}
 	
@@ -91,34 +91,31 @@ public class Game {
 	/**
 	 * The main game loop, iterates through 3 weeks of play
 	 * @param state the initial state
-	 * @param gameDeck the deck used for the game
-	 * @param gameBag the bag used for the game
 	 */
-	public static void run(GameState state, Deck gameDeck, TreasureBag gameBag,
-			ScoreCounter counter)
+	public static void run(GameState state)
 	{
 		//get the list of all the drawable cards
-		ArrayList<Integer> availibleCards = gameDeck.allCards();
+		ArrayList<Integer> availibleCards = state.getDeck().allCards();
 		
 		for(int week = 1; week <= 3; week++)
 		{
 			state.setWeek(week);
-			gameBag.resetBag();
-			placeTreasures(state, gameBag);
+			state.getBag().resetBag();
+			placeTreasures(state);
 			distributeInitialGold(state, 10);
 			
 			//this section either draws the initial hand (at the start of the game)
 			//or adds six cards to the existing hands
 			if(week == 1)
 			{
-				drawCards(state, availibleCards, 9, gameDeck);
+				drawCards(state, availibleCards, 9);
 			}
 			else
 			{
-				drawCards(state, availibleCards, 6, gameDeck);
+				drawCards(state, availibleCards, 6);
 			}
 			
-			state = weekLoop(state, gameDeck, gameBag, counter);
+			state = weekLoop(state);
 		}
 		
 		int max = Integer.MIN_VALUE;
@@ -148,16 +145,15 @@ public class Game {
 	/**
 	 * Places the treasures for the start of a week
 	 * @param state the state of the game at the start of the week
-	 * @param gameBag the treasure bag being used for the game
 	 */
-	private static void placeTreasures(GameState state, TreasureBag gameBag)
+	private static void placeTreasures(GameState state)
 	{
 		resetBoardLoot(state);
 		for(int i = 0; i < 6; i++)
 		{
 			for(Player p : state.getPlayerList())
 			{
-				state.getBoard().getLoot(i).addLoot(gameBag.randomTreasure(), 1);
+				state.getBoard().getLoot(i).addLoot(state.getBag().randomTreasure(), 1);
 			}
 		}
 	}
@@ -165,11 +161,10 @@ public class Game {
 	/**
 	 * Draws cards from the deck and deals them to each player
 	 * @param state the state to distribute the cards in
-	 * @param gameDeck the deck being used for this game
 	 * @param numCards the # of cards to give to each player
 	 */
 	private static void drawCards(GameState state, ArrayList<Integer> availibleCards, 
-			int numCards, Deck gameDeck)
+			int numCards)
 	{
 		if(availibleCards.size() < numCards)
 		{
@@ -185,7 +180,7 @@ public class Game {
 			
 			for(Player p : state.getPlayerList())
 			{
-				p.addToHand(new Card(p.getFaction(), card, gameDeck));
+				p.addToHand(new Card(p.getFaction(), card, state.getDeck()));
 			}
 		}
 	}
@@ -193,15 +188,14 @@ public class Game {
 	/**
 	 * Gathers cards from the players and puts them on the board
 	 * @param state the current state of the game
-	 * @param gameDeck the deck being used with this game
 	 */
-	private static void pickCards(GameState state, Deck gameDeck, TreasureBag bag, ScoreCounter counter)
+	private static void pickCards(GameState state)
 	{
 		HashSet<Card> chosenCards = new HashSet<Card>();
 		
 		for(Player p : state.getPlayerList())
 		{
-			Card choice = p.pickCard(state, gameDeck, bag, counter);
+			Card choice = p.pickCard(state);
 			if(choice != null)
 			{
 				chosenCards.add(choice);
@@ -223,11 +217,9 @@ public class Game {
 	 * Helper method to do the night state for one particular player at a time
 	 * @param state the game state at the start of the night phase
 	 * @param faction the faction of the player we're working on
-	 * @param counter the scorecounter being used in this game
 	 * @return the player after all his night phase actions have been completed
 	 */
-	private static Player nightPhaseHelper(GameState state, Color faction, 
-			TreasureBag bag, ScoreCounter counter)
+	private static Player nightPhaseHelper(GameState state, Color faction)
 	{
 		for(Player p : state.getPlayerList())
 		{
@@ -255,7 +247,7 @@ public class Game {
 						}
 						else
 						{
-							state = den.get(index).nightAction(new GameState(state), bag, counter);
+							state = den.get(index).nightAction(new GameState(state));
 							
 							//Gotta make sure to check if the card is still in play or not
 							if(state.getPlayer(faction).getDen().contains(den.get(index)))
@@ -286,12 +278,8 @@ public class Game {
 	/**
 	 * Performs the actions for one week of play
 	 * @param state the game state at the start of the week
-	 * @param gameDeck the deck to use for this week
-	 * @param counter the scorecounter being used in this game
-	 * @param gameBag the treasure bag to use for this week
 	 */
-	private static GameState weekLoop(GameState state, Deck gameDeck, 
-			TreasureBag gameBag, ScoreCounter counter)
+	private static GameState weekLoop(GameState state)
 	{
 		for(int day = 0; day <= 5; day++)
 		{
@@ -299,7 +287,7 @@ public class Game {
 			
 			if(state.getTime() == Time.PICK_CARDS)
 			{
-				pickCards(state, gameDeck, gameBag, counter);
+				pickCards(state);
 				System.out.println(" ");
 				System.out.println("~DAY PHASE~");
 				System.out.println(" ");
@@ -308,11 +296,11 @@ public class Game {
 			
 			while(state.getTime() != Time.PICK_CARDS)
 			{
-				state = oneAction(state, gameDeck, gameBag, counter);
+				state = oneAction(state);
 			}
 		}
 		
-		state = counter.score(new GameState(state));
+		state = state.getCounter().score(new GameState(state));
 		
 		weekendClear(state);
 		
@@ -322,19 +310,15 @@ public class Game {
 	/**
 	 * Performs one action of the game
 	 * @param state the gamestate before the action
-	 * @param gameDeck the deck being used for this action
-	 * @param counter the scorecounter being used in this game
-	 * @param gameBag the bag being used for this action
 	 */
-	private static GameState oneAction(GameState state, Deck gameDeck, 
-			TreasureBag gameBag, ScoreCounter counter)
+	private static GameState oneAction(GameState state)
 	{
 		System.out.print("Board: ");
 		
 		//NOTE: this traversal might be backwards? need to check which way the cards get sorted
 		for(Card c : state.getBoard().getDeck())
 		{
-			System.out.print(gameDeck.abbreviatedName(c) + " ");
+			System.out.print(state.getDeck().abbreviatedName(c) + " ");
 		}
 		
 		//this if statement performs either 1 day action or 1 evening action
@@ -360,7 +344,7 @@ public class Game {
 			else
 			{
 				Card actionCard = deck[index];
-				state = deck[index].dayAction(new GameState(state), gameBag, counter);
+				state = deck[index].dayAction(new GameState(state));
 				
 				//Check to make sure the card is still in play
 				if(state.getBoard().getDeck().length > index 
@@ -398,7 +382,7 @@ public class Game {
 			else
 			{
 				Card actionCard = deck[index];
-				state = deck[index].eveningAction(new GameState(state), gameBag, counter);
+				state = deck[index].eveningAction(new GameState(state));
 				
 				//Check to make sure the card is still in play
 				if(state.getBoard().getDeck().length > index 
@@ -427,8 +411,7 @@ public class Game {
 			
 			for(int i = 0; i < stateList.length; i++)
 			{
-				endList[i] = nightPhaseHelper(new GameState(state), stateList[i].getFaction(), 
-						gameBag, counter);
+				endList[i] = nightPhaseHelper(new GameState(state), stateList[i].getFaction());
 			}
 			
 			state.setPlayerList(endList);

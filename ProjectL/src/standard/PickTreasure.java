@@ -8,13 +8,10 @@ import players.Faction;
 import players.Player;
 import main.GameState;
 import score.Loot;
-import score.ScoreCounter;
 import score.Treasure;
-import score.TreasureBag;
 import test.DebugMenu;
 import cards.Action;
 import cards.Card;
-import cards.Deck;
 
 /**
  * The class to choose a generic treasure from the ship
@@ -24,8 +21,7 @@ import cards.Deck;
 public class PickTreasure implements Action {
 
 	@Override
-	public GameState doAction(GameState state, Card card, TreasureBag bag, 
-			Deck deck, ScoreCounter counter, int time) 
+	public GameState doAction(GameState state, Card card, int time) 
 	{
 		Color faction = card.getFaction();
 		if(!state.getPlayer(faction).checkCPU())
@@ -80,8 +76,7 @@ public class PickTreasure implements Action {
 		else //if the player is a CPU, we generate all possible outcomes for treasure choice
 		{	
 			return state.getPlayer(faction).chooseState(
-					allActions(new GameState(state), card, bag, deck, counter, time),
-					card, deck, bag, counter);
+					allActions(new GameState(state), card, time), card);
 		}
 		return state;
 	}
@@ -255,8 +250,7 @@ public class PickTreasure implements Action {
 	}
 
 	@Override
-	public GameState[] allActions(GameState state, Card card, TreasureBag bag,
-			Deck deck, ScoreCounter counter, int time) {
+	public GameState[] allActions(GameState state, Card card, int time) {
 		
 		Color faction = card.getFaction();
 		Loot Lbag = state.getBoard().getLoot(state.getDay());

@@ -2,7 +2,11 @@ package main;
 
 import java.awt.Color;
 
+import cards.Deck;
+
 import players.Player;
+import score.ScoreCounter;
+import score.TreasureBag;
 
 /**
  * @author Chris
@@ -17,14 +21,21 @@ public class GameState {
 	private int day;
 	private int time;
 	private int week;
+	private Deck deck;
+	private TreasureBag bag;
+	private ScoreCounter counter;
 	
-	public GameState(Player[] playerlist, Board board)
+	public GameState(Player[] playerlist, Board board, Deck deck, 
+			TreasureBag bag, ScoreCounter counter)
 	{
 		pList = playerlist;
 		this.board = board;
 		day = 0;
 		week = 0;
 		time = Time.PICK_CARDS;
+		this.deck = deck;
+		this.bag = bag;
+		this.counter = counter;
 	}
 	
 	public GameState(GameState state)
@@ -38,6 +49,9 @@ public class GameState {
 		day = state.day;
 		time = state.time;
 		week = state.week;
+		deck = state.deck;
+		bag = state.bag.copy();
+		counter = state.counter;
 	}
 	
 	public Player[] getPlayerList()
@@ -103,6 +117,21 @@ public class GameState {
 	public void setTime(int time)
 	{
 		this.time = time;
+	}
+	
+	public Deck getDeck()
+	{
+		return deck;
+	}
+	
+	public TreasureBag getBag()
+	{
+		return bag;
+	}
+	
+	public ScoreCounter getCounter()
+	{
+		return counter;
 	}
 
 }
