@@ -154,7 +154,8 @@ public class Game {
 		{
 			for(Player p : state.getPlayerList())
 			{
-				state.getBoard().getLoot(i).addLoot(state.getBag().randomTreasure(), 1);
+				String s = state.getBag().randomTreasure();
+				state.getBoard().getLoot(i).addLoot(s, 1);
 			}
 		}
 	}

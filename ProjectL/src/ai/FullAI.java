@@ -73,6 +73,7 @@ public class FullAI implements AI {
 		//doing more calculations
 		if(cache.containsKey(state))
 		{
+			System.out.println("cache!" + cache.get(state));
 			return cache.get(state);
 		}
 		
@@ -496,6 +497,8 @@ public class FullAI implements AI {
 			int check = alphabetaCardPicking(new GameState(state), 
 					new ArrayList<Color>(playerList), new ArrayList<Card>(), alpha, beta, 
 					player.getFaction());
+			
+			System.out.print("check: " + check);
 			
 			//Check to see if this state is better
 			if(check > alpha)

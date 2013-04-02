@@ -113,11 +113,19 @@ public class PickTreasure implements Action {
 			{
 				leftP = state.getPlayerList()[playerIndex-1];
 			}
+			else
+			{
+				leftP = state.getPlayerList()[state.getPlayerList().length-1];
+			}
 			
 			Player rightP = null;
 			if(playerIndex+1 < state.getPlayerList().length)
 			{
 				rightP = state.getPlayerList()[playerIndex+1];
+			}
+			else
+			{
+				rightP = state.getPlayerList()[0];
 			}
 			
 			if(leftP != null || rightP != null) //if there are neighbors
@@ -127,9 +135,9 @@ public class PickTreasure implements Action {
 				while(true)
 				{
 					HashSet<Card> leftSet = new HashSet<Card>();
-					if(leftP != null)
+					if(!leftP.getFaction().equals(faction))
 					{
-						System.out.println(Faction.getPirateName(leftP.getFaction()) + " has ");
+						System.out.println(Faction.getPirateName(leftP.getFaction()) + " has \n");
 						for(Card c : leftP.getDen())
 						{
 							System.out.print(" " + c.abbreviate() + " ");
@@ -138,10 +146,9 @@ public class PickTreasure implements Action {
 					}
 					
 					HashSet<Card> rightSet = new HashSet<Card>();
-					if(leftP == null || 
-							(rightP != null && !leftP.getFaction().equals(rightP.getFaction())))
+					if(!rightP.getFaction().equals(faction))
 					{
-						System.out.println(Faction.getPirateName(rightP.getFaction()) + " has ");
+						System.out.println(Faction.getPirateName(rightP.getFaction()) + " has \n");
 						for(Card c : rightP.getDen())
 						{
 							System.out.print(" " + c.abbreviate() + " ");
@@ -156,7 +163,7 @@ public class PickTreasure implements Action {
 					
 					while(true) //otherwise we prompt the user to kill one of them
 					{
-						System.out.println("Choose a pirate to kill: ");
+						System.out.println("\nChoose a pirate to kill: ");
 					
 						DebugMenu menu = new DebugMenu();
 						
@@ -217,17 +224,25 @@ public class PickTreasure implements Action {
 		{
 			leftP = state.getPlayerList()[playerIndex-1];
 		}
+		else
+		{
+			leftP = state.getPlayerList()[state.getPlayerList().length-1];
+		}
 		
 		Player rightP = null;
 		if(playerIndex+1 < state.getPlayerList().length)
 		{
 			rightP = state.getPlayerList()[playerIndex+1];
 		}
+		else
+		{
+			rightP = state.getPlayerList()[0];
+		}
 		
 		//collect a list of killable pirates
 		
 		HashSet<Card> leftSet = new HashSet<Card>();
-		if(leftP != null)
+		if(!leftP.getFaction().equals(faction))
 		{
 			for(Card c : leftP.getDen())
 			{
@@ -236,8 +251,7 @@ public class PickTreasure implements Action {
 		}
 		
 		HashSet<Card> rightSet = new HashSet<Card>();
-		if(leftP == null || 
-				(rightP != null && !leftP.getFaction().equals(rightP.getFaction())))
+		if(!rightP.getFaction().equals(faction))
 		{
 			for(Card c : rightP.getDen())
 			{

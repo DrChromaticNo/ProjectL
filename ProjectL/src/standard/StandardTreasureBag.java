@@ -73,7 +73,7 @@ public class StandardTreasureBag implements TreasureBag {
 		bag.addLoot(Treasure.RELIC, -bag.countTreasure(Treasure.RELIC));
 		bag.addLoot(Treasure.RELIC, 10);
 		
-		totalTreasures = 40;
+		totalTreasures = 50;
 	}
 
 	@Override

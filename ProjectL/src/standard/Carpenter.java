@@ -46,8 +46,8 @@ public class Carpenter implements Action {
 		Color faction = card.getFaction();
 		Player player = state.getPlayer(faction);
 		System.out.println();
-		System.out.println(Faction.getPirateName(faction) + " lost " + player.getGold()/2 + 
-				" gold due to their Carpenter!");
+//		System.out.println(Faction.getPirateName(faction) + " lost " + player.getGold()/2 + 
+//				" gold due to their Carpenter!");
 		System.out.println();
 		player.addGold(-player.getGold()/2);
 		return state;
