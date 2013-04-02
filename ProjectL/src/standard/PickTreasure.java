@@ -26,6 +26,7 @@ public class PickTreasure implements Action {
 		Color faction = card.getFaction();
 		if(!state.getPlayer(faction).checkCPU())
 		{	
+			//First we just display all the possible choices for treasure
 			String choice = "";
 			Loot Lbag = state.getBoard().getLoot(state.getDay());
 			boolean allZero = false;
@@ -48,7 +49,7 @@ public class PickTreasure implements Action {
 					}
 				}
 				
-				if(!allZero)
+				if(!allZero) //providing there are any, we ask the player to choose one of them
 				{
 					System.out.println("Please choose one treasure:");
 					DebugMenu menu = new DebugMenu();
@@ -61,6 +62,8 @@ public class PickTreasure implements Action {
 			state.getBoard().setLoot(state.getDay(), Lbag);
 			state.getPlayer(faction).getLoot().addLoot(choice, 1);
 			System.out.println(Faction.getPirateName(faction) + " chose " + choice);
+			
+			//There are a few special cases that we need to case on (with standard rules)
 			
 			if(choice.equals(Treasure.OFFICER))
 			{
@@ -81,10 +84,18 @@ public class PickTreasure implements Action {
 		return state;
 	}
 	
+	/**
+	 * Does the action for the saber in standard rules (killing)
+	 * @param state the state before the saber action
+	 * @param faction the faction weilding the saber
+	 * @return the state after the saber action
+	 */
 	private GameState saberAction(GameState state, Color faction)
 	{
 		if(!state.getPlayer(faction).checkCPU())
 		{
+			
+			//First we need to find the player's index in the list
 			int playerIndex = 0;
 			for(int i = 0; i < state.getPlayerList().length; i++)
 			{
@@ -93,6 +104,9 @@ public class PickTreasure implements Action {
 					playerIndex = i;
 				}
 			}
+			
+			//we then use this to determine the players to their left and right
+			//and see if they have any killable pirates
 			
 			Player leftP = null;
 			if(playerIndex-1 >= 0)
@@ -106,8 +120,9 @@ public class PickTreasure implements Action {
 				rightP = state.getPlayerList()[playerIndex+1];
 			}
 			
-			if(leftP != null || rightP != null)
+			if(leftP != null || rightP != null) //if there are neighbors
 			{
+				//we figure out if they have killable pirates
 				String choice = "";
 				while(true)
 				{
@@ -134,34 +149,37 @@ public class PickTreasure implements Action {
 						}
 					}
 					
-					if(leftSet.isEmpty() && rightSet.isEmpty())
+					if(leftSet.isEmpty() && rightSet.isEmpty()) //if there are none we just return
 					{
 						return state;
 					}
 					
-					System.out.println("Choose a pirate to kill: ");
-					
-					DebugMenu menu = new DebugMenu();
-					
-					choice = menu.launch(state);
-					
-					for(Card c : leftSet)
+					while(true) //otherwise we prompt the user to kill one of them
 					{
-						if(c.abbreviate().equals(choice))
+						System.out.println("Choose a pirate to kill: ");
+					
+						DebugMenu menu = new DebugMenu();
+						
+						choice = menu.launch(state);
+						
+						for(Card c : leftSet)
 						{
-							state.getPlayer(leftP.getFaction()).removeFromDen(c);
-							state.getPlayer(leftP.getFaction()).addToDiscard(c);
-							return state;
+							if(c.abbreviate().equals(choice))
+							{
+								state.getPlayer(leftP.getFaction()).removeFromDen(c);
+								state.getPlayer(leftP.getFaction()).addToDiscard(c);
+								return state;
+							}
 						}
-					}
-					
-					for(Card c : rightSet)
-					{
-						if(c.abbreviate().equals(choice))
+						
+						for(Card c : rightSet)
 						{
-							state.getPlayer(rightP.getFaction()).removeFromDen(c);
-							state.getPlayer(rightP.getFaction()).addToDiscard(c);
-							return state;
+							if(c.abbreviate().equals(choice))
+							{
+								state.getPlayer(rightP.getFaction()).removeFromDen(c);
+								state.getPlayer(rightP.getFaction()).addToDiscard(c);
+								return state;
+							}
 						}
 					}
 				}
@@ -174,8 +192,15 @@ public class PickTreasure implements Action {
 		}
 	}
 	
+	/**
+	 * Does the same as saber action, but just collects the list of states after each possible pirate has been killed
+	 * @param state the state before the saber action
+	 * @param faction the faction of the player weilding the saber
+	 * @return the list of possible post-killing states
+	 */
 	private GameState[] saberActionCPU(GameState state, Color faction)
 	{
+		//get the players' index
 		int playerIndex = 0;
 		for(int i = 0; i < state.getPlayerList().length; i++)
 		{
@@ -184,6 +209,8 @@ public class PickTreasure implements Action {
 				playerIndex = i;
 			}
 		}
+		
+		//determine their left and right neighbors
 		
 		Player leftP = null;
 		if(playerIndex-1 >= 0)
@@ -196,6 +223,8 @@ public class PickTreasure implements Action {
 		{
 			rightP = state.getPlayerList()[playerIndex+1];
 		}
+		
+		//collect a list of killable pirates
 		
 		HashSet<Card> leftSet = new HashSet<Card>();
 		if(leftP != null)
@@ -216,7 +245,7 @@ public class PickTreasure implements Action {
 			}
 		}
 		
-		if(leftSet.isEmpty() && rightSet.isEmpty())
+		if(leftSet.isEmpty() && rightSet.isEmpty()) //if there are none
 		{
 			GameState[] choices = new GameState[1];
 			choices[0] = state;
@@ -224,6 +253,8 @@ public class PickTreasure implements Action {
 		}
 		
 		HashSet<GameState> choices = new HashSet<GameState>();
+		
+		//otherwise create the list of all possible states
 		
 		for(Card c : leftSet)
 		{
@@ -246,7 +277,8 @@ public class PickTreasure implements Action {
 
 	@Override
 	public int score(GameState state, Card card) {
-		return 0;
+		return 0; //this should never get called, unless some card maps directly to this action
+		//(which would be theoretically possible but weird)
 	}
 
 	@Override

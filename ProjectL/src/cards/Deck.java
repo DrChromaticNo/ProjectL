@@ -59,6 +59,13 @@ public interface Deck {
 	 * @return the shortened name
 	 */
 	public String abbreviatedName(Card card);
+	
+	/**
+	 * Returns the value of the parrot card, if any (returns an unused card value otherwise)
+	 * @return the value of the parrot card
+	 */
+	public int parrotValue(); //The parrot card operates in a different way than most other cards so
+	//it's useful to have this information on the fly, especially for the AI
 
 
 }

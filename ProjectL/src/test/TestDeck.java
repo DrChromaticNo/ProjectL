@@ -147,4 +147,9 @@ public class TestDeck implements Deck {
 		}
 		return states;
 	}
+
+	@Override
+	public int parrotValue() {
+		return 1;
+	}
 }

@@ -121,6 +121,7 @@ public class Game {
 		int max = Integer.MIN_VALUE;
 		HashSet<Player> winners = new HashSet<Player>();
 		
+		//determine the winners of the game!
 		for(Player p : state.getPlayerList())
 		{
 			if(p.getScore() == max)
