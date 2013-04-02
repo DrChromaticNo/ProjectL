@@ -113,16 +113,41 @@ public class TestDeck implements Deck {
 	{
 		HashMap<Integer, HashMap<Color, Integer>> map = new HashMap<Integer, HashMap<Color, Integer>>();
 		
-		map.put(9, new HashMap<Color, Integer>());
+		map.put(1, new HashMap<Color, Integer>());
 		
-		//note: there is a pattern to faction/color values in game,
-		//when i make the real deck i should exploit that
-		map.get(9).put(Faction.WHITE, 1);
-		map.get(9).put(Faction.YELLOW, 2);
-		map.get(9).put(Faction.RED, 3);
-		map.get(9).put(Faction.BLUE, 4);
-		map.get(9).put(Faction.GREEN, 5);
-		map.get(9).put(Faction.BLACK, 6);
+		map.get(1).put(Faction.YELLOW, 1);
+		map.get(1).put(Faction.RED, 2);
+		map.get(1).put(Faction.BLUE, 3);
+		map.get(1).put(Faction.GREEN, 4);
+		map.get(1).put(Faction.BLACK, 5);
+		map.get(1).put(Faction.WHITE, 6);
+		
+		for(int i = 2; i <= 30; i++)
+		{
+			map.put(i, new HashMap<Color, Integer>());
+			
+			if(i % 6 == 1)
+			{
+				for(Color f : Faction.allFactions())
+				{
+					map.get(i).put(f, map.get(i-1).get(f));
+				}
+			}
+			else
+			{
+				for(Color f : Faction.allFactions())
+				{
+					if(map.get(i-1).get(f) == 6)
+					{
+						map.get(i).put(f, 1);
+					}
+					else
+					{
+						map.get(i).put(f, map.get(i-1).get(f)+1);
+					}
+				}
+			}
+		}
 		
 		return map;
 	}
