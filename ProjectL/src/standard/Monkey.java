@@ -101,7 +101,7 @@ public class Monkey implements Action {
 		
 		if(time == Time.DAY)
 		{
-			states[1] = doAction(new GameState(state), card, time);
+			states[0] = doAction(new GameState(state), card, time);
 		}
 		else if(time == Time.EVENING)
 		{
