@@ -318,8 +318,6 @@ public class Game {
 			System.out.print(state.getDeck().abbreviatedName(c) + " ");
 		}
 		
-		System.out.println("\n");
-		
 		//this if statement performs either 1 day action or 1 evening action
 		//or all of the night actions (since they happen concurrently)
 		if(state.getTime() == Time.DAY)

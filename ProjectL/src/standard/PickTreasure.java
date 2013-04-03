@@ -61,7 +61,7 @@ public class PickTreasure implements Action {
 			Lbag.addLoot(choice, -1);
 			state.getBoard().setLoot(state.getDay(), Lbag);
 			state.getPlayer(faction).getLoot().addLoot(choice, 1);
-			System.out.println(Faction.getPirateName(faction) + " chose " + choice);
+			System.out.println("\n" + Faction.getPirateName(faction) + " chose " + choice + "\n");
 			
 			//There are a few special cases that we need to case on (with standard rules)
 			
@@ -151,7 +151,7 @@ public class PickTreasure implements Action {
 					}
 					
 					HashSet<Card> rightSet = new HashSet<Card>();
-					if(!rightP.getFaction().equals(faction))
+					if(!rightP.getFaction().equals(faction) && !rightP.getFaction().equals(leftP.getFaction()))
 					{
 						System.out.println(Faction.getPirateName(rightP.getFaction()) + " has \n");
 						for(Card c : rightP.getDen())
@@ -256,7 +256,7 @@ public class PickTreasure implements Action {
 		}
 		
 		HashSet<Card> rightSet = new HashSet<Card>();
-		if(!rightP.getFaction().equals(faction))
+		if(!rightP.getFaction().equals(faction) || !rightP.equals(leftP.getFaction()))
 		{
 			for(Card c : rightP.getDen())
 			{
