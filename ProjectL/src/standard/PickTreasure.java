@@ -67,7 +67,6 @@ public class PickTreasure implements Action {
 			
 			if(choice.equals(Treasure.OFFICER))
 			{
-				System.out.println("A Spanish officer killed the ");
 				state.getBoard().removeCard(card);
 				state.getPlayer(faction).addToDiscard(card);
 			}
@@ -78,8 +77,14 @@ public class PickTreasure implements Action {
 		}
 		else //if the player is a CPU, we generate all possible outcomes for treasure choice
 		{	
-			return state.getPlayer(faction).chooseState(
-					allActions(new GameState(state), card, time), card);
+			HashMap<GameState, String> choiceMap = allActionsWithPhrases(new GameState(state), card, time);
+			
+			GameState choice = state.getPlayer(faction)
+					.chooseState(choiceMap.keySet().toArray(new GameState[0]), card);
+			
+			System.out.println(choiceMap.get(choice));
+			
+			return choice;
 		}
 		return state;
 	}
@@ -298,9 +303,21 @@ public class PickTreasure implements Action {
 	@Override
 	public GameState[] allActions(GameState state, Card card, int time) {
 		
+		return allActionsWithPhrases(state, card, time).keySet().toArray(new GameState[0]);
+	}
+	
+	/**
+	 * A helper method to get display strings for the various treasure choices
+	 * @param state the state to choose the possibilities from
+	 * @param card the card doing the choosing
+	 * @param time the time the choosing is happening (should always be dusk)
+	 * @return the hashmap connecting states to possible display strings
+	 */
+	private HashMap<GameState, String> allActionsWithPhrases(GameState state, Card card, int time)
+	{
 		Color faction = card.getFaction();
 		Loot Lbag = state.getBoard().getLoot(state.getDay());
-		HashSet<GameState> choiceSet = new HashSet<GameState>();
+		HashMap<GameState, String> choiceSet = new HashMap<GameState, String>();
 		for(String s : Treasure.allTreasures())
 		{
 			if(Lbag.countTreasure(s) != 0)
@@ -310,28 +327,29 @@ public class PickTreasure implements Action {
 				Lbag.addLoot(s, -1);
 				tempState.getBoard().setLoot(tempState.getDay(), Lbag);
 				tempState.getPlayer(faction).getLoot().addLoot(s, 1);
+				String choice = s;
 				
 				if(s.equals(Treasure.OFFICER))
 				{
 					tempState.getBoard().removeCard(card);
 					tempState.getPlayer(faction).addToDiscard(card);
-					choiceSet.add(tempState);
+					choiceSet.put(tempState, "\n" + Faction.getPirateName(faction) + " chose " + choice + "\n");
 				}
 				else if(tempState.equals(Treasure.SABER))
 				{
 					for(GameState g : saberActionCPU(tempState, faction))
 					{
-						choiceSet.add(g);
+						choiceSet.put(g, "\n" + Faction.getPirateName(faction) + " chose " + choice + "\n");
 					}
 				}
 				else
 				{
-					choiceSet.add(tempState);
+					choiceSet.put(tempState, "\n" + Faction.getPirateName(faction) + " chose " + choice + "\n");
 				}
 			}
 		}
 		
-		return choiceSet.toArray(new GameState[choiceSet.size()]);
+		return choiceSet;
 	}
 
 

@@ -79,7 +79,17 @@ public class Card implements Comparable<Card>{
 			{
 				if(this.value == ((Card) other).value)
 				{
-					return true;
+					Card card = (Card) other;
+					if(dayPhase == card.dayPhase)
+					{
+						if(eveningPhase == card.eveningPhase)
+						{
+							if(nightPhase == card.nightPhase)
+							{
+								return true;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -238,7 +248,8 @@ public class Card implements Comparable<Card>{
 	}
 	
 	/**
-	 * 
+	 * Sets a given time to true
+	 * @param time the time of the phase to set to true
 	 */
 	public void setTrue(int time)
 	{
@@ -254,6 +265,12 @@ public class Card implements Comparable<Card>{
 		{
 			nightPhase = true;
 		}
+	}
+	
+	@Override
+	public String toString()
+	{
+		return abbreviate();
 	}
 	
 }

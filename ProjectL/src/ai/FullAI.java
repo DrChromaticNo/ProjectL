@@ -9,6 +9,7 @@ import java.util.Map;
 import main.GameState;
 import main.Time;
 import players.Player;
+import test.DebugMenu;
 import cards.Card;
 
 /**
@@ -47,6 +48,8 @@ public class FullAI implements AI {
 			
 			System.out.println("\ncheck: " + check);
 			
+			
+			
 			//Check to see if this state is better
 			if(check > alpha)
 			{
@@ -71,11 +74,12 @@ public class FullAI implements AI {
 		
 		//If we have the cached value for this spot, return it without
 		//doing more calculations
-		if(cache.containsKey(state))
+	/*	if(cache.containsKey(state))
 		{
 			System.out.println("cache!" + cache.get(state));
+			
 			return cache.get(state);
-		}
+		} CACHING CURRENTLY DISABELD */
 		
 		int val = 0;
 		
@@ -148,13 +152,13 @@ public class FullAI implements AI {
 				}
 			}
 			
-			System.out.println("score: " + (playerScore - maxScore));
+	//		System.out.println("score: " + (playerScore - maxScore));
 			
 			return playerScore - maxScore; //should always be a positive value
 		}
 		else
 		{	
-			System.out.println("score: " + (playerScore - maxScore));
+	//		System.out.println("score: " + (playerScore - maxScore));
 			
 			return playerScore - maxScore; //should always be a negative value or 0
 		}
@@ -170,7 +174,7 @@ public class FullAI implements AI {
 	 * @return alpha if the player matches the player doing the action, beta otherwise 
 	 */
 	private int ABactionOrScore (GameState state, int alpha, int beta, Color faction)
-	{
+	{	
 		//iterate through normal game "actions" until we find the next action
 		if(state.getTime() == Time.DAY)
 		{
@@ -498,8 +502,11 @@ public class FullAI implements AI {
 		for(Card card : cards)
 		{
 			
+			ArrayList<Card> cardChoices = new ArrayList<Card>();
+			cardChoices.add(card);
+			
 			int check = alphabetaCardPicking(new GameState(state), 
-					new ArrayList<Color>(playerList), new ArrayList<Card>(), alpha, beta, 
+					new ArrayList<Color>(playerList), cardChoices, alpha, beta, 
 					player.getFaction());
 			
 			System.out.println("\ncheck: " + check);
