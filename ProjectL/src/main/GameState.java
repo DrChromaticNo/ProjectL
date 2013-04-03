@@ -133,5 +133,44 @@ public class GameState {
 	{
 		return counter;
 	}
+	
+	@Override public boolean equals(Object other)
+	{
+		if(other instanceof GameState)
+		{
+			GameState state = (GameState) other;
+			
+			if(day == state.day)
+			{
+				if(week == state.week)
+				{
+					if(time == state.time)
+					{
+						if(pList.length == state.pList.length)
+						{
+							for(int i = 0; i < pList.length; i++)
+							{
+								if(!pList[i].equals(state.pList[i]))
+								{
+									return false;
+								}
+							}
+							
+							if(board.equals(state.board))
+							{
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	@Override public int hashCode()
+	{
+		return board.hashCode()*pList.length + day + week + time;
+	}
 
 }

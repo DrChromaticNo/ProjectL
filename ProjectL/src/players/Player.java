@@ -236,5 +236,41 @@ public class Player {
 	{
 		return CPU;
 	}
+	
+	@Override public boolean equals(Object other)
+	{
+		if(other instanceof Player)
+		{
+			Player player = (Player) other;
+			if(faction.equals(player.faction))
+			{
+				if(gold == player.gold)
+				{
+					if(score == player.score)
+					{
+						if(loot.equals(player.loot))
+						{
+							if(hand.equals(player.hand))
+							{
+								if(discard.equals(player.discard))
+								{
+									if(den.equals(player.den))
+									{
+										return true;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	@Override public int hashCode()
+	{
+		return gold + score + faction.hashCode()*den.hashCode()*discard.hashCode()*hand.hashCode();
+	}
 
 }

@@ -60,5 +60,23 @@ public class Loot {
 			}
 		}
 	}
+	
+	@Override public boolean equals(Object other)
+	{
+		if(other instanceof Loot)
+		{
+			Loot bag = (Loot) other;
+			if(loot.equals(bag.loot))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override public int hashCode()
+	{
+		return loot.hashCode();
+	}
 
 }

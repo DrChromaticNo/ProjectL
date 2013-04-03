@@ -104,4 +104,32 @@ public class Board {
 		return shipLoot;
 	}
 	
+	@Override public boolean equals(Object other)
+	{
+		if(other instanceof Board)
+		{
+			Board board = (Board) other;
+			if(deck.equals(board.deck))
+			{
+				if(shipLoot.length == board.shipLoot.length)
+				{
+					for(int i = 0; i < shipLoot.length; i++)
+					{
+						if(!shipLoot[i].equals(board.shipLoot[i]))
+						{
+							return false;
+						}
+					}
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	@Override public int hashCode()
+	{
+		return deck.hashCode()*shipLoot.length;
+	}
+	
 }
