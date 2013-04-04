@@ -72,15 +72,14 @@ public class FullAI implements AI {
 	private int alphabeta(GameState state, int alpha, int beta, Color faction)
 	{
 		
+		/*
 		//If we have the cached value for this spot, return it without
 		//doing more calculations
-	/*	if(cache.containsKey(state))
-		{
-			System.out.println("cache!" + cache.get(state));
-			
+		if(cache.containsKey(state))
+		{	
 			return cache.get(state);
-		} CACHING CURRENTLY DISABELD */
-		
+		}
+		CACHEING CURRENTLY DISABLED*/
 		int val = 0;
 		
 		//If we need to choose cards to play on the board we go to the
