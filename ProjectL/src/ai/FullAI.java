@@ -72,14 +72,13 @@ public class FullAI implements AI {
 	private int alphabeta(GameState state, int alpha, int beta, Color faction)
 	{
 		
-		/*
 		//If we have the cached value for this spot, return it without
 		//doing more calculations
 		if(cache.containsKey(state))
 		{	
 			return cache.get(state);
 		}
-		CACHEING CURRENTLY DISABLED*/
+		
 		int val = 0;
 		
 		//If we need to choose cards to play on the board we go to the
@@ -100,7 +99,6 @@ public class FullAI implements AI {
 			val = ABactionOrScore(new GameState(state), alpha, beta, faction);
 		}
 		
-		cache.put(state, val);
 		return val;
 	}
 	
@@ -215,6 +213,7 @@ public class FullAI implements AI {
 					{
 						alpha = Math.max(alpha, 
 								alphabeta(s, alpha, beta, faction));
+						cache.put(state, alpha);
 						if(alpha >= beta)
 							return alpha;
 					}
@@ -280,6 +279,7 @@ public class FullAI implements AI {
 					{
 						alpha = Math.max(alpha, 
 								alphabeta(s, alpha, beta, faction));
+						cache.put(state, alpha);
 						if(alpha >= beta)
 							return alpha;
 					}
@@ -350,6 +350,7 @@ public class FullAI implements AI {
 						{
 							alpha = Math.max(alpha, 
 									alphabeta(s, alpha, beta, faction));
+							cache.put(state, alpha);
 							if(alpha >= beta)
 								return alpha;
 						}
