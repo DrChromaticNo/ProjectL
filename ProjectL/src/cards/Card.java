@@ -79,6 +79,7 @@ public class Card implements Comparable<Card>{
 			{
 				if(this.value == ((Card) other).value)
 				{
+					//Not sure if the card's equal function should be this deep: maybe use compareTo instead?
 					Card card = (Card) other;
 					if(dayPhase == card.dayPhase)
 					{

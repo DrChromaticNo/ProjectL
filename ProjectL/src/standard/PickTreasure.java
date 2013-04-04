@@ -335,9 +335,10 @@ public class PickTreasure implements Action {
 					tempState.getPlayer(faction).addToDiscard(card);
 					choiceSet.put(tempState, "\n" + Faction.getPirateName(faction) + " chose " + choice + "\n");
 				}
-				else if(tempState.equals(Treasure.SABER))
+				else if(s.equals(Treasure.SABER))
 				{
-					for(GameState g : saberActionCPU(tempState, faction))
+					GameState[] states = saberActionCPU(tempState, faction);
+					for(GameState g : states)
 					{
 						choiceSet.put(g, "\n" + Faction.getPirateName(faction) + " chose " + choice + "\n");
 					}
