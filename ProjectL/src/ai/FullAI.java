@@ -97,7 +97,7 @@ public class FullAI implements AI {
 		{	
 			val = ABactionOrScore(new GameState(state), alpha, beta, faction);
 		}
-		
+
 		return val;
 	}
 	
@@ -212,7 +212,6 @@ public class FullAI implements AI {
 					{
 						alpha = Math.max(alpha, 
 								alphabeta(s, alpha, beta, faction));
-						cache.put(state, alpha);
 						if(alpha >= beta)
 							return alpha;
 					}
@@ -278,7 +277,6 @@ public class FullAI implements AI {
 					{
 						alpha = Math.max(alpha, 
 								alphabeta(s, alpha, beta, faction));
-						cache.put(state, alpha);
 						if(alpha >= beta)
 							return alpha;
 					}
@@ -349,7 +347,6 @@ public class FullAI implements AI {
 						{
 							alpha = Math.max(alpha, 
 									alphabeta(s, alpha, beta, faction));
-							cache.put(state, alpha);
 							if(alpha >= beta)
 								return alpha;
 						}
