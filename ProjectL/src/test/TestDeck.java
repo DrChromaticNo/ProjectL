@@ -12,6 +12,7 @@ import score.TreasureBag;
 import standard.Beggar;
 import standard.Carpenter;
 import standard.Monkey;
+import standard.Recruiter;
 import cards.Action;
 import cards.Card;
 import cards.Deck;
@@ -52,15 +53,19 @@ public class TestDeck implements Deck {
 	@Override
 	public ArrayList<Integer> allCards() {
 		ArrayList<Integer> cards = new ArrayList<Integer>(30);
-		for(int i = 0; i < 10; i++)
+		for(int i = 0; i < 7; i++)
 		{
 			cards.add(new Integer(2));
 		}
-		for(int i = 10; i < 20; i++)
+		for(int i = 7; i < 15; i++)
 		{
 			cards.add(new Integer(3));
 		}
-		for(int i = 20; i < 30; i++)
+		for(int i = 15; i < 22; i++)
+		{
+			cards.add(new Integer(4));
+		}
+		for(int i = 22; i < 30; i++)
 		{
 			cards.add(new Integer(9));
 		}
@@ -168,6 +173,7 @@ public class TestDeck implements Deck {
 		
 		map.put(2, new Monkey());
 		map.put(3, new Beggar());
+		map.put(4, new Recruiter());
 		map.put(9, new Carpenter());
 		
 		return map;

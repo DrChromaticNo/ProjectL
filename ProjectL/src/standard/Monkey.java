@@ -87,7 +87,7 @@ public class Monkey implements Action {
 			state.getPlayer(leftP.getFaction()).getLoot().addLoot(Treasure.RELIC, relics);
 			
 			System.out.println("\n" + Faction.getPirateName(faction) +  " transferred " + relics + 
-					" relics to " + Faction.getPirateName(leftP.getFaction()) + "\n");
+					" relic(s) to " + Faction.getPirateName(leftP.getFaction()) + "\n");
 		}
 		
 		return state;
