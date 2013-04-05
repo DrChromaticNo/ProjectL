@@ -180,6 +180,7 @@ public class PickTreasure implements Action {
 							{
 								state.getPlayer(leftP.getFaction()).removeFromDen(c);
 								state.getPlayer(leftP.getFaction()).addToDiscard(c);
+								System.out.println(" and killed " + c.abbreviate());
 								return state;
 							}
 						}
@@ -190,6 +191,7 @@ public class PickTreasure implements Action {
 							{
 								state.getPlayer(rightP.getFaction()).removeFromDen(c);
 								state.getPlayer(rightP.getFaction()).addToDiscard(c);
+								System.out.println(" and killed " + c.abbreviate());
 								return state;
 							}
 						}
@@ -210,7 +212,7 @@ public class PickTreasure implements Action {
 	 * @param faction the faction of the player weilding the saber
 	 * @return the list of possible post-killing states
 	 */
-	private GameState[] saberActionCPU(GameState state, Color faction)
+	private HashMap<GameState, String> saberActionCPU(GameState state, Color faction)
 	{
 		//get the players' index
 		int playerIndex = 0;
@@ -264,14 +266,13 @@ public class PickTreasure implements Action {
 			}
 		}
 		
+		HashMap<GameState, String> choices = new HashMap<GameState, String>();
+		
 		if(leftSet.isEmpty() && rightSet.isEmpty()) //if there are none
 		{
-			GameState[] choices = new GameState[1];
-			choices[0] = state;
+			choices.put(state, "\n" + Faction.getPirateName(faction) + " chose saber(s) but couldn't kill anyone \n");
 			return choices;
 		}
-		
-		HashSet<GameState> choices = new HashSet<GameState>();
 		
 		//otherwise create the list of all possible states
 		
@@ -280,7 +281,8 @@ public class PickTreasure implements Action {
 			GameState tempState = new GameState(state);
 			tempState.getPlayer(leftP.getFaction()).removeFromDen(c);
 			tempState.getPlayer(leftP.getFaction()).addToDiscard(c);
-			choices.add(tempState);
+			choices.put(tempState, "\n" + Faction.getPirateName(faction) 
+					+ " chose saber(s) and killed " + c.abbreviate() + "\n");
 		}
 		
 		for(Card c : rightSet)
@@ -288,10 +290,11 @@ public class PickTreasure implements Action {
 			GameState tempState = new GameState(state);
 			tempState.getPlayer(rightP.getFaction()).removeFromDen(c);
 			tempState.getPlayer(rightP.getFaction()).addToDiscard(c);
-			choices.add(tempState);
+			choices.put(tempState, "\n" + Faction.getPirateName(faction) 
+					+ " chose saber(s) and killed " + c.abbreviate() + "\n");
 		}
 		
-		return choices.toArray(new GameState[choices.size()]);
+		return choices;
 	}
 
 	@Override
@@ -337,11 +340,8 @@ public class PickTreasure implements Action {
 				}
 				else if(s.equals(Treasure.SABER))
 				{
-					GameState[] states = saberActionCPU(tempState, faction);
-					for(GameState g : states)
-					{
-						choiceSet.put(g, "\n" + Faction.getPirateName(faction) + " chose " + choice + "\n");
-					}
+					HashMap<GameState, String> saberList = saberActionCPU(tempState, faction);
+					choiceSet.putAll(saberList);
 				}
 				else
 				{
