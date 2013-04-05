@@ -52,13 +52,17 @@ public class TestDeck implements Deck {
 	@Override
 	public ArrayList<Integer> allCards() {
 		ArrayList<Integer> cards = new ArrayList<Integer>(30);
-		for(int i = 0; i < 15; i++)
+		for(int i = 0; i < 10; i++)
+		{
+			cards.add(new Integer(2));
+		}
+		for(int i = 10; i < 20; i++)
 		{
 			cards.add(new Integer(3));
 		}
-		for(int i = 15; i < 30; i++)
+		for(int i = 20; i < 30; i++)
 		{
-			cards.add(new Integer(3));
+			cards.add(new Integer(9));
 		}
 		
 		return cards;
