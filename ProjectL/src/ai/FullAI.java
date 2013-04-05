@@ -73,10 +73,10 @@ public class FullAI implements AI {
 		
 		//If we have the cached value for this spot, return it without
 		//doing more calculations
-		if(cache.containsKey(state))
-		{	
+	/*	if(cache.containsKey(state))
+		{
 			return cache.get(state);
-		}
+		} CACHEING IS ONCE AGAIN DISABLED */
 		
 		int val = 0;
 		
