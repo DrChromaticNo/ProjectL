@@ -6,7 +6,7 @@ import cards.Action;
 import cards.Card;
 
 /**
- * The class that represents the carpenter card
+ * The class that represents the cabin boy card
  * @author Chris
  * 
  * Day: N/A
