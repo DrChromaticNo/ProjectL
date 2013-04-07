@@ -41,7 +41,7 @@ public class Game {
 		
 		ScoreCounter score = new StandardScoreCounter();
 		
-		int numPlayers = 4; //assume/require > 1, < 7
+		int numPlayers = 3; //assume/require > 1, < 7
 		Player[] playerList = new Player[numPlayers];
 		
 		ArrayList<Color> factionList = Faction.allFactions();
@@ -58,21 +58,13 @@ public class Game {
 		}
 	*/
 		
-		playerList[0] = new Player(chooseFaction(factionList), new DepthAI(1));
+		playerList[0] = new Player(chooseFaction(factionList), new FullAI());
 		
 		System.out.println(playerList[0].getFaction());
 		
-		playerList[1] = new Player(chooseFaction(factionList), new DepthAI(1));
+		playerList[1] = new Player(chooseFaction(factionList), new FullAI());
 		
 		System.out.println(playerList[1].getFaction());
-		
-		playerList[2] = new Player(chooseFaction(factionList), new DepthAI(1));
-		
-		System.out.println(playerList[2].getFaction());
-		
-		playerList[3] = new Player(chooseFaction(factionList), new DepthAI(1));
-		
-		System.out.println(playerList[3].getFaction());
 		
 		//now, create the gamestate
 		GameState state = new GameState(playerList,new Board(), gameDeck, gameBag, score);
@@ -295,7 +287,7 @@ public class Game {
 			{
 				pickCards(state);
 				System.out.println(" ");
-				System.out.println("~DAY PHASE~");
+				System.out.println("~DAY PHASE (" + day + ")~");
 				System.out.println(" ");
 				state.setTime(Time.DAY);
 			}
