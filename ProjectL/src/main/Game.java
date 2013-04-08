@@ -41,7 +41,7 @@ public class Game {
 		
 		ScoreCounter score = new StandardScoreCounter();
 		
-		int numPlayers = 3; //assume/require > 1, < 7
+		int numPlayers = 2; //assume/require > 1, < 7
 		Player[] playerList = new Player[numPlayers];
 		
 		ArrayList<Color> factionList = Faction.allFactions();

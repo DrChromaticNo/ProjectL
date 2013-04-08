@@ -13,6 +13,7 @@ import standard.Beggar;
 import standard.CabinBoy;
 import standard.Carpenter;
 import standard.Monkey;
+import standard.Preacher;
 import standard.Recruiter;
 import cards.Action;
 import cards.Card;
@@ -54,23 +55,27 @@ public class TestDeck implements Deck {
 	@Override
 	public ArrayList<Integer> allCards() {
 		ArrayList<Integer> cards = new ArrayList<Integer>(30);
-		for(int i = 0; i < 6; i++)
+		for(int i = 0; i < 5; i++)
 		{
 			cards.add(new Integer(2));
 		}
-		for(int i = 6; i < 12; i++)
+		for(int i = 5; i < 10; i++)
 		{
 			cards.add(new Integer(3));
 		}
-		for(int i = 12; i < 18; i++)
+		for(int i = 10; i < 15; i++)
 		{
 			cards.add(new Integer(4));
 		}
-		for(int i = 18; i < 24; i++)
+		for(int i = 15; i < 20; i++)
 		{
 			cards.add(new Integer(5));
 		}
-		for(int i = 24; i < 30; i++)
+		for(int i = 20; i < 25; i++)
+		{
+			cards.add(new Integer(6));
+		}
+		for(int i = 25; i < 30; i++)
 		{
 			cards.add(new Integer(9));
 		}
@@ -180,6 +185,7 @@ public class TestDeck implements Deck {
 		map.put(3, new Beggar());
 		map.put(4, new Recruiter());
 		map.put(5, new CabinBoy());
+		map.put(6, new Preacher());
 		map.put(9, new Carpenter());
 		
 		return map;
