@@ -3,8 +3,6 @@ package standard;
 import java.awt.Color;
 import java.util.HashMap;
 
-import players.Faction;
-
 import score.Loot;
 import score.Treasure;
 import test.DebugMenu;
@@ -86,8 +84,8 @@ public class Preacher implements Action {
 				
 				if(allEmpty)
 				{
-					System.out.println("\n" + Faction.getPirateName(faction) 
-							+ " had no treasures to choose from\n");
+					System.out.println("\n" + "The preacher" + card.abbreviate() + 
+							" had no treasures to choose from\n");
 					return state;
 				}
 				
@@ -97,8 +95,8 @@ public class Preacher implements Action {
 				
 				if(bag.countTreasure(treasure) != 0) //if we chose a valid treasure, remove all others and set it to 1
 				{	
-					System.out.println("\n" + Faction.getPirateName(faction) 
-							+ " discarded all treasures besides 1 " + treasure + "\n");
+					System.out.println("\nThe preacher" + card.abbreviate() + 
+							" discarded all treasures besides 1 " + treasure + "\n");
 					for(String s : Treasure.allTreasures())
 					{
 						if(s.equals(treasure))
@@ -141,8 +139,8 @@ public class Preacher implements Action {
 		
 		if(allEmpty)
 		{
-			choiceMap.put(state, "\n" + Faction.getPirateName(faction) 
-					+ " had no treasures to choose from\n");
+			choiceMap.put(state, "\n" + "The preacher" + card.abbreviate() + 
+					" had no treasures to choose from\n");
 			return choiceMap;
 		}
 		
@@ -164,8 +162,8 @@ public class Preacher implements Action {
 							.addLoot(s, -state.getPlayer(faction).getLoot().countTreasure(s));
 					}
 				}
-				choiceMap.put(tempState, "\n" + Faction.getPirateName(faction) 
-						+ " discarded all treasures besides 1 " + treasure + "\n");
+				choiceMap.put(tempState, "\nThe preacher" + card.abbreviate() + 
+						" discarded all treasures besides 1 " + treasure + "\n");
 			}
 		}
 		
