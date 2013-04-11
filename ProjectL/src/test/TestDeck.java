@@ -9,6 +9,7 @@ import players.Faction;
 import main.GameState;
 import score.ScoreCounter;
 import score.TreasureBag;
+import standard.Barkeep;
 import standard.Beggar;
 import standard.CabinBoy;
 import standard.Carpenter;
@@ -69,11 +70,11 @@ public class TestDeck implements Deck {
 		}
 		for(int i = 15; i < 20; i++)
 		{
-			cards.add(new Integer(5));
+			cards.add(new Integer(6));
 		}
 		for(int i = 20; i < 25; i++)
 		{
-			cards.add(new Integer(6));
+			cards.add(new Integer(7));
 		}
 		for(int i = 25; i < 30; i++)
 		{
@@ -186,6 +187,7 @@ public class TestDeck implements Deck {
 		map.put(4, new Recruiter());
 		map.put(5, new CabinBoy());
 		map.put(6, new Preacher());
+		map.put(7, new Barkeep());
 		map.put(9, new Carpenter());
 		
 		return map;

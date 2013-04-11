@@ -58,7 +58,7 @@ public class Game {
 		}
 	*/
 		
-		playerList[0] = new Player(chooseFaction(factionList), new FullAI());
+		playerList[0] = new Player(chooseFaction(factionList));
 		
 		System.out.println(playerList[0].getFaction());
 		
