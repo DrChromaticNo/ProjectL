@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import ai.DepthAI;
 import ai.FullAI;
@@ -89,7 +90,7 @@ public class Game {
 	 * The main game loop, iterates through 3 weeks of play
 	 * @param state the initial state
 	 */
-	public static void run(GameState state)
+	public static Set<Player> run(GameState state)
 	{
 		//get the list of all the drawable cards
 		ArrayList<Integer> availibleCards = state.getDeck().allCards();
@@ -138,6 +139,8 @@ public class Game {
 			System.out.println(Faction.getPirateName(p.getFaction()) + 
 					" won with a score of " + p.getScore() + "!");
 		}
+		
+		return winners;
 	}
 	
 	/**
