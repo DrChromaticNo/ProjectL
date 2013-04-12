@@ -31,7 +31,7 @@ public class AITest {
 	private int BIG_INT = 100;
 	
 	@Test
-	public void depth01opponent() {
+	public void depth0opponent1() {
 		
 		Deck gameDeck = new TestDeck();
 		
@@ -84,7 +84,7 @@ public class AITest {
 	}
 	
 	@Test
-	public void depth03opponent() {
+	public void depth0opponent3() {
 		
 		Deck gameDeck = new TestDeck();
 		

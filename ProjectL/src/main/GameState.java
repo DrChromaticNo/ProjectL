@@ -24,6 +24,8 @@ public class GameState {
 	private Deck deck;
 	private TreasureBag bag;
 	private ScoreCounter counter;
+	private boolean drawCards; //represnts the set-up before the game starts proper
+	//false if not yet started, true once everything is set up
 	
 	public GameState(Player[] playerlist, Board board, Deck deck, 
 			TreasureBag bag, ScoreCounter counter)
@@ -33,6 +35,7 @@ public class GameState {
 		day = 0;
 		week = 0;
 		time = Time.PICK_CARDS;
+		drawCards = false;
 		this.deck = deck;
 		this.bag = bag;
 		this.counter = counter;
@@ -52,6 +55,7 @@ public class GameState {
 		deck = state.deck;
 		bag = state.bag.copy();
 		counter = state.counter;
+		drawCards = state.drawCards;
 	}
 	
 	public Player[] getPlayerList()
@@ -134,6 +138,16 @@ public class GameState {
 		return counter;
 	}
 	
+	public boolean checkDraw()
+	{
+		return drawCards;
+	}
+	
+	public void setDraw(boolean draw)
+	{
+		drawCards = draw;
+	}
+	
 	@Override public boolean equals(Object other)
 	{
 		if(other instanceof GameState)
@@ -146,19 +160,22 @@ public class GameState {
 				{
 					if(time == state.time)
 					{
-						if(pList.length == state.pList.length)
+						if(drawCards == state.drawCards)
 						{
-							for(int i = 0; i < pList.length; i++)
+							if(pList.length == state.pList.length)
 							{
-								if(!pList[i].equals(state.pList[i]))
+								for(int i = 0; i < pList.length; i++)
 								{
-									return false;
+									if(!pList[i].equals(state.pList[i]))
+									{
+										return false;
+									}
 								}
-							}
-							
-							if(board.equals(state.board))
-							{
-								return true;
+								
+								if(board.equals(state.board))
+								{
+									return true;
+								}
 							}
 						}
 					}

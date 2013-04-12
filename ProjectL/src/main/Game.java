@@ -95,24 +95,27 @@ public class Game {
 		//get the list of all the drawable cards
 		ArrayList<Integer> availibleCards = state.getDeck().allCards();
 		
-		for(int week = 1; week <= 3; week++)
+		for(int week = state.getWeek(); week <= 3; week++)
 		{
 			state.setWeek(week);
-			state.getBag().resetBag();
-			placeTreasures(state);
-			distributeInitialGold(state, 10);
 			
-			//this section either draws the initial hand (at the start of the game)
-			//or adds six cards to the existing hands
-			if(week == 1)
+			if(!state.checkDraw())
 			{
-				drawCards(state, availibleCards, 9);
+				state.getBag().resetBag();
+				placeTreasures(state);
+				distributeInitialGold(state, 10);
+				//this section either draws the initial hand (at the start of the game)
+				//or adds six cards to the existing hands
+				if(week == 1)
+				{
+					drawCards(state, availibleCards, 9);
+				}
+				else
+				{
+					drawCards(state, availibleCards, 6);
+				}
 			}
-			else
-			{
-				drawCards(state, availibleCards, 6);
-			}
-			
+				
 			state = weekLoop(state);
 		}
 		
@@ -184,6 +187,8 @@ public class Game {
 				p.addToHand(new Card(p.getFaction(), card, state.getDeck()));
 			}
 		}
+		
+		state.setDraw(true);
 	}
 	
 	/**
@@ -282,7 +287,7 @@ public class Game {
 	 */
 	private static GameState weekLoop(GameState state)
 	{
-		for(int day = 0; day <= 5; day++)
+		for(int day = state.getDay(); day <= 5; day++)
 		{
 			state.setDay(day);
 			
@@ -429,6 +434,8 @@ public class Game {
 	 */
 	private static void weekendClear(GameState state)
 	{
+		state.setDay(0);
+		state.setDraw(false);
 		for(Player p : state.getPlayerList())
 		{
 			p.clearDen();
