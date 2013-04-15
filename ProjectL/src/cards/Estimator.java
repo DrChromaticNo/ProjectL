@@ -2,6 +2,11 @@ package cards;
 
 import main.GameState;
 
+/**
+ * A class to facilitate ranking cards based on the heuristic value of playing them
+ * @author Chris
+ *
+ */
 public interface Estimator {
 
 	
