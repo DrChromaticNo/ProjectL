@@ -1,6 +1,11 @@
 package standard;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 import cards.Card;
+import cards.Estimator;
 import players.Player;
 import main.GameState;
 import score.ScoreCounter;
@@ -66,5 +71,22 @@ public class StandardScoreCounter implements ScoreCounter {
 		return state;
 	}
 
-
+	@Override
+	public Card[] rankCards(final GameState state, Card[] cards) {
+		final Estimator estimator = new StandardEstimator();
+		ArrayList<Card> list = new ArrayList<Card>();
+		for(Card c : cards)
+		{
+			list.add(c);
+		}
+		
+		//we sort the arraylist with respect to the estimator class
+		Collections.sort(list, new Comparator<Card>() {
+			@Override
+			public int compare(cards.Card arg0, cards.Card arg1) {
+				return estimator.estimate(state, arg1) - estimator.estimate(state, arg0);
+			}});
+		
+		return list.toArray(cards);
+	}
 }
