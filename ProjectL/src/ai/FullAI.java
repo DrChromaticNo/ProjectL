@@ -68,7 +68,7 @@ public class FullAI implements AI {
 	 * @param faction the faction of the player whose score we want to maximize
 	 * @return alpha if the player matches the player doing the action, beta otherwise
 	 */
-	private int alphabeta(GameState state, int alpha, int beta, Color faction)
+	protected int alphabeta(GameState state, int alpha, int beta, Color faction)
 	{
 		
 		//If we have the cached value for this spot, return it without
@@ -107,7 +107,7 @@ public class FullAI implements AI {
 	 * @param faction the faction of the player who we care about
 	 * @return the value of the position for the player
 	 */
-	private int alphabetaScore(GameState state, Color faction)
+	protected int alphabetaScore(GameState state, Color faction)
 	{
 		state = state.getCounter().score(state);
 		
@@ -169,7 +169,7 @@ public class FullAI implements AI {
 	 * @param faction the faction of the player whose score we are trying to maximize
 	 * @return alpha if the player matches the player doing the action, beta otherwise 
 	 */
-	private int ABactionOrScore (GameState state, int alpha, int beta, Color faction)
+	protected int ABactionOrScore (GameState state, int alpha, int beta, Color faction)
 	{	
 		//iterate through normal game "actions" until we find the next action
 		if(state.getTime() == Time.DAY)
@@ -398,7 +398,7 @@ public class FullAI implements AI {
 	 * @param faction the faction of the player whose score we are trying to maximize
 	 * @return alpha if the player matches the player doing the action, beta otherwise 
 	 */
-	private int alphabetaCardPicking(GameState state, 
+	protected int alphabetaCardPicking(GameState state, 
 			ArrayList<Color> playerList, ArrayList<Card> choiceList, int alpha, int beta, Color faction)
 	{
 		//Base case, if there aren't any more players we go to the first action
@@ -523,7 +523,7 @@ public class FullAI implements AI {
 	 * @param card the card who needs to have its state changed
 	 * @return the state after you flip the card
 	 */
-	private GameState findSetToTrue(GameState state, Card card)
+	protected GameState findSetToTrue(GameState state, Card card)
 	{
 		//Check the hand
 		for(Card c : state.getPlayer(card.getFaction()).getHand())
