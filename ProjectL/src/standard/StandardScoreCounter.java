@@ -84,7 +84,7 @@ public class StandardScoreCounter implements ScoreCounter {
 		Collections.sort(list, new Comparator<Card>() {
 			@Override
 			public int compare(cards.Card arg0, cards.Card arg1) {
-				return estimator.estimate(state, arg1) - estimator.estimate(state, arg0);
+				return -1*(estimator.estimate(state, arg0) - estimator.estimate(state, arg1));
 			}});
 		
 		return list.toArray(cards);

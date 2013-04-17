@@ -72,6 +72,8 @@ public class EstAI extends FullAI {
 					
 					if(alpha >= beta)
 						return alpha;
+					
+					i++;
 				}
 				//we also need to check if they have no cards in their hand
 				if(state.getPlayer(pColor).getHand().isEmpty())
@@ -96,6 +98,8 @@ public class EstAI extends FullAI {
 							faction));
 					if(alpha >= beta)
 						return beta;
+					
+					i++;
 				}
 				if(state.getPlayer(pColor).getHand().isEmpty())
 				{

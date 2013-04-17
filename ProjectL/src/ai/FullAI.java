@@ -401,6 +401,7 @@ public class FullAI implements AI {
 	protected int alphabetaCardPicking(GameState state, 
 			ArrayList<Color> playerList, ArrayList<Card> choiceList, int alpha, int beta, Color faction)
 	{
+		
 		//Base case, if there aren't any more players we go to the first action
 		if(playerList.size() == 0)
 		{
