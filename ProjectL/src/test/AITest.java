@@ -85,9 +85,9 @@ public class AITest {
 	}
 	
 	@Test
-	public void est2opponent1()
+	public void est1opponent1()
 	{
-Deck gameDeck = new TestDeck();
+		Deck gameDeck = new TestDeck();
 		
 		TreasureBag gameBag = new StandardTreasureBag();
 		
@@ -106,7 +106,7 @@ Deck gameDeck = new TestDeck();
 		
 			playerList[0] = new Player(chooseFaction(factionList), new SimpleAI());
 			
-			playerList[1] = new Player(chooseFaction(factionList), new EstAI(2));
+			playerList[1] = new Player(chooseFaction(factionList), new EstAI(1));
 			
 			Color check = playerList[1].getFaction();
 			

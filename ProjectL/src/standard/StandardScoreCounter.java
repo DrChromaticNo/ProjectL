@@ -3,6 +3,7 @@ package standard;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import cards.Card;
 import cards.Estimator;
@@ -80,11 +81,18 @@ public class StandardScoreCounter implements ScoreCounter {
 			list.add(c);
 		}
 		
+		final HashMap<Card, Integer> map = new HashMap<Card, Integer>();
+		
+		for(Card c : cards)
+		{
+			map.put(c, estimator.estimate(state, c));
+		}
+		
 		//we sort the arraylist with respect to the estimator class
 		Collections.sort(list, new Comparator<Card>() {
 			@Override
 			public int compare(cards.Card arg0, cards.Card arg1) {
-				return -1*(estimator.estimate(state, arg0) - estimator.estimate(state, arg1));
+				return -1*(map.get(arg0) - map.get(arg1));
 			}});
 		
 		return list.toArray(cards);
