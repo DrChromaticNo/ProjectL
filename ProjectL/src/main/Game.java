@@ -13,6 +13,7 @@ import java.util.Random;
 import java.util.Set;
 
 import ai.DepthAI;
+import ai.DepthEstAI;
 import ai.EstAI;
 import ai.FullAI;
 import ai.SimpleAI;
@@ -60,11 +61,11 @@ public class Game {
 		}
 	*/
 		
-		playerList[0] = new Player(chooseFaction(factionList));
+		playerList[0] = new Player(chooseFaction(factionList), new SimpleAI());
 		
 		System.out.println(playerList[0].getFaction());
 		
-		playerList[1] = new Player(chooseFaction(factionList), new EstAI(2));
+		playerList[1] = new Player(chooseFaction(factionList), new DepthEstAI(4,4));
 		
 		System.out.println(playerList[1].getFaction());
 		
