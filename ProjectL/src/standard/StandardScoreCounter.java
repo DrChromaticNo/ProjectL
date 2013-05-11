@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 
 import cards.Card;
 import cards.Estimator;
@@ -96,5 +97,31 @@ public class StandardScoreCounter implements ScoreCounter {
 			}});
 		
 		return list.toArray(cards);
+	}
+
+	@Override
+	public GameState[] rankTreasures(Map<GameState, String> treasureMap, Card card) {
+		final Estimator estimator = new StandardEstimator();
+		ArrayList<GameState> list = new ArrayList<GameState>();
+		for(GameState state : treasureMap.keySet())
+		{
+			list.add(state);
+		}
+		
+		final HashMap<GameState, Integer> map = new HashMap<GameState, Integer>();
+		
+		for(GameState state : treasureMap.keySet())
+		{
+			map.put(state, estimator.treasureValue(state, card, treasureMap.get(state)));
+		}
+		
+		//we sort the arraylist with respect to the estimator class
+		Collections.sort(list, new Comparator<GameState>() {
+			@Override
+			public int compare(main.GameState arg0, main.GameState arg1) {
+				return -1*(map.get(arg0) - map.get(arg1));
+			}});
+		
+		return list.toArray(new GameState[map.keySet().size()]);
 	}
 }

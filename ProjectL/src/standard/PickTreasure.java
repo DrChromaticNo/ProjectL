@@ -306,7 +306,7 @@ public class PickTreasure implements Action {
 	@Override
 	public GameState[] allActions(GameState state, Card card, int time) {
 		
-		return allActionsWithPhrases(state, card, time).keySet().toArray(new GameState[0]);
+		return state.getCounter().rankTreasures(allActionsWithTreasures(state, card, time), card);
 	}
 	
 	/**
@@ -346,6 +346,53 @@ public class PickTreasure implements Action {
 				else
 				{
 					choiceSet.put(tempState, "\n" + Faction.getPirateName(faction) + " chose " + choice + "\n");
+				}
+			}
+		}
+		
+		return choiceSet;
+	}
+	
+	/**
+	 * A helper method to get mappings for the various treasure choices
+	 * @param state the state to choose the possibilities from
+	 * @param card the card doing the choosing
+	 * @param time the time the choosing is happening (should always be dusk)
+	 * @return the hashmap connecting states to treasures
+	 **/
+	private HashMap<GameState, String> allActionsWithTreasures(GameState state, Card card, int time)
+	{
+		Color faction = card.getFaction();
+		Loot Lbag = state.getBoard().getLoot(state.getDay());
+		HashMap<GameState, String> choiceSet = new HashMap<GameState, String>();
+		for(String s : Treasure.allTreasures())
+		{
+			if(Lbag.countTreasure(s) != 0)
+			{
+				GameState tempState = new GameState(state);
+				Lbag = tempState.getBoard().getLoot(state.getDay());
+				Lbag.addLoot(s, -1);
+				tempState.getBoard().setLoot(tempState.getDay(), Lbag);
+				tempState.getPlayer(faction).getLoot().addLoot(s, 1);
+				String choice = s;
+				
+				if(s.equals(Treasure.OFFICER))
+				{
+					tempState.getBoard().removeCard(card);
+					tempState.getPlayer(faction).addToDiscard(card);
+					choiceSet.put(tempState, Treasure.OFFICER);
+				}
+				else if(s.equals(Treasure.SABER))
+				{
+					HashMap<GameState, String> saberList = saberActionCPU(tempState, faction);
+					for(GameState saberState : saberList.keySet())
+					{
+						choiceSet.put(saberState, Treasure.SABER);
+					}
+				}
+				else
+				{
+					choiceSet.put(tempState, choice);
 				}
 			}
 		}

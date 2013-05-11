@@ -17,4 +17,13 @@ public interface Estimator {
 	 * @return the heuristic estimated value of playing a given card on a given state
 	 */
 	public int estimate(GameState state, Card card);
+	
+	/**
+	 * Estimates the value of this card choosing a particular treasure at this state 
+	 * @param state the state in which the treasure is being chosen
+	 * @param card the card choosing that treasure
+	 * @param treasure treasure being chosen
+	 * @return the value for that player choosing this particular treasure
+	 */
+	public int treasureValue(GameState state, Card card, String treasure);
 }

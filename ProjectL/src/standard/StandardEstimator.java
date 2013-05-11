@@ -244,4 +244,43 @@ public class StandardEstimator implements Estimator {
 				.countTreasure(Treasure.OFFICER) > 0;
 	}
 
+	@Override
+	public int treasureValue(GameState state, Card card, String treasure) {
+		int value = 0;
+		//First, we get the base value of the treasure
+		switch(treasure)
+		{
+			case Treasure.CHEST: value+=5;
+			case Treasure.JEWEL: value+=3;
+			case Treasure.MAP: if(state.getPlayer(card.getFaction())
+					.getLoot().countTreasure(Treasure.MAP)%3 == 2)
+				     {
+						value+=12; 
+				     }
+					else
+					{
+						value+=0;
+					}
+			case Treasure.GOODS: value+=1;
+			case Treasure.OFFICER: value+=0;
+			case Treasure.SABER: value+=0;
+			case Treasure.RELIC: value+=-3;
+		}
+		
+		//Now, we modify it based on the value you lose by having either of these cards killed
+		if(treasure.equals(Treasure.OFFICER))
+		{
+			if(card.getValue() == 6)
+			{
+				value+=-5;
+			}
+			else if(card.getValue() == 9)
+			{
+				value+=-10;
+			}
+		}
+		
+		return value;
+	}
+
 }

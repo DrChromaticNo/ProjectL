@@ -52,8 +52,6 @@ public class DepthEstAI implements AI {
 			
 			System.out.println("\ncheck: " + check);
 			
-			
-			
 			//Check to see if this state is better
 			if(check > alpha)
 			{
@@ -270,11 +268,13 @@ public class DepthEstAI implements AI {
 					}
 				}
 				
+				
 				//Do alpha beta stuff on the resulting sets
 				if(faction.equals(actionCard.getFaction()))
 				{
-					for(GameState s : states)
+					for(int i = 0; i < cardBreadth && i < states.length; i++)
 					{
+						GameState s = states[i];
 						alpha = Math.max(alpha, 
 								alphabeta(s, alpha, beta, faction, depth));
 						if(alpha >= beta)
@@ -284,8 +284,9 @@ public class DepthEstAI implements AI {
 				}
 				else
 				{
-					for(GameState s : states)
+					for(int i = 0; i < cardBreadth && i < states.length; i++)
 					{
+						GameState s = states[i];
 						beta = Math.min(beta, 
 								alphabeta(s, alpha, beta, faction, depth));
 						if(alpha >= beta)
@@ -399,7 +400,8 @@ public class DepthEstAI implements AI {
 	 * @return alpha if the player matches the player doing the action, beta otherwise 
 	 */
 	protected int alphabetaCardPicking(GameState state, 
-			ArrayList<Color> playerList, ArrayList<Card> choiceList, int alpha, int beta, Color faction, int depth)
+			ArrayList<Color> playerList, ArrayList<Card> choiceList, 
+			int alpha, int beta, Color faction, int depth)
 	{
 		//Base case, if there aren't any more players we go to the first action
 		if(playerList.size() == 0)
