@@ -24,7 +24,7 @@ public class GameState {
 	private Deck deck;
 	private TreasureBag bag;
 	private ScoreCounter counter;
-	private boolean drawCards; //represnts the set-up before the game starts proper
+	private boolean drawCards; //Represents the set-up before the game starts proper
 	//false if not yet started, true once everything is set up
 	
 	public GameState(Player[] playerlist, Board board, Deck deck, 
@@ -146,6 +146,20 @@ public class GameState {
 	public void setDraw(boolean draw)
 	{
 		drawCards = draw;
+	}
+	
+	/**
+	 * Tells the gamestate to update all the GUIS attached to its various players
+	 */
+	public void updateGUIs()
+	{
+		for(Player p : pList)
+		{
+			if(!p.checkCPU())
+			{
+				p.getGUI().update(this);
+			}
+		}
 	}
 	
 	@Override public boolean equals(Object other)

@@ -1,5 +1,7 @@
 package players;
 
+import gui.GUI;
+
 import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,10 +38,13 @@ public class Player {
 	private Set<Card> hand;
 	private Set<Card> discard;
 	private Set<Card> den;
+	//If the player is not human, the ai that governs the actions of the player (null otherwise)
 	private AI ai;
+	//If the player is human, the gui that the player interfaces with (null otherwise)
+	private GUI gui;
 	
 	
-	public Player(Color faction)
+	private Player(Color faction)
 	{
 		this.faction = faction;
 		CPU = false;
@@ -49,6 +54,12 @@ public class Player {
 		hand = new HashSet<Card>();
 		discard = new HashSet<Card>();
 		den = new HashSet<Card>();
+	}
+	
+	public Player(Color faction, GUI gui)
+	{
+		this(faction);
+		this.gui = gui;
 	}
 	
 	public Player(Color faction, AI ai)
@@ -69,6 +80,7 @@ public class Player {
 		discard = new HashSet<Card>(player.getDiscard());
 		den = new HashSet<Card>(player.getDen());
 		ai = player.ai;
+		gui = player.gui;
 	}
 	
 	public int getGold()
@@ -235,6 +247,11 @@ public class Player {
 	public boolean checkCPU()
 	{
 		return CPU;
+	}
+	
+	public GUI getGUI()
+	{
+		return gui;
 	}
 	
 	@Override public boolean equals(Object other)
