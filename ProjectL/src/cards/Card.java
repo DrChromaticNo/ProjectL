@@ -164,7 +164,7 @@ public class Card implements Comparable<Card>{
 	 */
 	public GameState eveningAction(GameState state)
 	{
-		GameState end = deck.doPhase(Time.EVENING, this, state);
+		GameState end = deck.doPhase(Time.DUSK, this, state);
 		return end;
 	}
 	
@@ -175,7 +175,7 @@ public class Card implements Comparable<Card>{
 	 */
 	public GameState[] possibleEveningActions(GameState state)
 	{
-		GameState[] states = deck.getPossiblePhases(Time.EVENING, this, state);
+		GameState[] states = deck.getPossiblePhases(Time.DUSK, this, state);
 		return states;
 	}
 	
@@ -234,7 +234,7 @@ public class Card implements Comparable<Card>{
 		{
 			return dayPhase;
 		}
-		else if(time == Time.EVENING)
+		else if(time == Time.DUSK)
 		{
 			return eveningPhase;
 		}
@@ -258,7 +258,7 @@ public class Card implements Comparable<Card>{
 		{
 			dayPhase = true;
 		}
-		else if(time == Time.EVENING)
+		else if(time == Time.DUSK)
 		{
 			eveningPhase = true;
 		}

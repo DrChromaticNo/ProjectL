@@ -32,7 +32,7 @@ public class Monkey implements Action {
 		{
 			state = monkeyDay(state, card);
 		}
-		else if(time == Time.EVENING)
+		else if(time == Time.DUSK)
 		{
 			PickTreasure temp = new PickTreasure();
 			state = temp.doAction(state, card, time);
@@ -148,7 +148,7 @@ public class Monkey implements Action {
 		{
 			states[0] = monkeyDayAll(new GameState(state), card);
 		}
-		else if(time == Time.EVENING)
+		else if(time == Time.DUSK)
 		{
 			PickTreasure temp = new PickTreasure();
 			states = temp.allActions(new GameState(state), card, time);

@@ -27,7 +27,7 @@ public class Beggar implements Action {
 		{
 			state = beggarDayAction(state, card);
 		}
-		else if(time == Time.EVENING)
+		else if(time == Time.DUSK)
 		{
 			PickTreasure temp = new PickTreasure();
 			state = temp.doAction(state, card, time);
@@ -112,7 +112,7 @@ public class Beggar implements Action {
 		{
 			states[0] = beggarDayAll(new GameState(state), card);
 		}
-		else if(time == Time.EVENING)
+		else if(time == Time.DUSK)
 		{
 			PickTreasure temp = new PickTreasure();
 			states = temp.allActions(new GameState(state), card, time);

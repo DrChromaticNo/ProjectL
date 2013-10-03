@@ -24,7 +24,7 @@ public class Barkeep implements Action {
 		{
 			//Do nothing
 		}
-		else if(time == Time.EVENING)
+		else if(time == Time.DUSK)
 		{
 			PickTreasure temp = new PickTreasure();
 			state = temp.doAction(state, card, time);
@@ -55,7 +55,7 @@ public class Barkeep implements Action {
 		{
 			//Do nothing
 		}
-		else if(time == Time.EVENING)
+		else if(time == Time.DUSK)
 		{
 			PickTreasure temp = new PickTreasure();
 			states = temp.allActions(new GameState(state), card, time);

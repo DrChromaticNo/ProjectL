@@ -185,7 +185,7 @@ public class FullAI implements AI {
 			
 			if(index >= shipDeck.length) //this means all day actions have been completed
 			{
-				state.setTime(Time.EVENING);
+				state.setTime(Time.DUSK);
 				return alphabeta(state, alpha, beta, faction);
 			}
 			else //we case on the next day action
@@ -230,13 +230,13 @@ public class FullAI implements AI {
 				}
 			}
 		}
-		else if(state.getTime() == Time.EVENING)
+		else if(state.getTime() == Time.DUSK)
 		{
 			Card[] shipDeck = state.getBoard().getDeck();
 			
 			int index = shipDeck.length-1;
 				
-			while(index >= 0 && shipDeck[index].checkPhase(Time.EVENING))
+			while(index >= 0 && shipDeck[index].checkPhase(Time.DUSK))
 			{
 				index--;
 			}
@@ -266,7 +266,7 @@ public class FullAI implements AI {
 					if(s.getBoard().getDeck().length > index 
 							&& s.getBoard().getDeck()[index].equals(actionCard))
 					{
-						s.getBoard().getDeck()[index].setTrue(Time.EVENING);
+						s.getBoard().getDeck()[index].setTrue(Time.DUSK);
 					}
 				}
 				

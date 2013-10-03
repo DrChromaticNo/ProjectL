@@ -5,6 +5,8 @@
 
 package main;
 
+import gui.TestGUI;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,12 +67,16 @@ public class Game {
 		
 		System.out.println(playerList[0].getFaction());
 		
-		playerList[1] = new Player(chooseFaction(factionList), new DepthEstAI(4,4));
+		Color faction = chooseFaction(factionList);
+		
+		playerList[1] = new Player(faction, new TestGUI(faction));
 		
 		System.out.println(playerList[1].getFaction());
 		
 		//now, create the gamestate
 		GameState state = new GameState(playerList,new Board(), gameDeck, gameBag, score);
+		
+		state.updateGUIs();
 		
 		run(state);
 
@@ -323,7 +329,6 @@ public class Game {
 	{
 		System.out.print("Board: ");
 		
-		//NOTE: this traversal might be backwards? need to check which way the cards get sorted
 		for(Card c : state.getBoard().getDeck())
 		{
 			System.out.print(state.getDeck().abbreviatedName(c) + " ");
@@ -347,7 +352,7 @@ public class Game {
 				System.out.println(" ");
 				System.out.println("~DUSK PHASE~");
 				System.out.println(" ");
-				state.setTime(Time.EVENING);
+				state.setTime(Time.DUSK);
 			}
 			else
 			{
@@ -362,13 +367,13 @@ public class Game {
 				}
 			}
 		}
-		else if(state.getTime() == Time.EVENING)
+		else if(state.getTime() == Time.DUSK)
 		{
 			Card[] deck = state.getBoard().getDeck();
 			
 			int index = deck.length-1;
 				
-			while(index >= 0 && deck[index].checkPhase(Time.EVENING))
+			while(index >= 0 && deck[index].checkPhase(Time.DUSK))
 			{
 				index--;
 			}
@@ -396,7 +401,7 @@ public class Game {
 				if(state.getBoard().getDeck().length > index 
 						&& state.getBoard().getDeck()[index].equals(actionCard))
 				{
-					state.getBoard().getDeck()[index].setTrue(Time.EVENING);
+					state.getBoard().getDeck()[index].setTrue(Time.DUSK);
 				}
 			}
 		}
@@ -427,6 +432,7 @@ public class Game {
 			state.setTime(Time.PICK_CARDS);
 		}
 		
+		state.updateGUIs();
 		return state;
 	}
 	

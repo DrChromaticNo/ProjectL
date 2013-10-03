@@ -10,6 +10,6 @@ public class Time {
 
 	public static final int PICK_CARDS = 0;
 	public static final int DAY = 1;
-	public static final int EVENING = 2;
+	public static final int DUSK = 2;
 	public static final int NIGHT = 3;
 }

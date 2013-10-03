@@ -20,7 +20,7 @@ public class CabinBoy implements Action {
 	@Override
 	public GameState doAction(GameState state, Card card, int time) {
 		
-		if(time == Time.EVENING)
+		if(time == Time.DUSK)
 		{
 			System.out.println("\nThe Cabin Boy (" + card.abbreviate() + ") chooses no treasures\n");
 		}

@@ -30,7 +30,7 @@ public class Recruiter implements Action {
 		{
 			state = carpenterDay(state, card);
 		}
-		else if(time == Time.EVENING)
+		else if(time == Time.DUSK)
 		{
 			PickTreasure temp = new PickTreasure();
 			state = temp.doAction(state, card, time);
@@ -100,7 +100,7 @@ public class Recruiter implements Action {
 		{
 			states = dayActionWithPhrases(new GameState(state), card).keySet().toArray(new GameState[0]);
 		}
-		else if(time == Time.EVENING)
+		else if(time == Time.DUSK)
 		{
 			PickTreasure temp = new PickTreasure();
 			states = temp.allActions(new GameState(state), card, time);

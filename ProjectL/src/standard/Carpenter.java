@@ -28,7 +28,7 @@ public class Carpenter implements Action {
 		{
 			state = carpenterDay(state, card);
 		}
-		else if(time == Time.EVENING)
+		else if(time == Time.DUSK)
 		{
 			PickTreasure pick = new PickTreasure();
 			state = pick.doAction(state, card, time);
@@ -76,7 +76,7 @@ public class Carpenter implements Action {
 		{
 			states[0] = carpenterDayAll(new GameState(state), card);
 		}
-		else if(time == Time.EVENING)
+		else if(time == Time.DUSK)
 		{
 			PickTreasure temp = new PickTreasure();
 			states = temp.allActions(new GameState(state), card, time);

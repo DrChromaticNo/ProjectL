@@ -30,7 +30,7 @@ public class Preacher implements Action {
 		{
 			state = preacherDay(state, card);
 		}
-		else if(time == Time.EVENING)
+		else if(time == Time.DUSK)
 		{
 			PickTreasure temp = new PickTreasure();
 			state = temp.doAction(state, card, time);
@@ -179,7 +179,7 @@ public class Preacher implements Action {
 		{
 			states = allPreacherDay(state, card).keySet().toArray(new GameState[0]);
 		}
-		else if(time == Time.EVENING)
+		else if(time == Time.DUSK)
 		{
 			PickTreasure temp = new PickTreasure();
 			states = temp.allActions(state, card, time);
