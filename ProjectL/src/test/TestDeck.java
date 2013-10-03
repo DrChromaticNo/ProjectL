@@ -16,6 +16,7 @@ import standard.Carpenter;
 import standard.Monkey;
 import standard.Preacher;
 import standard.Recruiter;
+import standard.Waitress;
 import cards.Action;
 import cards.Card;
 import cards.Deck;
@@ -56,27 +57,35 @@ public class TestDeck implements Deck {
 	@Override
 	public ArrayList<Integer> allCards() {
 		ArrayList<Integer> cards = new ArrayList<Integer>(30);
-		for(int i = 0; i < 5; i++)
+		for(int i = 0; i < 4; i++)
 		{
 			cards.add(new Integer(2));
 		}
-		for(int i = 5; i < 10; i++)
+		for(int i = 4; i < 8; i++)
 		{
 			cards.add(new Integer(3));
 		}
-		for(int i = 10; i < 15; i++)
+		for(int i = 8; i < 12; i++)
 		{
 			cards.add(new Integer(4));
 		}
-		for(int i = 15; i < 20; i++)
+		for(int i = 12; i < 16; i++)
+		{
+			cards.add(new Integer(5));
+		}
+		for(int i = 16; i < 20; i++)
 		{
 			cards.add(new Integer(6));
 		}
-		for(int i = 20; i < 25; i++)
+		for(int i = 20; i < 24; i++)
 		{
 			cards.add(new Integer(7));
 		}
-		for(int i = 25; i < 30; i++)
+		for(int i = 24; i < 28; i++)
+		{
+			cards.add(new Integer(8));
+		}
+		for(int i = 28; i < 30; i++)
 		{
 			cards.add(new Integer(9));
 		}
@@ -188,6 +197,7 @@ public class TestDeck implements Deck {
 		map.put(5, new CabinBoy());
 		map.put(6, new Preacher());
 		map.put(7, new Barkeep());
+		map.put(8, new Waitress());
 		map.put(9, new Carpenter());
 		
 		return map;

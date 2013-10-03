@@ -2,6 +2,8 @@ package standard;
 
 import java.awt.Color;
 
+import players.Player;
+
 import score.Loot;
 import score.Treasure;
 
@@ -37,6 +39,8 @@ public class StandardEstimator implements Estimator {
 			case 6: estimate = preacherEst(state,card);
 				break;
 			case 7: estimate = barkeepEst(state,card);
+				break;
+			case 8: estimate = waitressEst(state,card);
 				break;
 			case 9: estimate = carpenterEst(state,card);
 				break;
@@ -231,6 +235,31 @@ public class StandardEstimator implements Estimator {
 		}
 	}
 	
+	/**
+	 * The estimate for the waitress card
+	 * @param state state the waitress is being played in
+	 * @param card the card being played
+	 * @return the estimate for the waitress
+	 */
+	private int waitressEst(GameState state, Card card)
+	{
+		Player player = state.getPlayer(card.getFaction());
+		
+		int maps = player.getLoot().countTreasure(Treasure.MAP);
+		
+		//Check to see if the player has any maps and if they'd actually want to sell those maps
+		if(maps > 0)
+		{
+			maps = maps%3;
+			int sellDays = Math.min(6-state.getDay(), maps);
+			return sellDays*3;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
 	
 	
 	/**
@@ -267,7 +296,7 @@ public class StandardEstimator implements Estimator {
 			case Treasure.RELIC: value+=-3;
 		}
 		
-		//Now, we modify it based on the value you lose by having either of these cards killed
+		//Now, we modify it based on the value you lose (or gain) by having either of these cards killed
 		if(treasure.equals(Treasure.OFFICER))
 		{
 			if(card.getValue() == 6)

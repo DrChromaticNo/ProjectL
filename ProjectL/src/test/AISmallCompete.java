@@ -53,7 +53,7 @@ public class AISmallCompete {
 	}
 	
 	@Test
-	public void depthest02vsdepthest21opponent3()
+	public void depthest02vsdepthest21()
 	{
 		for(int i = 0; i < BIG_INT; i++)
 		{
