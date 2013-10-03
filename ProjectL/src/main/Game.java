@@ -318,6 +318,8 @@ public class Game {
 		
 		weekendClear(state);
 		
+		state.updateGUIs();
+		
 		return state;
 	}
 	
