@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.Icon;
+
 import players.Faction;
 
 import main.GameState;
@@ -31,12 +33,14 @@ public class TestDeck implements Deck {
 	private HashMap<Color, String> abbrvMap;
 	private HashMap<Integer, HashMap<Color, Integer>> silverMap;
 	private HashMap<Integer, Action> actionMap;
+	private HashMap<Integer, Icon> iconMap;
 	
 	public TestDeck()
 	{
 		abbrvMap = createAbbrvMap();
 		silverMap = createSilverMap();
 		actionMap = createCardActionMap();
+		iconMap = createIconMap();
 	}
 	
 	@Override
@@ -202,6 +206,13 @@ public class TestDeck implements Deck {
 		
 		return map;
 	}
+	
+	private static HashMap<Integer, Icon> createIconMap()
+	{
+		HashMap<Integer, Icon> map = new HashMap<Integer, Icon>();
+		
+		return map;
+	}
 
 	@Override
 	public GameState[] getPossiblePhases(int time, Card card, GameState state) {
@@ -218,5 +229,11 @@ public class TestDeck implements Deck {
 	@Override
 	public int parrotValue() {
 		return 1;
+	}
+
+	@Override
+	public Icon getCardIcon(Card card) {
+		
+		return iconMap.get(card.getValue());
 	}
 }
