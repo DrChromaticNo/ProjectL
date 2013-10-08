@@ -84,12 +84,10 @@ public class TestGUI implements GUI, ActionListener {
 		
 	}
 	
-	private void launchCardGroupDisplay(String title, Card[] cards)
+	private JPanel getCardGroupDisplayPanel(Card[] cards)
 	{
-		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		
-		frame.add(panel);
 		for(Card c : cards)
 		{
 			JLabel label = new JLabel();
@@ -105,9 +103,7 @@ public class TestGUI implements GUI, ActionListener {
 			
 		}
 		
-		frame.pack();
-		
-		frame.setVisible(true);
+		return panel;
 		
 	}
 
@@ -116,8 +112,14 @@ public class TestGUI implements GUI, ActionListener {
 		// TODO Auto-generated method stub
 		if(arg0.getActionCommand().equals(DISCARD))
 		{
-			launchCardGroupDisplay("The discard pile", latest.getPlayer(faction)
+			JFrame frame = new JFrame("The discard pile");
+			
+			JPanel panel = getCardGroupDisplayPanel(latest.getPlayer(faction)
 					.getDiscard().toArray(new Card[0]));
+			
+			frame.add(panel);
+			frame.pack();
+			frame.setVisible(true);
 		}
 	}
 
