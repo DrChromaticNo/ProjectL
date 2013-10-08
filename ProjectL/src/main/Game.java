@@ -123,7 +123,9 @@ public class Game {
 					drawCards(state, availibleCards, 6);
 				}
 			}
-				
+			
+			state.updateGUIs();
+			
 			state = weekLoop(state);
 		}
 		

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 import players.Faction;
 
@@ -33,7 +34,7 @@ public class TestDeck implements Deck {
 	private HashMap<Color, String> abbrvMap;
 	private HashMap<Integer, HashMap<Color, Integer>> silverMap;
 	private HashMap<Integer, Action> actionMap;
-	private HashMap<Integer, Icon> iconMap;
+	private HashMap<Color, HashMap<Integer, Icon>> iconMap;
 	
 	public TestDeck()
 	{
@@ -207,9 +208,19 @@ public class TestDeck implements Deck {
 		return map;
 	}
 	
-	private static HashMap<Integer, Icon> createIconMap()
+	private static HashMap<Color, HashMap<Integer, Icon>> createIconMap()
 	{
-		HashMap<Integer, Icon> map = new HashMap<Integer, Icon>();
+		IconServer server = new IconServer();
+		HashMap<Color, HashMap<Integer, Icon>> map = new HashMap<Color, HashMap<Integer, Icon>>();
+		
+		for(Color faction : Faction.allFactions())
+		{
+			map.put(faction, new HashMap<Integer, Icon>());
+			for(int i = 2; i <= 9; i++)
+			{
+				map.get(faction).put(i, server.getIcon(faction, i));
+			}
+		}
 		
 		return map;
 	}
@@ -234,6 +245,7 @@ public class TestDeck implements Deck {
 	@Override
 	public Icon getCardIcon(Card card) {
 		
-		return iconMap.get(card.getValue());
+		return iconMap.get(card.getFaction())
+				.get(card.getValue());
 	}
 }
