@@ -64,13 +64,6 @@ public interface Deck {
 	public String abbreviatedName(Card card);
 	
 	/**
-	 * Gives the icon for a particular card in the deck
-	 * @param card the card whose icon is being returned
-	 * @return the icon corresponding to the given card
-	 */
-	public Icon getCardIcon(Card card);	
-	
-	/**
 	 * Returns the value of the parrot card, if any (returns an unused card value otherwise)
 	 * @return the value of the parrot card
 	 */

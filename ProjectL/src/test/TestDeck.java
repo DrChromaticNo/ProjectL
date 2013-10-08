@@ -34,14 +34,12 @@ public class TestDeck implements Deck {
 	private HashMap<Color, String> abbrvMap;
 	private HashMap<Integer, HashMap<Color, Integer>> silverMap;
 	private HashMap<Integer, Action> actionMap;
-	private HashMap<Color, HashMap<Integer, Icon>> iconMap;
 	
 	public TestDeck()
 	{
 		abbrvMap = createAbbrvMap();
 		silverMap = createSilverMap();
 		actionMap = createCardActionMap();
-		iconMap = createIconMap();
 	}
 	
 	@Override
@@ -207,23 +205,6 @@ public class TestDeck implements Deck {
 		
 		return map;
 	}
-	
-	private static HashMap<Color, HashMap<Integer, Icon>> createIconMap()
-	{
-		IconServer server = new IconServer();
-		HashMap<Color, HashMap<Integer, Icon>> map = new HashMap<Color, HashMap<Integer, Icon>>();
-		
-		for(Color faction : Faction.allFactions())
-		{
-			map.put(faction, new HashMap<Integer, Icon>());
-			for(int i = 2; i <= 9; i++)
-			{
-				map.get(faction).put(i, server.getIcon(faction, i));
-			}
-		}
-		
-		return map;
-	}
 
 	@Override
 	public GameState[] getPossiblePhases(int time, Card card, GameState state) {
@@ -240,12 +221,5 @@ public class TestDeck implements Deck {
 	@Override
 	public int parrotValue() {
 		return 1;
-	}
-
-	@Override
-	public Icon getCardIcon(Card card) {
-		
-		return iconMap.get(card.getFaction())
-				.get(card.getValue());
 	}
 }
