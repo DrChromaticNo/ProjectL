@@ -2,26 +2,28 @@ package gui;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Iterator;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import cards.Card;
 
-import players.Faction;
 import players.Player;
-import test.IconServer;
 
 import main.GameState;
 
-public class TestGUI implements GUI {
+public class TestGUI implements GUI, ActionListener {
 
 	private Color faction;
-	private JLabel gold;
-	private JLabel score;
-	private JLabel discard;
+	private JPanel playerPanel;
+	private GameState latest;
+	private static final String DISCARD = "discard";
 	
 	public TestGUI(Color faction)
 	{
@@ -30,43 +32,93 @@ public class TestGUI implements GUI {
 		playerScreen.setLayout(new FlowLayout());
 		playerScreen.setSize(500, 200);
 		playerScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		discard = new JLabel();
-		gold = new JLabel("Gold: ");
-		score = new JLabel("Score: ");
-		playerScreen.add(discard);
-		playerScreen.add(gold);
-		playerScreen.add(score);
+		
+		playerPanel = new JPanel();
+		playerPanel.setLayout(new FlowLayout());
+		
+		playerScreen.add(playerPanel);
 		playerScreen.setVisible(true);
 	}
 	
 	@Override
 	public void update(GameState state) {
-		Player player = state.getPlayer(faction);
+		latest = new GameState(state);
+		Player player = latest.getPlayer(faction);
+		playerPanel.removeAll();
 		
 		//Placeholder discard code- will be broken out into own method in future
 		if(player.getDiscard().isEmpty())
 		{
-			discard.setText("The discard is currently empty");
-			discard.setIcon(null);
+			playerPanel.add(new JLabel("The discard is currently empty"));
 		}
 		else
 		{
-			discard.setText("");
+			playerPanel.add(createDiscardButton());
+		}
+		
+		playerPanel.add(new JLabel("Gold: " + player.getGold()));
+		
+		playerPanel.add(new JLabel("Score: " + player.getScore()));
+		
+		playerPanel.revalidate();
+
+	}
+	
+	private JButton createDiscardButton()
+	{
+		Player player = latest.getPlayer(faction);
+		
+		Iterator<Card> iterator = player.getDiscard().iterator();
+		
+		ImageIcon icon = (ImageIcon) latest.getDeck()
+				.getCardIcon(iterator.next());
+		
+		ImageIcon resized = new ImageIcon(icon.getImage()
+				.getScaledInstance(40, 56, 0));
+		
+		JButton button = new JButton(resized);
+		button.setActionCommand(DISCARD);
+		button.addActionListener(this);
+		
+		return button;
+		
+	}
+	
+	private void launchCardGroupDisplay(String title, Card[] cards)
+	{
+		JFrame frame = new JFrame();
+		JPanel panel = new JPanel();
+		
+		frame.add(panel);
+		for(Card c : cards)
+		{
+			JLabel label = new JLabel();
 			
-			Iterator<Card> iterator = player.getDiscard().iterator();
-			
-			ImageIcon icon = (ImageIcon) state.getDeck()
-					.getCardIcon(iterator.next());
+			ImageIcon icon = (ImageIcon) latest.getDeck().getCardIcon(c);
 			
 			ImageIcon resized = new ImageIcon(icon.getImage()
 					.getScaledInstance(40, 56, 0));
 			
-			discard.setIcon(resized);
+			label.setIcon(resized);
+			
+			panel.add(label);
+			
 		}
 		
-		gold.setText("Gold: " + player.getGold());
-		score.setText("Score: " + player.getScore());
+		frame.pack();
+		
+		frame.setVisible(true);
+		
+	}
 
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		if(arg0.getActionCommand().equals(DISCARD))
+		{
+			launchCardGroupDisplay("The discard pile", latest.getPlayer(faction)
+					.getDiscard().toArray(new Card[0]));
+		}
 	}
 
 }
