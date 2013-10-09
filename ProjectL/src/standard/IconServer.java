@@ -1,4 +1,4 @@
-package test;
+package standard;
 
 import java.awt.Color;
 import java.util.HashMap;

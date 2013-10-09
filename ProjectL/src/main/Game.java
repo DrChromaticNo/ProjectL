@@ -5,7 +5,6 @@
 
 package main;
 
-import gui.TestGUI;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -29,6 +28,7 @@ import score.TreasureBag;
 import standard.StandardScoreCounter;
 import standard.StandardTreasureBag;
 import test.TestDeck;
+import test.TestGUI;
 import cards.Card;
 import cards.Deck;
 

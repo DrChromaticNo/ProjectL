@@ -1,4 +1,4 @@
-package standard;
+package standard.actions;
 
 import main.GameState;
 import main.Time;

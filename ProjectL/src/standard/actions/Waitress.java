@@ -1,4 +1,4 @@
-package standard;
+package standard.actions;
 
 import java.awt.Color;
 

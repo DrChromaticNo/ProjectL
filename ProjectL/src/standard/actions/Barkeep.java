@@ -1,4 +1,4 @@
-package standard;
+package standard.actions;
 
 import players.Faction;
 import main.GameState;

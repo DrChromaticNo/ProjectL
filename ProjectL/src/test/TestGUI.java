@@ -1,32 +1,29 @@
-package gui;
+package test;
 
-import java.awt.BorderLayout;
+import gui.GUI;
+
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
 
 import cards.Card;
 
 import players.Faction;
 import players.Player;
-import test.IconServer;
+import standard.IconServer;
 
 import main.GameState;
 
-public class TestGUI implements GUI, ActionListener {
+public class TestGUI implements GUI {
 
 	//The faction of the player that this UI represents
 	private Color faction;
@@ -39,8 +36,6 @@ public class TestGUI implements GUI, ActionListener {
 	//A map to help connect cards to icons that represent them
 	private HashMap<Color, HashMap<Integer, Icon>> cardIconMap;
 	
-	private static final String DISCARD = "discard";
-	
 	public TestGUI(Color faction)
 	{
 		this.faction = faction;
@@ -49,7 +44,7 @@ public class TestGUI implements GUI, ActionListener {
 		
 		JFrame playerScreen = new JFrame("Player Data");
 		playerScreen.setLayout(new FlowLayout());
-		playerScreen.setSize(500, 200);
+		playerScreen.setSize(700, 220);
 		playerScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		playerPanel = new JPanel();
@@ -92,7 +87,13 @@ public class TestGUI implements GUI, ActionListener {
 		}
 		else
 		{
-			playerPanel.add(createDiscardButton());
+			JPanel discardPile = new JPanel();
+			discardPile.setLayout(new BoxLayout(discardPile, BoxLayout.Y_AXIS));
+			discardPile.add(new JLabel("Discard"));
+			discardPile.add(getCardGroupDisplayPanel(player.getDiscard()
+					.toArray(new Card[0])));
+			
+			playerPanel.add(discardPile);
 		}
 		
 		playerPanel.add(new JLabel("Gold: " + player.getGold()));
@@ -100,6 +101,7 @@ public class TestGUI implements GUI, ActionListener {
 		playerPanel.add(new JLabel("Score: " + player.getScore()));
 		
 		JPanel denAndHand = new JPanel();
+		
 		denAndHand.setLayout(new BoxLayout(denAndHand, BoxLayout.Y_AXIS));
 		
 		if(player.getHand().isEmpty())
@@ -131,69 +133,54 @@ public class TestGUI implements GUI, ActionListener {
 	}
 	
 	/**
-	 * Creates the button that shows the discard pile
-	 * @return the button that, when pressed, shows the contents of the discard pile
-	 */
-	private JButton createDiscardButton()
-	{
-		Player player = latest.getPlayer(faction);
-		
-		Iterator<Card> iterator = player.getDiscard().iterator();
-		
-		ImageIcon icon = (ImageIcon) getCardIcon(iterator.next());
-		
-		ImageIcon resized = new ImageIcon(icon.getImage()
-				.getScaledInstance(40, 56, 0));
-		
-		JButton button = new JButton(resized);
-		button.setActionCommand(DISCARD);
-		button.addActionListener(this);
-		
-		return button;
-		
-	}
-	
-	/**
 	 * Returns a panel displaying a list of the cards provided as input
 	 * @param cards the cards whose icons will be displayed
 	 * @return the panel displaying a list of the card icons
 	 */
 	private JPanel getCardGroupDisplayPanel(Card[] cards)
 	{
-		JPanel panel = new JPanel();
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		
 		for(Card c : cards)
 		{
 			JLabel label = new JLabel();
 			
-			ImageIcon icon = (ImageIcon) getCardIcon(c);
+			final ImageIcon icon = (ImageIcon) getCardIcon(c);
 			
 			ImageIcon resized = new ImageIcon(icon.getImage()
 					.getScaledInstance(40, 56, 0));
 			
 			label.setIcon(resized);
 			
+			//Make it so clicking on a small image of a card will
+			//pop up a bigger window with the full size picture
+			label.addMouseListener(new MouseListener(){
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					
+					JFrame frame = new JFrame();
+					JPanel image = new JPanel();
+					frame.add(image);
+					image.add(new JLabel(icon));
+					frame.pack();
+					frame.setVisible(true);
+	
+				}
+				@Override
+				public void mouseEntered(MouseEvent arg0) {}
+				@Override
+				public void mouseExited(MouseEvent arg0) {}
+				@Override
+				public void mousePressed(MouseEvent arg0) {}
+				@Override
+				public void mouseReleased(MouseEvent arg0) {}
+			});
+			
 			panel.add(label);
 			
 		}
 		
 		return panel;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		if(arg0.getActionCommand().equals(DISCARD))
-		{
-			JFrame frame = new JFrame("The discard pile");
-			
-			JPanel panel = getCardGroupDisplayPanel(latest.getPlayer(faction)
-					.getDiscard().toArray(new Card[0]));
-			
-			frame.add(panel);
-			frame.pack();
-			frame.setVisible(true);
-		}
 	}
 	
 	/**

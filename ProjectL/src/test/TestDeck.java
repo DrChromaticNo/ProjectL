@@ -4,22 +4,18 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 import players.Faction;
 
 import main.GameState;
-import score.ScoreCounter;
-import score.TreasureBag;
-import standard.Barkeep;
-import standard.Beggar;
-import standard.CabinBoy;
-import standard.Carpenter;
-import standard.Monkey;
-import standard.Preacher;
-import standard.Recruiter;
-import standard.Waitress;
+import standard.actions.Barkeep;
+import standard.actions.Beggar;
+import standard.actions.CabinBoy;
+import standard.actions.Carpenter;
+import standard.actions.Monkey;
+import standard.actions.Preacher;
+import standard.actions.Recruiter;
+import standard.actions.Waitress;
 import cards.Action;
 import cards.Card;
 import cards.Deck;
