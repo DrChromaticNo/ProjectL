@@ -22,6 +22,8 @@ public class IconServer {
 	private static final String G = "/Green";
 	private static final String W = "/White";
 	private static final String Y = "/Yellow";
+	private static final String TREASURE = "/Treasures";
+	public ImageIcon bag = new ImageIcon(root + "/bag.png");
 	
 	private HashMap<Color, String> colorMap = new HashMap<Color, String>();
 	private HashMap<Integer, String> numMap = new HashMap<Integer, String>();
@@ -47,8 +49,13 @@ public class IconServer {
 	 * @param val the value of the card
 	 * @return the icon corresponding to the faction and value
 	 */
-	public ImageIcon getIcon(Color faction, int val)
+	public ImageIcon getCardIcon(Color faction, int val)
 	{
 		return new ImageIcon(root + colorMap.get(faction) + numMap.get(val));
+	}
+	
+	public ImageIcon getTreasureIcon(String treasure)
+	{
+		return new ImageIcon(root + TREASURE + "/" + treasure + ".png");
 	}
 }

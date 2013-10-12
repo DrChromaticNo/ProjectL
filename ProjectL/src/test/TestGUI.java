@@ -4,6 +4,7 @@ import gui.GUI;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,6 +21,9 @@ import cards.Card;
 
 import players.Faction;
 import players.Player;
+import score.Loot;
+import score.Treasure;
+import score.TreasureBag;
 import standard.IconServer;
 
 import main.GameState;
@@ -35,12 +40,15 @@ public class TestGUI implements GUI {
 	private IconServer server;
 	//A map to help connect cards to icons that represent them
 	private HashMap<Color, HashMap<Integer, Icon>> cardIconMap;
+	//A map to help connect treasures to icons that represent them
+	private HashMap<String, Icon> treasureIconMap;
 	
 	public TestGUI(Color faction)
 	{
 		this.faction = faction;
 		server = new IconServer();
 		cardIconMap = createCardIconMap();
+		treasureIconMap = createTreasureIconMap();
 		
 		JFrame playerScreen = new JFrame("Player Data");
 		playerScreen.setLayout(new FlowLayout());
@@ -67,13 +75,30 @@ public class TestGUI implements GUI {
 			map.put(faction, new HashMap<Integer, Icon>());
 			for(int i = 2; i <= 9; i++)
 			{
-				map.get(faction).put(i, server.getIcon(faction, i));
+				map.get(faction).put(i, server.getCardIcon(faction, i));
 			}
 		}
 		
 		return map;
 	}
 	
+	/**
+	 * Generates a map that links treasure name to an icon
+	 * @return the map that links treasure name to the icon that represents the analogous treasure
+	 */
+	private HashMap<String, Icon> createTreasureIconMap()
+	{
+		HashMap<String, Icon> map = new HashMap<String, Icon>();
+		
+		for(String treasure : Treasure.allTreasures())
+		{
+			map.put(treasure, server.getTreasureIcon(treasure));
+		}
+		
+		return map;
+	}
+	
+	//NOTE: pull most of this out into seperate methods- just all clumped together for testing
 	@Override
 	public void update(GameState state) {
 		latest = new GameState(state);
@@ -99,6 +124,34 @@ public class TestGUI implements GUI {
 		playerPanel.add(new JLabel("Gold: " + player.getGold()));
 		
 		playerPanel.add(new JLabel("Score: " + player.getScore()));
+		
+		JButton bagButton = new JButton();
+		ImageIcon bagIcon = new ImageIcon(server.bag.getImage()
+				.getScaledInstance(40, 56, 1));
+		bagButton.setIcon(bagIcon);
+		bagButton.addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				JFrame frame = new JFrame("Your Loot");
+				frame.add(getTreasureDisplayPanel(
+						latest.getPlayer(faction).getLoot(), -1));	
+				frame.pack();
+				frame.setVisible(true);
+			}
+			@Override
+			public void mouseEntered(MouseEvent arg0) {	
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {	
+			}
+			@Override
+			public void mousePressed(MouseEvent arg0) {	
+			}
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+			}
+		});
+		playerPanel.add(bagButton);
 		
 		JPanel denAndHand = new JPanel();
 		
@@ -184,6 +237,71 @@ public class TestGUI implements GUI {
 	}
 	
 	/**
+	 * Returns a panel showing all the treasures in the given loot
+	 * @param loot the loot to show the treasures of
+	 * @param max the max # of treasures to show (a negative input will show all treasures)
+	 * @return the panel showing all treasures in the given loot
+	 */
+	private JPanel getTreasureDisplayPanel(Loot loot, int max)
+	{
+		JPanel panel = new JPanel();
+		
+		double test;
+		
+		if(max >= 0)
+		{
+			test = Math.sqrt(max);
+		}
+		else
+		{
+			int total = 0;
+			
+			for(String treasure : Treasure.allTreasures())
+			{
+				total+= loot.countTreasure(treasure);
+			}
+			
+			max = total;
+			test = Math.sqrt(total);
+		}
+		
+		int side = (int) test;
+		if((side^2) != max)
+		{
+			side++;
+		}
+		
+		panel.setLayout(new GridLayout(side,side));
+		
+		int count = 0;
+		int tCount = 0;
+		int index = 0;
+		String[] list = Treasure.allTreasures();
+		
+		while(count < max && index < list.length)
+		{
+			if(tCount < loot.countTreasure(list[index]))
+			{
+				JLabel label = new JLabel();
+				ImageIcon resized = new ImageIcon(((ImageIcon) getTreasureIcon(list[index]))
+						.getImage().getScaledInstance(40, 56, 0));
+				label.setIcon(resized);
+				panel.add(label);
+				count++;
+				tCount++;
+			}
+			else
+			{
+				index++;
+				tCount = 0;
+			}
+		}
+		
+		return panel;
+		
+	}
+	
+	/**
 	 * Given a card, returns the icon corresponding to it
 	 * @param card the card for which to display an icon
 	 * @return the icon corresponding to the card
@@ -192,6 +310,15 @@ public class TestGUI implements GUI {
 		
 		return cardIconMap.get(card.getFaction())
 				.get(card.getValue());
+	}
+	
+	/**
+	 * Given a treasure, returns the icon corresponding to it
+	 * @param treasure the treasure for which to display an icon
+	 * @return the icon corresponding to the treasure
+	 */
+	private Icon getTreasureIcon(String treasure) {	
+		return treasureIconMap.get(treasure);
 	}
 
 }
