@@ -28,7 +28,7 @@ import standard.StandardTreasureBag;
 
 public class AISmallCompete {
 
-	private int BIG_INT = 100;
+	private int BIG_INT = 1000;
 	private double p1Wins;
 	private double p2Wins;
 	private double loss;
