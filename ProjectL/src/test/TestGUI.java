@@ -32,8 +32,6 @@ public class TestGUI implements GUI {
 
 	//The faction of the player that this UI represents
 	private Color faction;
-	//The panel which holds the 3 main panels
-	private JPanel mainPanel;
 	//The panel which holds the player data: score, gold, discard, treasures, den, and hand
 	private JPanel playerPanel;
 	//The panel which holds the current game states: treasures for each day, and current card layout on the board
@@ -108,7 +106,36 @@ public class TestGUI implements GUI {
 	@Override
 	public void update(GameState state) {
 		latest = new GameState(state);
+		updateGamePanel();
 		updatePlayerPanel();
+	}
+	
+	private void updateGamePanel()
+	{
+		gamePanel.removeAll();
+		gamePanel.setLayout(new GridLayout(2,6));
+		
+		Card[] deck = latest.getBoard().getDeck();
+		
+		for(int i = 0; i < 6-deck.length; i++)
+		{
+			gamePanel.add(new JLabel());
+		}
+		//Possibly try to change card group display to handle this case as well?
+		for(Card c : deck)
+		{
+			JLabel label = getClickableCardLabel(c);
+			
+			gamePanel.add(label);
+		}
+		
+		for(int i = 0; i < 6; i++)
+		{
+			gamePanel.add(getTreasureDisplayPanel(latest
+					.getBoard().getLoot(i), 6));
+		}
+		
+		gamePanel.revalidate();
 	}
 	
 	private void updatePlayerPanel()
@@ -236,44 +263,55 @@ public class TestGUI implements GUI {
 		
 		for(Card c : cards)
 		{
-			JLabel label = new JLabel();
-			
-			final ImageIcon icon = (ImageIcon) getCardIcon(c);
-			
-			ImageIcon resized = new ImageIcon(icon.getImage()
-					.getScaledInstance(40, 56, 0));
-			
-			label.setIcon(resized);
-			
-			//Make it so clicking on a small image of a card will
-			//pop up a bigger window with the full size picture
-			label.addMouseListener(new MouseListener(){
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					
-					JFrame frame = new JFrame();
-					JPanel image = new JPanel();
-					frame.add(image);
-					image.add(new JLabel(icon));
-					frame.pack();
-					frame.setVisible(true);
-	
-				}
-				@Override
-				public void mouseEntered(MouseEvent arg0) {}
-				@Override
-				public void mouseExited(MouseEvent arg0) {}
-				@Override
-				public void mousePressed(MouseEvent arg0) {}
-				@Override
-				public void mouseReleased(MouseEvent arg0) {}
-			});
+			JLabel label = getClickableCardLabel(c);
 			
 			panel.add(label);
-			
 		}
 		
 		return panel;
+	}
+	
+	/**
+	 * Helper method to get an individual clickable label for an individual card
+	 * @param c the card to get the clickable lavel for
+	 * @return the clickable label with the card icon
+	 */
+	private JLabel getClickableCardLabel(Card c)
+	{
+		JLabel label = new JLabel();
+		
+		final ImageIcon icon = (ImageIcon) getCardIcon(c);
+		
+		ImageIcon resized = new ImageIcon(icon.getImage()
+				.getScaledInstance(40, 56, 0));
+		
+		label.setIcon(resized);
+		
+		//Make it so clicking on a small image of a card will
+		//pop up a bigger window with the full size picture
+		label.addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				
+				JFrame frame = new JFrame();
+				JPanel image = new JPanel();
+				frame.add(image);
+				image.add(new JLabel(icon));
+				frame.pack();
+				frame.setVisible(true);
+
+			}
+			@Override
+			public void mouseEntered(MouseEvent arg0) {}
+			@Override
+			public void mouseExited(MouseEvent arg0) {}
+			@Override
+			public void mousePressed(MouseEvent arg0) {}
+			@Override
+			public void mouseReleased(MouseEvent arg0) {}
+		});
+		
+		return label;
 	}
 	
 	/**
