@@ -32,8 +32,12 @@ public class TestGUI implements GUI {
 
 	//The faction of the player that this UI represents
 	private Color faction;
-	//The panel which holds the player data: score, gold, discard, den, and hand
+	//The panel which holds the 3 main panels
+	private JPanel mainPanel;
+	//The panel which holds the player data: score, gold, discard, treasures, den, and hand
 	private JPanel playerPanel;
+	//The panel which holds the current game states: treasures for each day, and current card layout on the board
+	private JPanel gamePanel;
 	//The gamestate that this UI will pull its info from
 	private GameState latest;
 	//The class to serve the various icons
@@ -50,15 +54,18 @@ public class TestGUI implements GUI {
 		cardIconMap = createCardIconMap();
 		treasureIconMap = createTreasureIconMap();
 		
-		JFrame playerScreen = new JFrame("Player Data");
-		playerScreen.setLayout(new FlowLayout());
-		playerScreen.setSize(700, 220);
+		JFrame playerScreen = new JFrame("Project L");
+		playerScreen.setLayout(new GridLayout(2,1));
+		playerScreen.setSize(700, 440);
 		playerScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		playerPanel = new JPanel();
-		playerPanel.setLayout(new FlowLayout());
+		gamePanel = new JPanel();
 		
+		playerPanel = new JPanel();
+		
+		playerScreen.add(gamePanel);
 		playerScreen.add(playerPanel);
+		
 		playerScreen.setVisible(true);
 	}
 	
@@ -98,14 +105,38 @@ public class TestGUI implements GUI {
 		return map;
 	}
 	
-	//NOTE: pull most of this out into seperate methods- just all clumped together for testing
 	@Override
 	public void update(GameState state) {
 		latest = new GameState(state);
+		updatePlayerPanel();
+	}
+	
+	private void updatePlayerPanel()
+	{
 		Player player = latest.getPlayer(faction);
 		playerPanel.removeAll();
+		playerPanel.setLayout(new FlowLayout());
 		
-		//Placeholder discard code- will be broken out into own method in future
+		updatePlayerDiscardPile(player);
+		
+		playerPanel.add(new JLabel("Gold: " + player.getGold()));
+		
+		playerPanel.add(new JLabel("Score: " + player.getScore()));
+		
+		updatePlayerTreasureDisplay();
+		
+		updatePlayerDenAndHand(player);
+		
+		playerPanel.revalidate();
+
+	}
+	
+	/**
+	 * Updates the discard pile in the player panel
+	 * @param player the player whose discard pile is being updated
+	 */
+	private void updatePlayerDiscardPile(Player player)
+	{
 		if(player.getDiscard().isEmpty())
 		{
 			playerPanel.add(new JLabel("The discard is currently empty"));
@@ -120,15 +151,20 @@ public class TestGUI implements GUI {
 			
 			playerPanel.add(discardPile);
 		}
-		
-		playerPanel.add(new JLabel("Gold: " + player.getGold()));
-		
-		playerPanel.add(new JLabel("Score: " + player.getScore()));
-		
+	}
+	
+	/**
+	 * Updates the treasure display button in the player panel
+	 */
+	private void updatePlayerTreasureDisplay()
+	{
 		JButton bagButton = new JButton();
+		
 		ImageIcon bagIcon = new ImageIcon(server.bag.getImage()
 				.getScaledInstance(40, 56, 1));
+		
 		bagButton.setIcon(bagIcon);
+		
 		bagButton.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -152,7 +188,14 @@ public class TestGUI implements GUI {
 			}
 		});
 		playerPanel.add(bagButton);
-		
+	}
+	
+	/**
+	 * Updates the den and hand display for the given player on the player panel
+	 * @param player the player whose den and hand need to be updated
+	 */
+	private void updatePlayerDenAndHand(Player player)
+	{
 		JPanel denAndHand = new JPanel();
 		
 		denAndHand.setLayout(new BoxLayout(denAndHand, BoxLayout.Y_AXIS));
@@ -170,7 +213,7 @@ public class TestGUI implements GUI {
 		
 		if(player.getDen().isEmpty())
 		{
-			denAndHand.add(new JLabel("The den is currently empty"));
+			denAndHand.add(new JLabel("Your den is currently empty"));
 		}
 		else
 		{
@@ -180,9 +223,6 @@ public class TestGUI implements GUI {
 		}
 		
 		playerPanel.add(denAndHand);
-		
-		playerPanel.revalidate();
-
 	}
 	
 	/**
@@ -248,6 +288,7 @@ public class TestGUI implements GUI {
 		
 		double test;
 		
+		//First, we determine the dimensions (always a square)
 		if(max >= 0)
 		{
 			test = Math.sqrt(max);
@@ -271,6 +312,7 @@ public class TestGUI implements GUI {
 			side++;
 		}
 		
+		//Next, we create the panel and populate it with images
 		panel.setLayout(new GridLayout(side,side));
 		
 		int count = 0;
