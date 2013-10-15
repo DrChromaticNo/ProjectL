@@ -4,6 +4,8 @@ import gui.GUI;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -17,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import cards.Card;
 
@@ -24,7 +27,6 @@ import players.Faction;
 import players.Player;
 import score.Loot;
 import score.Treasure;
-import score.TreasureBag;
 import standard.IconServer;
 
 import main.GameState;
@@ -37,6 +39,8 @@ public class TestGUI implements GUI {
 	private JPanel playerPanel;
 	//The panel which holds the current game states: treasures for each day, and current card layout on the board
 	private JPanel gamePanel;
+	//The panel which will hold the opponents data
+	private JPanel opponentPanel;
 	//The gamestate that this UI will pull its info from
 	private GameState latest;
 	//The class to serve the various icons
@@ -54,14 +58,17 @@ public class TestGUI implements GUI {
 		treasureIconMap = createTreasureIconMap();
 		
 		JFrame playerScreen = new JFrame("Project L");
-		playerScreen.setLayout(new GridLayout(2,1));
-		playerScreen.setSize(700, 440);
+		playerScreen.setLayout(new GridLayout(3,1));
+		playerScreen.setSize(700, 660);
 		playerScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		opponentPanel = new JPanel();
 		
 		gamePanel = new JPanel();
 		
 		playerPanel = new JPanel();
 		
+		playerScreen.add(opponentPanel);
 		playerScreen.add(gamePanel);
 		playerScreen.add(playerPanel);
 		
@@ -107,8 +114,81 @@ public class TestGUI implements GUI {
 	@Override
 	public void update(GameState state) {
 		latest = new GameState(state);
+		updateOpponentPanel();
 		updateGamePanel();
 		updatePlayerPanel();
+	}
+	
+	private void updateOpponentPanel()
+	{
+		opponentPanel.removeAll();
+		Player[] playerList = latest.getPlayerList();
+		
+		int index = 0;
+		
+		while(!playerList[index].getFaction().equals(faction))
+		{
+			index++;
+		}
+		
+		int end = index;
+		int writer = 0;
+		Player[] opponentList = new Player[playerList.length-1];
+		index--;
+		while(end != index)
+		{
+			if(index < 0)
+			{
+				index = playerList.length-1;
+			}
+			else
+			{
+				opponentList[writer] = playerList[index];
+				writer++;
+				index--;
+			}
+		}
+		
+		opponentPanel.setLayout(
+				new GridLayout(1, opponentList.length));
+		
+		for(Player p : opponentList)
+		{
+			opponentPanel.add(getOpponentPortrait(p));
+		}
+		
+		opponentPanel.revalidate();
+	}
+	
+	/**
+	 * Gets the opponent display for the given player
+	 * @param player the panel is being generated for
+	 * @return the panel displaying the data relevant to the given player, as an opponent
+	 */
+	private JPanel getOpponentPortrait(Player player)
+	{
+		JPanel panel = new JPanel();
+		
+		if(player.getDen().isEmpty())
+		{
+			panel.setLayout(new GridLayout(2,1));
+			panel.add(getGoldScoreDisplayPanel(player));
+			JLabel label = new JLabel("Den is currently empty");
+			label.setHorizontalAlignment(SwingConstants.CENTER);
+			panel.add(label);
+		}
+		else
+		{
+			panel.setLayout(new GridLayout(3,1));
+			panel.add(getGoldScoreDisplayPanel(player));
+			JLabel label = new JLabel("Den");
+			label.setHorizontalAlignment(SwingConstants.CENTER);
+			panel.add(label);
+			panel.add(getCardGroupDisplayPanel(player
+					.getDen().toArray(new Card[0])));
+		}
+		
+		return panel;
 	}
 	
 	private void updateGamePanel()
@@ -122,7 +202,7 @@ public class TestGUI implements GUI {
 		{
 			gamePanel.add(new JLabel());
 		}
-		//Possibly try to change card group display to handle this case as well?
+	
 		for(Card c : deck)
 		{
 			JLabel label = getClickableCardLabel(c);
@@ -155,9 +235,7 @@ public class TestGUI implements GUI {
 		
 		updatePlayerDiscardPile(player);
 		
-		playerPanel.add(new JLabel("Gold: " + player.getGold()));
-		
-		playerPanel.add(new JLabel("Score: " + player.getScore()));
+		playerPanel.add(getGoldScoreDisplayPanel(player));
 		
 		updatePlayerTreasureDisplay();
 		
@@ -187,6 +265,38 @@ public class TestGUI implements GUI {
 			
 			playerPanel.add(discardPile);
 		}
+	}
+	
+	/**
+	 * Displays the player name, score, and gold counter
+	 * @param player the player whose gold score and name are being updated
+	 */
+	private JPanel getGoldScoreDisplayPanel(Player player)
+	{
+		JPanel panel = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridwidth = 2;
+		c.gridx = 0;
+		c.gridy = 0;
+		
+		JLabel playerName = new JLabel(Faction.getPirateName(player.getFaction()));
+		
+		playerName.setForeground(player.getFaction());
+		
+		panel.add(playerName, c);
+		
+		c.gridx = 0;
+		c.gridy = 1;
+		c.gridwidth = 1;
+		
+		panel.add(new JLabel("Gold: " + player.getGold() + "  "), c);
+		
+		c.gridx = 1;
+		c.gridy = 1;
+		
+		panel.add(new JLabel("Score: " + player.getScore()), c);
+		
+		return panel;
 	}
 	
 	/**

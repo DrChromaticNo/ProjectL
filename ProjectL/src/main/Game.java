@@ -46,7 +46,7 @@ public class Game {
 		
 		ScoreCounter score = new StandardScoreCounter();
 		
-		int numPlayers = 2; //assume/require > 1, < 7
+		int numPlayers = 4; //assume/require > 1, < 7
 		Player[] playerList = new Player[numPlayers];
 		
 		ArrayList<Color> factionList = Faction.allFactions();
@@ -64,6 +64,8 @@ public class Game {
 	*/
 		
 		playerList[0] = new Player(chooseFaction(factionList), new SimpleAI());
+		playerList[2] = new Player(chooseFaction(factionList), new SimpleAI());
+		playerList[3] = new Player(chooseFaction(factionList), new SimpleAI());
 		
 		System.out.println(playerList[0].getFaction());
 		
