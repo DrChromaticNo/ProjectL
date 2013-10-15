@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -131,8 +132,16 @@ public class TestGUI implements GUI {
 		
 		for(int i = 0; i < 6; i++)
 		{
-			gamePanel.add(getTreasureDisplayPanel(latest
-					.getBoard().getLoot(i), 6));
+			
+			JPanel panel = getTreasureDisplayPanel(latest
+					.getBoard().getLoot(i), 6);
+			
+			if(latest.getDay() == i)
+			{
+				panel.setBorder(BorderFactory.createLoweredBevelBorder());
+			}
+			
+			gamePanel.add(panel);
 		}
 		
 		gamePanel.revalidate();
