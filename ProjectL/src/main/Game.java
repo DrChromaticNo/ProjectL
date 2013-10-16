@@ -63,9 +63,9 @@ public class Game {
 		}
 	*/
 		
-		playerList[0] = new Player(chooseFaction(factionList), new SimpleAI());
-		playerList[2] = new Player(chooseFaction(factionList), new SimpleAI());
-		playerList[3] = new Player(chooseFaction(factionList), new SimpleAI());
+		playerList[0] = new Player(chooseFaction(factionList), new DepthEstAI(2,1));
+		playerList[2] = new Player(chooseFaction(factionList), new DepthEstAI(2,1));
+		playerList[3] = new Player(chooseFaction(factionList), new DepthEstAI(2,1));
 		
 		System.out.println(playerList[0].getFaction());
 		
@@ -105,7 +105,7 @@ public class Game {
 		//get the list of all the drawable cards
 		ArrayList<Integer> availibleCards = state.getDeck().allCards();
 		
-		for(int week = state.getWeek(); week <= 3; week++)
+		for(int week = state.getWeek(); week < 3; week++)
 		{
 			state.setWeek(week);
 			

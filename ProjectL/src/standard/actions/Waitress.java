@@ -12,6 +12,16 @@ import main.Time;
 import cards.Action;
 import cards.Card;
 
+/**
+ * The class that represents the waitress card
+ * @author Chris
+ * 
+ * Day: N/A
+ * Dusk: Choose 1 treasure
+ * Night: If you have at least one Treasure Map, you can sell it for 3 gold
+ * End: N/A
+ *
+ */
 public class Waitress implements Action {
 
 	@Override

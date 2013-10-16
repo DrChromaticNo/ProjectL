@@ -188,6 +188,9 @@ public class TestGUI implements GUI {
 					.getDen().toArray(new Card[0])));
 		}
 		
+		panel.setBorder(BorderFactory
+				.createLineBorder(player.getFaction()));
+		
 		return panel;
 	}
 	
@@ -219,6 +222,10 @@ public class TestGUI implements GUI {
 			if(latest.getDay() == i)
 			{
 				panel.setBorder(BorderFactory.createLoweredBevelBorder());
+			}
+			else
+			{
+				panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			}
 			
 			gamePanel.add(panel);
