@@ -18,8 +18,10 @@ public class GameState {
 	//note, the players are ordered in clockwise orientation (the turn order and seating)
 	private Player[] pList;
 	private Board board;
+	//In the default game, the days run from 0 to 5
 	private int day;
 	private int time;
+	//In the default game, the weeks run from 0 to 2
 	private int week;
 	private Deck deck;
 	private TreasureBag bag;
