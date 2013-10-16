@@ -2,7 +2,10 @@ package test;
 
 import gui.GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -16,10 +19,14 @@ import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.text.ComponentView;
+import javax.swing.text.Element;
 
 import cards.Card;
 
@@ -35,6 +42,10 @@ public class TestGUI implements GUI {
 
 	//The faction of the player that this UI represents
 	private Color faction;
+	//This frame holds the panel which is the log for messages/player actions
+	private JFrame logFrame;
+	//This panel holds the actual log used to hold messages/player actions
+	private JEditorPane log;
 	//The panel which holds the player data: score, gold, discard, treasures, den, and hand
 	private JPanel playerPanel;
 	//The panel which holds the current game states: treasures for each day, and current card layout on the board
@@ -52,14 +63,16 @@ public class TestGUI implements GUI {
 	
 	public TestGUI(Color faction)
 	{
+		
+		//First, we handle the main player GUI
 		this.faction = faction;
 		server = new IconServer();
 		cardIconMap = createCardIconMap();
 		treasureIconMap = createTreasureIconMap();
 		
 		JFrame playerScreen = new JFrame("Project L");
+		playerScreen.setSize(800, 660);
 		playerScreen.setLayout(new GridLayout(3,1));
-		playerScreen.setSize(700, 660);
 		playerScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		opponentPanel = new JPanel();
@@ -68,11 +81,36 @@ public class TestGUI implements GUI {
 		
 		playerPanel = new JPanel();
 		
+		opponentPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		playerScreen.add(opponentPanel);
+		
+		gamePanel.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
 		playerScreen.add(gamePanel);
+		
+		playerPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		playerScreen.add(playerPanel);
 		
 		playerScreen.setVisible(true);
+		
+		//Next, we initialize the log functionality
+		
+		logFrame = new JFrame("Log");
+		logFrame.setSize(350, 660);
+		logFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		logFrame.setLayout(new BorderLayout());
+		logFrame.setResizable(false);
+
+		log = new JEditorPane();
+		log.setEditable(false);
+		
+		JScrollPane scrollPane = new JScrollPane(log);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane
+				.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane
+				.HORIZONTAL_SCROLLBAR_NEVER);
+		logFrame.add(scrollPane, BorderLayout.CENTER);
+		scrollPane.setVisible(true);
+		scrollPane.setPreferredSize(new Dimension(350,660));
 	}
 	
 	/**
@@ -119,6 +157,9 @@ public class TestGUI implements GUI {
 		updatePlayerPanel();
 	}
 	
+	/**
+	 * Updates the top row of the player screen
+	 */
 	private void updateOpponentPanel()
 	{
 		opponentPanel.removeAll();
@@ -194,6 +235,9 @@ public class TestGUI implements GUI {
 		return panel;
 	}
 	
+	/**
+	 * Updates the middle row of the player screen
+	 */
 	private void updateGamePanel()
 	{
 		gamePanel.removeAll();
@@ -209,6 +253,8 @@ public class TestGUI implements GUI {
 		for(Card c : deck)
 		{
 			JLabel label = getClickableCardLabel(c);
+			
+			label.setHorizontalAlignment(SwingConstants.CENTER);
 			
 			gamePanel.add(label);
 		}
@@ -234,6 +280,9 @@ public class TestGUI implements GUI {
 		gamePanel.revalidate();
 	}
 	
+	/**
+	 * Updates lower row of the player screen
+	 */
 	private void updatePlayerPanel()
 	{
 		Player player = latest.getPlayer(faction);
@@ -242,7 +291,7 @@ public class TestGUI implements GUI {
 		
 		updatePlayerDiscardPile(player);
 		
-		playerPanel.add(getGoldScoreDisplayPanel(player));
+		updatePlayerGoldScoreLog(player);
 		
 		updatePlayerTreasureDisplay();
 		
@@ -266,12 +315,58 @@ public class TestGUI implements GUI {
 		{
 			JPanel discardPile = new JPanel();
 			discardPile.setLayout(new BoxLayout(discardPile, BoxLayout.Y_AXIS));
-			discardPile.add(new JLabel("Discard"));
+			discardPile.add(new JLabel("Discard", SwingConstants.CENTER));
 			discardPile.add(getCardGroupDisplayPanel(player.getDiscard()
 					.toArray(new Card[0])));
 			
 			playerPanel.add(discardPile);
 		}
+	}
+	
+	/**
+	 * Updates the display which houses the gold, score, and log button
+	 * @param player the player who owns the display
+	 */
+	private void updatePlayerGoldScoreLog(Player player)
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		
+		JPanel gsPane = getGoldScoreDisplayPanel(player);
+		gsPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panel.add(gsPane);
+		
+		JButton btn = new JButton("Log");
+		btn.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btn.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				logFrame.setVisible(true);
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {	
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {	
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+			}
+			
+		});
+		
+		panel.add(btn);
+		
+		playerPanel.add(panel);
+		
 	}
 	
 	/**
@@ -311,6 +406,12 @@ public class TestGUI implements GUI {
 	 */
 	private void updatePlayerTreasureDisplay()
 	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		
+		panel.add(new JLabel("Loot",
+				SwingConstants.CENTER), BorderLayout.NORTH);
+		
 		JButton bagButton = new JButton();
 		
 		ImageIcon bagIcon = new ImageIcon(server.bag.getImage()
@@ -340,7 +441,8 @@ public class TestGUI implements GUI {
 			public void mouseReleased(MouseEvent arg0) {
 			}
 		});
-		playerPanel.add(bagButton);
+		panel.add(bagButton, BorderLayout.CENTER);
+		playerPanel.add(panel);
 	}
 	
 	/**
@@ -355,22 +457,26 @@ public class TestGUI implements GUI {
 		
 		if(player.getHand().isEmpty())
 		{
-			denAndHand.add(new JLabel("Your hand is currently empty"));
+			denAndHand.add(new JLabel("Your hand is currently empty",
+					SwingConstants.CENTER));
 		}
 		else
 		{
-			denAndHand.add(new JLabel("Hand"));
+			denAndHand.add(new JLabel("Hand"),
+					SwingConstants.CENTER);
 			denAndHand.add(getCardGroupDisplayPanel(player.getHand()
 					.toArray(new Card[0])));
 		}
 		
 		if(player.getDen().isEmpty())
 		{
-			denAndHand.add(new JLabel("Your den is currently empty"));
+			denAndHand.add(new JLabel("Your den is currently empty",
+					SwingConstants.CENTER));
 		}
 		else
 		{
-			denAndHand.add(new JLabel("Den"));
+			denAndHand.add(new JLabel("Den",
+					SwingConstants.CENTER));
 			denAndHand.add(getCardGroupDisplayPanel(player.getDen()
 					.toArray(new Card[0])));
 		}
