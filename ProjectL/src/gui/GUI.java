@@ -16,4 +16,10 @@ public interface GUI {
 	 * @param state the state to update the gui to reflect
 	 */
 	public void update(GameState state);
+	
+	/**
+	 * Displays the passed message in the GUI
+	 * @param message the message to be displayed
+	 */
+	public void displayMessage(String message);
 }

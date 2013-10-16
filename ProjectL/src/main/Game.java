@@ -67,18 +67,16 @@ public class Game {
 		playerList[2] = new Player(chooseFaction(factionList), new DepthEstAI(2,1));
 		playerList[3] = new Player(chooseFaction(factionList), new DepthEstAI(2,1));
 		
-		System.out.println(playerList[0].getFaction());
-		
 		Color faction = chooseFaction(factionList);
 		
 		playerList[1] = new Player(faction, new TestGUI(faction));
-		
-		System.out.println(playerList[1].getFaction());
 		
 		//now, create the gamestate
 		GameState state = new GameState(playerList,new Board(), gameDeck, gameBag, score);
 		
 		state.updateGUIs();
+		
+		state.messageAllGUIs("The game is starting!\nLook for a log of game events here");
 		
 		run(state);
 

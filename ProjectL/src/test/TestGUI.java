@@ -25,8 +25,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
-import javax.swing.text.ComponentView;
-import javax.swing.text.Element;
 
 import cards.Card;
 
@@ -76,18 +74,11 @@ public class TestGUI implements GUI {
 		playerScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		opponentPanel = new JPanel();
-		
 		gamePanel = new JPanel();
-		
 		playerPanel = new JPanel();
 		
-		opponentPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		playerScreen.add(opponentPanel);
-		
-		gamePanel.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
 		playerScreen.add(gamePanel);
-		
-		playerPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		playerScreen.add(playerPanel);
 		
 		playerScreen.setVisible(true);
@@ -377,7 +368,7 @@ public class TestGUI implements GUI {
 	{
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		c.gridwidth = 2;
+		c.gridwidth = 3;
 		c.gridx = 0;
 		c.gridy = 0;
 		
@@ -391,9 +382,14 @@ public class TestGUI implements GUI {
 		c.gridy = 1;
 		c.gridwidth = 1;
 		
-		panel.add(new JLabel("Gold: " + player.getGold() + "  "), c);
+		panel.add(new JLabel("Gold: " + player.getGold()), c);
 		
 		c.gridx = 1;
+		c.gridy = 1;
+		
+		panel.add(new JLabel(" "), c);
+		
+		c.gridx = 2;
 		c.gridy = 1;
 		
 		panel.add(new JLabel("Score: " + player.getScore()), c);
@@ -631,6 +627,14 @@ public class TestGUI implements GUI {
 	 */
 	private Icon getTreasureIcon(String treasure) {	
 		return treasureIconMap.get(treasure);
+	}
+
+	@Override
+	public void displayMessage(String message) {
+		
+		log.setText(log.getText() + "\n" + message);
+		logFrame.revalidate();
+		
 	}
 
 }

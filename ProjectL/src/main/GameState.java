@@ -164,6 +164,21 @@ public class GameState {
 		}
 	}
 	
+	/**
+	 * Sends the given message to all the GUIs
+	 * @param message the message to display in all the GUIs
+	 */
+	public void messageAllGUIs(String message)
+	{
+		for(Player p : pList)
+		{
+			if(!p.checkCPU())
+			{
+				p.getGUI().displayMessage(message);
+			}
+		}
+	}
+	
 	@Override public boolean equals(Object other)
 	{
 		if(other instanceof GameState)
