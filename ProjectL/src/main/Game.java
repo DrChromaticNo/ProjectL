@@ -116,7 +116,7 @@ public class Game {
 				distributeInitialGold(state, 10);
 				//this section either draws the initial hand (at the start of the game)
 				//or adds six cards to the existing hands
-				if(week == 1)
+				if(week == 0)
 				{
 					drawCards(state, availibleCards, 9);
 				}
