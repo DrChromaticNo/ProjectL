@@ -52,7 +52,7 @@ public class Preacher implements Action {
 			GameState choice = state.getPlayer(card.getFaction())
 					.chooseState(choiceMap.keySet().toArray(new GameState[0]), card);
 			
-			System.out.println(choiceMap.get(choice));
+			state.messageAllGUIs(choiceMap.get(choice));
 			
 			return choice;
 		}
@@ -84,8 +84,8 @@ public class Preacher implements Action {
 				
 				if(allEmpty)
 				{
-					System.out.println("\n" + "The preacher (" + card.abbreviate() + 
-							") had no treasures to choose from\n");
+					state.messageAllGUIs("The Preacher (" + card.abbreviate() + 
+							") had no treasures to choose from");
 					return state;
 				}
 				
@@ -95,8 +95,8 @@ public class Preacher implements Action {
 				
 				if(bag.countTreasure(treasure) != 0) //if we chose a valid treasure, remove all others and set it to 1
 				{	
-					System.out.println("\nThe preacher (" + card.abbreviate() + 
-							") discarded all treasures besides 1 " + treasure + "\n");
+					state.messageAllGUIs("The Preacher (" + card.abbreviate() + 
+							") discarded all treasures besides 1 " + treasure);
 					for(String s : Treasure.allTreasures())
 					{
 						if(s.equals(treasure))
@@ -139,8 +139,8 @@ public class Preacher implements Action {
 		
 		if(allEmpty)
 		{
-			choiceMap.put(state, "\n" + "The preacher (" + card.abbreviate() + 
-					") had no treasures to choose from\n");
+			choiceMap.put(state, "The Preacher (" + card.abbreviate() + 
+					") had no treasures to choose from");
 			return choiceMap;
 		}
 		
@@ -162,8 +162,8 @@ public class Preacher implements Action {
 							.addLoot(s, -state.getPlayer(faction).getLoot().countTreasure(s));
 					}
 				}
-				choiceMap.put(tempState, "\nThe preacher (" + card.abbreviate() + 
-						") discarded all treasures besides 1 " + treasure + "\n");
+				choiceMap.put(tempState, "The Preacher (" + card.abbreviate() + 
+						") discarded all treasures besides 1 " + treasure);
 			}
 		}
 		

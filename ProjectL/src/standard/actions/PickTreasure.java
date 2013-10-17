@@ -61,7 +61,7 @@ public class PickTreasure implements Action {
 			Lbag.addLoot(choice, -1);
 			state.getBoard().setLoot(state.getDay(), Lbag);
 			state.getPlayer(faction).getLoot().addLoot(choice, 1);
-			System.out.println("\n" + Faction.getPirateName(faction) + " chose " + choice + "\n");
+			state.messageAllGUIs(Faction.getPirateName(faction) + " chose " + choice);
 			
 			//There are a few special cases that we need to case on (with standard rules)
 			
@@ -82,7 +82,7 @@ public class PickTreasure implements Action {
 			GameState choice = state.getPlayer(faction)
 					.chooseState(choiceMap.keySet().toArray(new GameState[0]), card);
 			
-			System.out.println(choiceMap.get(choice));
+			state.messageAllGUIs(choiceMap.get(choice));
 			
 			return choice;
 		}
@@ -270,7 +270,7 @@ public class PickTreasure implements Action {
 		
 		if(leftSet.isEmpty() && rightSet.isEmpty()) //if there are none
 		{
-			choices.put(state, "\n" + Faction.getPirateName(faction) + " chose saber(s) but couldn't kill anyone \n");
+			choices.put(state, Faction.getPirateName(faction) + " chose a saber but couldn't kill anyone");
 			return choices;
 		}
 		
@@ -281,8 +281,8 @@ public class PickTreasure implements Action {
 			GameState tempState = new GameState(state);
 			tempState.getPlayer(leftP.getFaction()).removeFromDen(c);
 			tempState.getPlayer(leftP.getFaction()).addToDiscard(c);
-			choices.put(tempState, "\n" + Faction.getPirateName(faction) 
-					+ " chose saber(s) and killed " + c.abbreviate() + "\n");
+			choices.put(tempState, Faction.getPirateName(faction) 
+					+ " chose a saber and killed " + c.abbreviate());
 		}
 		
 		for(Card c : rightSet)
@@ -290,8 +290,8 @@ public class PickTreasure implements Action {
 			GameState tempState = new GameState(state);
 			tempState.getPlayer(rightP.getFaction()).removeFromDen(c);
 			tempState.getPlayer(rightP.getFaction()).addToDiscard(c);
-			choices.put(tempState, "\n" + Faction.getPirateName(faction) 
-					+ " chose saber(s) and killed " + c.abbreviate() + "\n");
+			choices.put(tempState, Faction.getPirateName(faction) 
+					+ " chose a saber and killed " + c.abbreviate());
 		}
 		
 		return choices;
@@ -336,7 +336,7 @@ public class PickTreasure implements Action {
 				{
 					tempState.getBoard().removeCard(card);
 					tempState.getPlayer(faction).addToDiscard(card);
-					choiceSet.put(tempState, "\n" + Faction.getPirateName(faction) + " chose " + choice + "\n");
+					choiceSet.put(tempState, Faction.getPirateName(faction) + " chose " + choice);
 				}
 				else if(s.equals(Treasure.SABER))
 				{
@@ -345,7 +345,7 @@ public class PickTreasure implements Action {
 				}
 				else
 				{
-					choiceSet.put(tempState, "\n" + Faction.getPirateName(faction) + " chose " + choice + "\n");
+					choiceSet.put(tempState, Faction.getPirateName(faction) + " chose " + choice);
 				}
 			}
 		}
@@ -399,6 +399,4 @@ public class PickTreasure implements Action {
 		
 		return choiceSet;
 	}
-
-
 }

@@ -633,7 +633,6 @@ public class TestGUI implements GUI {
 	public void displayMessage(String message) {
 		
 		log.setText(log.getText() + "\n" + message);
-		logFrame.revalidate();
 		
 	}
 

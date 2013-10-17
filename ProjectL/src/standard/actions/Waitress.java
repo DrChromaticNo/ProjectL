@@ -2,7 +2,6 @@ package standard.actions;
 
 import java.awt.Color;
 
-import players.Faction;
 import players.Player;
 import score.Treasure;
 import test.DebugMenu;
@@ -67,7 +66,7 @@ public class Waitress implements Action {
 			
 			if(sell != null && sell.equals(choice))
 			{
-				System.out.println(Faction.getPirateName(faction) + " sold 1 map for 3 gold.");
+				state.messageAllGUIs("The Waitress (" + card.abbreviate() + ") sold 1 map for 3 gold.");
 			}
 			
 			return choice;
@@ -90,6 +89,7 @@ public class Waitress implements Action {
 				
 				if(ans.equals("y"))
 				{
+					state.messageAllGUIs("The Waitress (" + card.abbreviate() + ") sold 1 map for 3 gold.");
 					return choices[1];
 				}
 				else

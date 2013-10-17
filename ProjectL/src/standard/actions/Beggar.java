@@ -10,7 +10,7 @@ import cards.Action;
 import cards.Card;
 
 /**
- * The class that represents the carpenter card
+ * The class that represents the beggar card
  * @author Chris
  * 
  * Day: The player with the card of highest rank on the ship gives you 3 gold
@@ -47,8 +47,8 @@ public class Beggar implements Action {
 		
 		if(highest.equals(card.getFaction())) //if that player is us we do nothing
 		{
-			System.out.println("\nThe beggar (" 
-					+ card.abbreviate() + ") is the card of highest rank so nothing happens\n");
+			state.messageAllGUIs(("The Beggar (" 
+					+ card.abbreviate() + ") is the card of highest rank so nothing happens"));
 			
 			return state;
 		}
@@ -56,8 +56,8 @@ public class Beggar implements Action {
 		{
 			if(state.getPlayer(highest).getGold() >= 3)
 			{
-				System.out.println("\nThe beggar (" 
-						+ card.abbreviate() + ") gets 3 gold from " + Faction.getPirateName(highest) + "\n");
+				state.messageAllGUIs(("The Beggar (" 
+						+ card.abbreviate() + ") gets 3 gold from " + Faction.getPirateName(highest)));
 				state.getPlayer(highest).addGold(-3);
 				state.getPlayer(card.getFaction()).addGold(3);
 				return state;
@@ -65,9 +65,9 @@ public class Beggar implements Action {
 			else
 			{
 				int smallGold = state.getPlayer(highest).getGold();
-				System.out.println("\nThe beggar (" 
+				state.messageAllGUIs("The Beggar (" 
 						+ card.abbreviate() + ") gets " + smallGold 
-						+ " gold from " + Faction.getPirateName(highest) + "\n");
+						+ " gold from " + Faction.getPirateName(highest));
 				state.getPlayer(highest).addGold(-smallGold);
 				state.getPlayer(card.getFaction()).addGold(smallGold);
 				return state;

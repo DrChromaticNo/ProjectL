@@ -7,7 +7,7 @@ import cards.Action;
 import cards.Card;
 
 /**
- * The class that represents the carpenter card
+ * The class that represents the barkeep card
  * @author Chris
  * 
  * Day: N/A
@@ -31,8 +31,8 @@ public class Barkeep implements Action {
 		}
 		else if(time == Time.NIGHT)
 		{
-			System.out.println("\nThe barkeep (" + card.abbreviate() + ") gives " 
-					+ Faction.getPirateName(card.getFaction()) + " 1 gold");
+			state.messageAllGUIs(("The Barkeep (" + card.abbreviate() + ") gives " 
+					+ Faction.getPirateName(card.getFaction()) + " 1 gold"));
 			
 			state = barNight(state, card);
 		}

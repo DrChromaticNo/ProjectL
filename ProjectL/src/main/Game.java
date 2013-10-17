@@ -149,8 +149,8 @@ public class Game {
 		
 		for(Player p : winners)
 		{
-			System.out.println(Faction.getPirateName(p.getFaction()) + 
-					" won with a score of " + p.getScore() + "!");
+			state.messageAllGUIs((Faction.getPirateName(p.getFaction()) + 
+					" won with a score of " + p.getScore() + "!"));
 		}
 		
 		return winners;
@@ -167,7 +167,8 @@ public class Game {
 		{
 			for(Player p : state.getPlayerList())
 			{
-				state.getBoard().getLoot(i).addLoot(state.getBag().randomTreasure(), 1);
+				state.getBoard().getLoot(i)
+					.addLoot(state.getBag().randomTreasure(), 1);
 			}
 		}
 	}
@@ -304,9 +305,7 @@ public class Game {
 			if(state.getTime() == Time.PICK_CARDS)
 			{
 				pickCards(state);
-				System.out.println(" ");
-				System.out.println("~DAY PHASE (" + day + ")~");
-				System.out.println(" ");
+				state.messageAllGUIs(("~DAY PHASE (" + (day+1) + ")~"));
 				state.setTime(Time.DAY);
 			}
 			
@@ -331,12 +330,6 @@ public class Game {
 	 */
 	private static GameState oneAction(GameState state)
 	{
-		System.out.print("Board: ");
-		
-		for(Card c : state.getBoard().getDeck())
-		{
-			System.out.print(state.getDeck().abbreviatedName(c) + " ");
-		}
 		
 		//this if statement performs either 1 day action or 1 evening action
 		//or all of the night actions (since they happen concurrently)
@@ -353,9 +346,7 @@ public class Game {
 			
 			if(index >= deck.length)
 			{
-				System.out.println(" ");
-				System.out.println("~DUSK PHASE~");
-				System.out.println(" ");
+				state.messageAllGUIs(("~DUSK PHASE~"));
 				state.setTime(Time.DUSK);
 			}
 			else
@@ -391,9 +382,7 @@ public class Game {
 				}
 				state.getBoard().clearDeck();
 				
-				System.out.println(" ");
-				System.out.println("~NIGHT PHASE~");
-				System.out.println(" ");
+				state.messageAllGUIs("~NIGHT PHASE~");
 				state.setTime(Time.NIGHT);
 			}
 			else

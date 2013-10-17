@@ -22,7 +22,7 @@ public class CabinBoy implements Action {
 		
 		if(time == Time.DUSK)
 		{
-			System.out.println("\nThe Cabin Boy (" + card.abbreviate() + ") chooses no treasures\n");
+			state.messageAllGUIs("The Cabin Boy (" + card.abbreviate() + ") chooses no treasures");
 		}
 		
 		return state; //The cabin boy never does anything at day, dusk, or night

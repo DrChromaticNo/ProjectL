@@ -53,7 +53,7 @@ public class Recruiter implements Action {
 			GameState choice = state.getPlayer(faction)
 					.chooseState(choiceMap.keySet().toArray(new GameState[0]), card);
 			
-			System.out.println(choiceMap.get(choice));
+			state.messageAllGUIs(choiceMap.get(choice));
 			return choice;
 		}
 		else
@@ -65,8 +65,8 @@ public class Recruiter implements Action {
 				Player p = state.getPlayer(faction);
 				if(p.getDen().isEmpty()) //there are no pirates in the den to recruit
 				{
-					System.out.println("\n" + Faction.getPirateName(faction) 
-							+ " had nobody to recruit\n");
+					state.messageAllGUIs("The Recruiter (" + card.abbreviate() + 
+							") had nobody to recruit");
 					return state;
 				}
 				System.out.println("Please choose one of these cards to recruit from your den: ");
@@ -79,8 +79,9 @@ public class Recruiter implements Action {
 				{
 					if(c.abbreviate().equals(choice)) //we remove the card chosen and add it back to the hand
 					{
-						System.out.println("\n " + Faction.getPirateName(faction) 
-								+ " recruited " + c.abbreviate() + " from their den to their hand\n");
+						state.messageAllGUIs("The Recruiter (" + card.abbreviate() + 
+								") recruited " + c.abbreviate() + " from " + Faction.getPirateName(faction) +
+								"'s den to their hand");
 						state.getPlayer(faction).removeFromDen(c);
 						c.resetPhases();
 						state.getPlayer(faction).addToHand(c);
@@ -126,8 +127,8 @@ public class Recruiter implements Action {
 		Player p = state.getPlayer(faction);
 		if(p.getDen().isEmpty()) //there are no pirates in the den to recruit
 		{
-			choiceMap.put(state, "\n" + Faction.getPirateName(faction) 
-					+ " had nobody to recruit\n");
+			choiceMap.put(state, "The Recruiter (" + card.abbreviate() + 
+					") had nobody to recruit");
 			return choiceMap;
 		}
 		for(Card c : p.getDen())
@@ -136,8 +137,9 @@ public class Recruiter implements Action {
 			tempState.getPlayer(faction).removeFromDen(c);
 			c.resetPhases();
 			tempState.getPlayer(faction).addToHand(c);
-			choiceMap.put(tempState, "\n" + Faction.getPirateName(faction) 
-					+ " recruited " + c.abbreviate() + " from their den to their hand\n");
+			choiceMap.put(tempState, "The Recruiter (" + card.abbreviate() + 
+					") recruited " + c.abbreviate() + " from " + Faction.getPirateName(faction) +
+					"'s den to their hand");
 		}
 		return choiceMap;
 	}
