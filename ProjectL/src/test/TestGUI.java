@@ -638,7 +638,7 @@ public class TestGUI implements GUI {
 	@Override
 	public void displayMessage(String message) {
 		
-		//Save the old position of the bar so it doesn't snap back to the top
+		//Manages the field to give enough room for the scrollbar, if visible
 		if(logScrollPane.getVerticalScrollBar().isShowing())
 		{
 			log.setMargin(new Insets(0,5,0,15));
@@ -647,6 +647,7 @@ public class TestGUI implements GUI {
 		{
 			log.setMargin(new Insets(0,5,0,0));
 		}
+		//Save the old position of the bar so it doesn't snap back to the top
 		int val = logScrollPane.getVerticalScrollBar().getValue();
 		log.setText(log.getText() + "\n" + message);
 		logScrollPane.getVerticalScrollBar().setValue(val);
