@@ -42,6 +42,8 @@ public class TestGUI implements GUI {
 	private Color faction;
 	//This frame holds the panel which is the log for messages/player actions
 	private JFrame logFrame;
+	//This pane allows the user to scroll through the log
+	private JScrollPane logScrollPane;
 	//This panel holds the actual log used to hold messages/player actions
 	private JEditorPane log;
 	//The panel which holds the player data: score, gold, discard, treasures, den, and hand
@@ -94,14 +96,14 @@ public class TestGUI implements GUI {
 		log = new JEditorPane();
 		log.setEditable(false);
 		
-		JScrollPane scrollPane = new JScrollPane(log);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane
+		logScrollPane = new JScrollPane(log);
+		logScrollPane.setVerticalScrollBarPolicy(JScrollPane
 				.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane
+		logScrollPane.setHorizontalScrollBarPolicy(JScrollPane
 				.HORIZONTAL_SCROLLBAR_NEVER);
-		logFrame.add(scrollPane, BorderLayout.CENTER);
-		scrollPane.setVisible(true);
-		scrollPane.setPreferredSize(new Dimension(350,660));
+		logFrame.add(logScrollPane, BorderLayout.CENTER);
+		logScrollPane.setVisible(true);
+		logScrollPane.setPreferredSize(new Dimension(350,660));
 	}
 	
 	/**
@@ -632,7 +634,10 @@ public class TestGUI implements GUI {
 	@Override
 	public void displayMessage(String message) {
 		
+		//Save the old position of the bar so it doesn't snap back to the top
+		int val = logScrollPane.getVerticalScrollBar().getValue();
 		log.setText(log.getText() + "\n" + message);
+		logScrollPane.getVerticalScrollBar().setValue(val);
 		
 	}
 
