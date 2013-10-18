@@ -57,20 +57,20 @@ public class TestGUI implements GUI {
 	private JFrame playerScreen;
 	//The gamestate that this UI will pull its info from
 	private GameState latest;
-	//The class to serve the various icons
+	//The class to serve the various icon
 	private IconServer server;
 	//A map to help connect cards to icons that represent them
 	private HashMap<Color, HashMap<Integer, Icon>> cardIconMap;
 	//A map to help connect treasures to icons that represent them
 	private HashMap<String, Icon> treasureIconMap;
 	
-	private static final int GUIWIDTH = 800;
-	private static final int GUIHEIGHT = 660;
-	private static final int LOGWIDTH = GUIWIDTH/2;
-	private static final int LOGRIGHTMARGIN = 15;
-	private static final int LOGLEFTMARGIN = 5;
-	private static final int CARDWIDTH = 40;
-	private static final int CARDHEIGHT = 56;
+	private static final int GUI_WIDTH = 800;
+	private static final int GUI_HEIGHT = 660;
+	private static final int LOG_WIDTH = GUI_WIDTH/2;
+	private static final int LOG_RIGHT_MARGIN = 15;
+	private static final int LOG_LEFT_MARGIN = 5;
+	private static final int CARD_WIDTH = 40;
+	private static final int CARD_HEIGHT = 56;
 	
 	public TestGUI(Color faction)
 	{
@@ -82,7 +82,7 @@ public class TestGUI implements GUI {
 		treasureIconMap = createTreasureIconMap();
 		
 		playerScreen = new JFrame("Project L");
-		playerScreen.setSize(GUIWIDTH, GUIHEIGHT);
+		playerScreen.setSize(GUI_WIDTH, GUI_HEIGHT);
 		playerScreen.setLayout(new GridLayout(3,1));
 		playerScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -99,7 +99,7 @@ public class TestGUI implements GUI {
 		//Next, we initialize the log functionality
 		
 		logFrame = new JFrame("Log");
-		logFrame.setSize(LOGWIDTH, GUIHEIGHT);
+		logFrame.setSize(LOG_WIDTH, GUI_HEIGHT);
 		logFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		logFrame.setLayout(new BorderLayout());
 		logFrame.setResizable(false);
@@ -114,7 +114,7 @@ public class TestGUI implements GUI {
 				.HORIZONTAL_SCROLLBAR_NEVER);
 		logFrame.add(logScrollPane, BorderLayout.CENTER);
 		logScrollPane.setVisible(true);
-		logScrollPane.setPreferredSize(new Dimension(LOGWIDTH,GUIHEIGHT));
+		logScrollPane.setPreferredSize(new Dimension(LOG_WIDTH,GUI_HEIGHT));
 	}
 	
 	/**
@@ -425,7 +425,7 @@ public class TestGUI implements GUI {
 		JButton bagButton = new JButton();
 		
 		ImageIcon bagIcon = new ImageIcon(server.bag.getImage()
-				.getScaledInstance(CARDWIDTH, CARDHEIGHT, 1));
+				.getScaledInstance(CARD_WIDTH, CARD_HEIGHT, 1));
 		
 		bagButton.setIcon(bagIcon);
 		
@@ -525,7 +525,7 @@ public class TestGUI implements GUI {
 		final ImageIcon icon = (ImageIcon) getCardIcon(c);
 		
 		ImageIcon resized = new ImageIcon(icon.getImage()
-				.getScaledInstance(CARDWIDTH, CARDHEIGHT, 0));
+				.getScaledInstance(CARD_WIDTH, CARD_HEIGHT, 0));
 		
 		label.setIcon(resized);
 		
@@ -606,7 +606,7 @@ public class TestGUI implements GUI {
 			{
 				JLabel label = new JLabel();
 				ImageIcon resized = new ImageIcon(((ImageIcon) getTreasureIcon(list[index]))
-						.getImage().getScaledInstance(CARDWIDTH, CARDHEIGHT, 0));
+						.getImage().getScaledInstance(CARD_WIDTH, CARD_HEIGHT, 0));
 				label.setIcon(resized);
 				panel.add(label);
 				count++;
@@ -649,11 +649,11 @@ public class TestGUI implements GUI {
 		//Manages the field to give enough room for the scrollbar, if visible
 		if(logScrollPane.getVerticalScrollBar().isShowing())
 		{
-			log.setMargin(new Insets(0,LOGLEFTMARGIN,0,LOGRIGHTMARGIN));
+			log.setMargin(new Insets(0,LOG_LEFT_MARGIN,0,LOG_RIGHT_MARGIN));
 		}
 		else
 		{
-			log.setMargin(new Insets(0,LOGLEFTMARGIN,0,0));
+			log.setMargin(new Insets(0,LOG_LEFT_MARGIN,0,0));
 		}
 		//Save the old position of the bar so it doesn't snap back to the top
 		int val = logScrollPane.getVerticalScrollBar().getValue();
