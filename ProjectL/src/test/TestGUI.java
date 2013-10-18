@@ -52,6 +52,8 @@ public class TestGUI implements GUI {
 	private JPanel gamePanel;
 	//The panel which will hold the opponents data
 	private JPanel opponentPanel;
+	//The frame which holds the previous 3 panels
+	private JFrame playerScreen;
 	//The gamestate that this UI will pull its info from
 	private GameState latest;
 	//The class to serve the various icons
@@ -70,7 +72,7 @@ public class TestGUI implements GUI {
 		cardIconMap = createCardIconMap();
 		treasureIconMap = createTreasureIconMap();
 		
-		JFrame playerScreen = new JFrame("Project L");
+		playerScreen = new JFrame("Project L");
 		playerScreen.setSize(800, 660);
 		playerScreen.setLayout(new GridLayout(3,1));
 		playerScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -148,6 +150,7 @@ public class TestGUI implements GUI {
 		updateOpponentPanel();
 		updateGamePanel();
 		updatePlayerPanel();
+		playerScreen.repaint();
 	}
 	
 	/**
