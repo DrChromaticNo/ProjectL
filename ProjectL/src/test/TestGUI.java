@@ -10,6 +10,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
@@ -105,7 +106,7 @@ public class TestGUI implements GUI {
 				.HORIZONTAL_SCROLLBAR_NEVER);
 		logFrame.add(logScrollPane, BorderLayout.CENTER);
 		logScrollPane.setVisible(true);
-		logScrollPane.setPreferredSize(new Dimension(350,660));
+		logScrollPane.setPreferredSize(new Dimension(400,660));
 	}
 	
 	/**
@@ -638,6 +639,14 @@ public class TestGUI implements GUI {
 	public void displayMessage(String message) {
 		
 		//Save the old position of the bar so it doesn't snap back to the top
+		if(logScrollPane.getVerticalScrollBar().isShowing())
+		{
+			log.setMargin(new Insets(0,5,0,15));
+		}
+		else
+		{
+			log.setMargin(new Insets(0,5,0,0));
+		}
 		int val = logScrollPane.getVerticalScrollBar().getValue();
 		log.setText(log.getText() + "\n" + message);
 		logScrollPane.getVerticalScrollBar().setValue(val);
