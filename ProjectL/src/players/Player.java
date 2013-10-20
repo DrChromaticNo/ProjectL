@@ -224,6 +224,10 @@ public class Player {
 		return ai.choose(this, states, card);
 	}
 	
+	/**
+	 * True if the player is a cpu, false if not
+	 * @return True if the player is a cpu, false if not
+	 */
 	public boolean checkCPU()
 	{
 		return CPU;

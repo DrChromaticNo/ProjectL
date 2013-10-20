@@ -13,6 +13,7 @@ import standard.actions.Beggar;
 import standard.actions.CabinBoy;
 import standard.actions.Carpenter;
 import standard.actions.Monkey;
+import standard.actions.Parrot;
 import standard.actions.Preacher;
 import standard.actions.Recruiter;
 import standard.actions.Waitress;
@@ -56,37 +57,45 @@ public class TestDeck implements Deck {
 	@Override
 	public ArrayList<Integer> allCards() {
 		ArrayList<Integer> cards = new ArrayList<Integer>(30);
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i < 3; i++)
+		{
+			cards.add(new Integer(1));
+		}
+		for(int i = 3; i < 6; i++)
 		{
 			cards.add(new Integer(2));
 		}
-		for(int i = 4; i < 8; i++)
+		for(int i = 6; i < 9; i++)
 		{
 			cards.add(new Integer(3));
 		}
-		for(int i = 8; i < 12; i++)
+		for(int i = 9; i < 12; i++)
 		{
 			cards.add(new Integer(4));
 		}
-		for(int i = 12; i < 16; i++)
+		for(int i = 12; i < 15; i++)
 		{
 			cards.add(new Integer(5));
 		}
-		for(int i = 16; i < 20; i++)
+		for(int i = 15; i < 18; i++)
 		{
 			cards.add(new Integer(6));
 		}
-		for(int i = 20; i < 24; i++)
+		for(int i = 18; i < 21; i++)
 		{
 			cards.add(new Integer(7));
 		}
-		for(int i = 24; i < 28; i++)
+		for(int i = 21; i < 24; i++)
 		{
 			cards.add(new Integer(8));
 		}
-		for(int i = 28; i < 30; i++)
+		for(int i = 24; i < 27; i++)
 		{
 			cards.add(new Integer(9));
+		}
+		for(int i = 27; i < 30; i++)
+		{
+			cards.add(new Integer(1));
 		}
 		
 		return cards;
@@ -190,6 +199,7 @@ public class TestDeck implements Deck {
 	{
 		HashMap<Integer, Action> map = new HashMap<Integer, Action>();
 		
+		map.put(1, new Parrot());
 		map.put(2, new Monkey());
 		map.put(3, new Beggar());
 		map.put(4, new Recruiter());

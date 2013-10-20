@@ -28,6 +28,8 @@ public class StandardEstimator implements Estimator {
 		{
 			switch(card.getValue()) {
 		
+			case 1: estimate = parrotEst(state,card);
+				break;
 			case 2: estimate = monkeyEst(state,card);
 				break;
 			case 3: estimate = beggarEst(state,card);
@@ -50,6 +52,18 @@ public class StandardEstimator implements Estimator {
 		return estimate;
 	}
 	
+	/**
+	 * The estimate for the parrot card
+	 * @param state state the parrot is being played in
+	 * @param card the card being played
+	 * @return the estimate for the parrot
+	 */
+	private int parrotEst(GameState state, Card card) {
+		//The reason that the parrot is a min value is because it is essentially identical to another card
+		//So you should always play that one instead (unless you want a lot of cards to be in the discard...)
+		return Integer.MIN_VALUE;
+	}
+
 	/**
 	 * The estimate for the monkey card
 	 * @param state state the monkey is being played in
