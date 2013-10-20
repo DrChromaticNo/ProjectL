@@ -67,7 +67,6 @@ public class TestGUI implements GUI {
 	private HashMap<String, Icon> treasureIconMap;
 	//The component that spawns all user prompt dialogs
 	private JOptionPane dialogSpawner;
-	private Object result;
 	
 	private static final int GUI_WIDTH = 800;
 	private static final int GUI_HEIGHT = 660;
@@ -669,8 +668,6 @@ public class TestGUI implements GUI {
 
 	@Override
 	public Card makeChoice(String prompt, Card[] cards) {
-		result = null;
-		
 		HashMap<Icon, Card> dict = new HashMap<Icon, Card>();
 		Icon[] icons = new Icon[cards.length];
 		int index = 0;
@@ -692,7 +689,7 @@ public class TestGUI implements GUI {
 		
 		JDialog dialog = dialogSpawner.createDialog(playerScreen, "Card choice");
 		dialog.setModal(false);
-		result = null;
+		Object result = null;
 		
 		while(result == null || result.equals(JOptionPane.UNINITIALIZED_VALUE))
 		{
