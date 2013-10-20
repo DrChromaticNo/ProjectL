@@ -501,47 +501,28 @@ public class DepthEstAI implements AI {
 		}
 		playerList.remove(player.getFaction());
 		
-		//We have special cases for the parrot card, because it's weird
-		Card parrotCard = null;
-		boolean parrot = false;
-		
 		//We perform alpha beta search on each state to see if
 		//it's the best
 		for(Card card : cards)
 		{
-			if(card.getValue() != state.getDeck().parrotValue())
+			ArrayList<Card> cardChoices = new ArrayList<Card>();
+			cardChoices.add(card);
+				
+			int check = alphabetaCardPicking(new GameState(state), 
+					new ArrayList<Color>(playerList), cardChoices, alpha, beta, 
+					player.getFaction(), maxDepth);
+				
+			System.out.println("\ncheck: " + check);
+				
+			//Check to see if this state is better
+			if(check > alpha)
 			{
-				ArrayList<Card> cardChoices = new ArrayList<Card>();
-				cardChoices.add(card);
-				
-				int check = alphabetaCardPicking(new GameState(state), 
-						new ArrayList<Color>(playerList), cardChoices, alpha, beta, 
-						player.getFaction(), maxDepth);
-				
-				System.out.println("\ncheck: " + check);
-				
-				//Check to see if this state is better
-				if(check > alpha)
-				{
-					alpha = check;
-					choice = card;
-				}
-			}
-			else
-			{
-				parrot = true;
-				parrotCard = card;
+				alpha = check;
+				choice = card;
 			}
 		}
 		
-		if(alpha < 0 && parrot)
-		{
-			return parrotCard;
-		}
-		else
-		{
-			return choice;
-		}
+		return choice;
 	}
 	
 	/**

@@ -303,19 +303,19 @@ public class Game {
 				pickCards(state);
 				state.messageAllGUIs(("~DAY PHASE (" + (day+1) + ")~"));
 				state.setTime(Time.DAY);
+				state.updateGUIs();
 			}
 			
 			while(state.getTime() != Time.PICK_CARDS)
 			{
 				state = oneAction(state);
+				state.updateGUIs();
 			}
 		}
 		
 		state = state.getCounter().score(new GameState(state));
 		
 		weekendClear(state);
-		
-		state.updateGUIs();
 		
 		return state;
 	}
@@ -421,7 +421,6 @@ public class Game {
 			state.setTime(Time.PICK_CARDS);
 		}
 		
-		state.updateGUIs();
 		return state;
 	}
 	
@@ -439,6 +438,7 @@ public class Game {
 			p.clearDiscard();
 			p.getLoot().emptyBag();
 		}
+		state.updateGUIs();
 	}
 	
 	/**
