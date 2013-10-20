@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import score.Loot;
 import score.Treasure;
-import test.DebugMenu;
 import main.GameState;
 import main.Time;
 import cards.Action;
@@ -58,61 +57,45 @@ public class Preacher implements Action {
 		}
 		else
 		{
-			DebugMenu menu = new DebugMenu();
 			Color faction = card.getFaction();
+			Loot bag = state.getPlayer(faction).getLoot();
+			boolean allEmpty = true;
 			
-			while(true)
+			for(String s : Treasure.allTreasures()) //list all treasures
 			{
-				System.out.println("Choose one treasure to keep, the rest will be discarded");
-				
-				HashMap<Integer, String> choiceMap = new HashMap<Integer, String>();
-				int index = 0;
-				Loot bag = state.getPlayer(faction).getLoot();
-				boolean allEmpty = true;
-				
-				for(String s : Treasure.allTreasures()) //list all treasures
+				if(bag.countTreasure(s) != 0)
 				{
-					if(bag.countTreasure(s) != 0)
-					{
-						System.out.println(index + ": " + s + " x" 
-								+ bag.countTreasure(s));
-						choiceMap.put(index, s);
-						index++;
-						allEmpty = false;
-					}
-				}
-				
-				if(allEmpty)
-				{
-					state.messageAllGUIs("The Preacher (" + card.abbreviate() + 
-							") had no treasures to choose from");
-					return state;
-				}
-				
-				int choice = Integer.parseInt(menu.launch(state)); //choose from them
-				
-				String treasure = choiceMap.get(choice);
-				
-				if(bag.countTreasure(treasure) != 0) //if we chose a valid treasure, remove all others and set it to 1
-				{	
-					state.messageAllGUIs("The Preacher (" + card.abbreviate() + 
-							") discarded all treasures besides 1 " + treasure);
-					for(String s : Treasure.allTreasures())
-					{
-						if(s.equals(treasure))
-						{
-							state.getPlayer(faction).getLoot()
-								.addLoot(s, (-state.getPlayer(faction).getLoot().countTreasure(s))+1);
-						}
-						else
-						{
-							state.getPlayer(faction).getLoot()
-								.addLoot(s, -state.getPlayer(faction).getLoot().countTreasure(s));
-						}
-					}
-					return state;
+					allEmpty = false;
 				}
 			}
+				
+			if(allEmpty)
+			{
+				state.messageAllGUIs("The Preacher (" + card.abbreviate() + 
+						") had no treasures to choose from");
+				return state;
+			}
+			
+			String treasure = state.getPlayer(faction).getGUI().makeChoice("Choose one treasure to keep, " +
+					"the rest will be discarded:", bag);
+	
+			state.messageAllGUIs("The Preacher (" + card.abbreviate() + 
+					") discarded all treasures besides 1 " + treasure);
+			
+			for(String s : Treasure.allTreasures())
+			{
+				if(s.equals(treasure))
+				{
+					state.getPlayer(faction).getLoot()
+						.addLoot(s, (-state.getPlayer(faction).getLoot().countTreasure(s))+1);
+				}
+				else
+				{
+					state.getPlayer(faction).getLoot()
+						.addLoot(s, -state.getPlayer(faction).getLoot().countTreasure(s));
+				}
+			}
+			return state;
 		}
 	}
 	

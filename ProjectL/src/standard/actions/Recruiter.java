@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import players.Faction;
 import players.Player;
-import test.DebugMenu;
 
 import main.GameState;
 import main.Time;
@@ -58,8 +57,6 @@ public class Recruiter implements Action {
 		}
 		else
 		{
-			String choice = "";
-			DebugMenu menu = new DebugMenu();
 			while(true)
 			{
 				Player p = state.getPlayer(faction);
@@ -69,15 +66,13 @@ public class Recruiter implements Action {
 							") had nobody to recruit");
 					return state;
 				}
-				System.out.println("Please choose one of these cards to recruit from your den: ");
+				
+				Card choice = p.getGUI().makeChoice("Choose one of these cards to recruit from your den:",
+						p.getDen().toArray(new Card[0]));
+				
 				for(Card c : p.getDen())
 				{
-					System.out.print(" " + c.abbreviate() + " "); //we display a list of choices
-				}
-				choice = menu.launch(state);
-				for(Card c : p.getDen())
-				{
-					if(c.abbreviate().equals(choice)) //we remove the card chosen and add it back to the hand
+					if(c.equals(choice)) //we remove the card chosen and add it back to the hand
 					{
 						state.messageAllGUIs("The Recruiter (" + card.abbreviate() + 
 								") recruited " + c.abbreviate() + " from " + Faction.getPirateName(faction) +

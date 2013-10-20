@@ -4,7 +4,6 @@ import java.awt.Color;
 
 import players.Player;
 import score.Treasure;
-import test.DebugMenu;
 
 import main.GameState;
 import main.Time;
@@ -74,20 +73,11 @@ public class Waitress implements Action {
 		else
 		{
 			if(choices.length > 1)
-			{
-				System.out.println("Do you want to sell 1 map for 3 gold (y or n)?");
+			{	
+				String ans = player.getGUI().makeChoice("Do you want to sell 1 map for 3 gold?", 
+						new String[]{"Yes", "No"});
 				
-				DebugMenu menu = new DebugMenu();
-				
-				String ans = menu.launch(state);
-				
-				while(!ans.equals("y") && !ans.equals ("n"))
-				{
-					System.out.println("Do you want to sell 1 map for 3 gold (y or n)?");
-					ans = menu.launch(state);
-				}
-				
-				if(ans.equals("y"))
+				if(ans.equals("Yes"))
 				{
 					state.messageAllGUIs("The Waitress (" + card.abbreviate() + ") sold 1 map for 3 gold.");
 					return choices[1];
