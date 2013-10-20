@@ -687,52 +687,20 @@ public class TestGUI implements GUI {
 			dict.put(resized, c);
 		}
 		
-		final JFrame frame = new JFrame("Card choice");
-		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		frame.setSize(400, 400);
-		frame.setLayout(new BorderLayout());
-		frame.add(new JLabel(prompt, JLabel.CENTER), 
-				BorderLayout.NORTH);
+		dialogSpawner = new JOptionPane(prompt, JOptionPane.QUESTION_MESSAGE,
+				JOptionPane.DEFAULT_OPTION, null, icons, null);
 		
-		JPanel choicePanel = new JPanel();
-		choicePanel.setLayout(new GridLayout(1, icons.length));
+		JDialog dialog = dialogSpawner.createDialog(playerScreen, "Card choice");
+		dialog.setModal(false);
+		result = null;
 		
-		for(final Icon icon : icons)
+		while(result == null || result.equals(JOptionPane.UNINITIALIZED_VALUE))
 		{
-			JButton btn = new JButton();
-			btn.setIcon(icon);
-			btn.addMouseListener(new MouseListener(){
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					result = icon;
-					frame.dispose();
-				}
-				@Override
-				public void mouseEntered(MouseEvent arg0) {
-				}
-				@Override
-				public void mouseExited(MouseEvent arg0) {
-				}
-				@Override
-				public void mousePressed(MouseEvent arg0) {	
-				}
-				@Override
-				public void mouseReleased(MouseEvent arg0) {	
-				}
-			});
-			
-			choicePanel.add(btn);
-		}
-		
-		frame.add(choicePanel, BorderLayout.CENTER);
-		frame.pack();
-		
-		while(result == null)
-		{
-			if(!frame.isVisible())
+			if(!dialog.isVisible())
 			{
-				frame.setVisible(true);
+				dialog.setVisible(true);
 			}
+			result = dialogSpawner.getValue();
 		}
 		
 		return dict.get(result);

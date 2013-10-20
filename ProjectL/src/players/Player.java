@@ -214,7 +214,7 @@ public class Player {
 		else
 		{	
 			chosenCard = gui.makeChoice
-					("Please choose a card from your hand to play", cards);
+					("Please choose a card from your hand to play:", cards);
 		}
 		
 		return chosenCard;
