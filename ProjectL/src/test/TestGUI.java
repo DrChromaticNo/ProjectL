@@ -134,7 +134,7 @@ public class TestGUI implements GUI {
 		for(Color faction : Faction.allFactions())
 		{
 			map.put(faction, new HashMap<Integer, Icon>());
-			for(int i = 2; i <= 9; i++)
+			for(int i = 1; i <= 9; i++)
 			{
 				map.get(faction).put(i, server.getCardIcon(faction, i));
 			}

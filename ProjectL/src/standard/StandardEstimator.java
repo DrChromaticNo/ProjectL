@@ -107,7 +107,12 @@ public class StandardEstimator implements Estimator {
 		
 		for(Card c : state.getPlayer(faction).getDen())
 		{
-			est = Math.max(est, estimate(state,c)); 
+			for(int day = state.getDay()+1; day < 6; day++)
+			{
+				GameState currState = new GameState(state);
+				state.setDay(day);
+				est = Math.max(est, estimate(currState,c)); 
+			}
 		}
 		
 		return est;

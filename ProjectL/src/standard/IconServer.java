@@ -26,7 +26,6 @@ public class IconServer {
 	public ImageIcon bag = new ImageIcon(root + "/bag.png");
 	
 	private HashMap<Color, String> colorMap = new HashMap<Color, String>();
-	private HashMap<Integer, String> numMap = new HashMap<Integer, String>();
 	
 	public IconServer()
 	{
@@ -36,11 +35,11 @@ public class IconServer {
 		colorMap.put(Faction.GREEN, G);
 		colorMap.put(Faction.WHITE, W);
 		colorMap.put(Faction.YELLOW, Y);
-		
-		for(int i = 2; i <= 9; i++)
-		{
-			numMap.put(i, "/" + i + ".png");
-		}
+	}
+	
+	private String numHelp(int i)
+	{
+		return "/" + i + ".png";
 	}
 	
 	/**
@@ -51,7 +50,7 @@ public class IconServer {
 	 */
 	public ImageIcon getCardIcon(Color faction, int val)
 	{
-		return new ImageIcon(root + colorMap.get(faction) + numMap.get(val));
+		return new ImageIcon(root + colorMap.get(faction) + numHelp(val));
 	}
 	
 	public ImageIcon getTreasureIcon(String treasure)
