@@ -97,7 +97,6 @@ public class TestDeck implements Deck {
 		{
 			cards.add(new Integer(1));
 		}
-		
 		return cards;
 	}
 

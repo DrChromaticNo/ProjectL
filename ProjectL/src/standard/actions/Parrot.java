@@ -62,6 +62,7 @@ public class Parrot implements Action {
 			end.getPlayer(faction).addToDiscard(card);
 			state.messageAllGUIs(Faction.getPirateName(faction) + "'s " +
 					"Parrot died but nothing could take its place");
+			return end;
 		}
 		
 		if(p.checkCPU())
