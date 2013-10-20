@@ -143,7 +143,7 @@ public class PickTreasure implements Action {
 				total.addAll(rightSet);
 				
 				Card choice = state.getPlayer(faction).getGUI().makeChoice("Since you chose a saber, " +
-						"choose a pirate in one of your neighbor's dens to kill", 
+						"choose a pirate in one of your neighbor's dens to kill:", 
 						total.toArray(new Card[total.size()]));
 				
 				
