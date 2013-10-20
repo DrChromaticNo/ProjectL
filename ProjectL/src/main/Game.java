@@ -13,11 +13,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import ai.DepthAI;
 import ai.DepthEstAI;
-import ai.EstAI;
-import ai.FullAI;
-import ai.SimpleAI;
 
 import players.Faction;
 import players.Player;
@@ -46,7 +42,7 @@ public class Game {
 		
 		ScoreCounter score = new StandardScoreCounter();
 		
-		int numPlayers = 4; //assume/require > 1, < 7
+		int numPlayers = 6; //assume/require > 1, < 7
 		Player[] playerList = new Player[numPlayers];
 		
 		ArrayList<Color> factionList = Faction.allFactions();
@@ -66,6 +62,8 @@ public class Game {
 		playerList[0] = new Player(chooseFaction(factionList), new DepthEstAI(2,1));
 		playerList[2] = new Player(chooseFaction(factionList), new DepthEstAI(2,1));
 		playerList[3] = new Player(chooseFaction(factionList), new DepthEstAI(2,1));
+		playerList[4] = new Player(chooseFaction(factionList), new DepthEstAI(2,1));
+		playerList[5] = new Player(chooseFaction(factionList), new DepthEstAI(2,1));
 		
 		Color faction = chooseFaction(factionList);
 		

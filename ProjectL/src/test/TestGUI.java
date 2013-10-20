@@ -13,6 +13,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
@@ -28,6 +29,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import cards.Card;
 
@@ -160,10 +162,27 @@ public class TestGUI implements GUI {
 	@Override
 	public void update(GameState state) {
 		latest = new GameState(state);
-		updateOpponentPanel();
-		updateGamePanel();
-		updatePlayerPanel();
-		playerScreen.repaint();
+		Thread t = new Thread() {
+
+	        public void run () {
+	            try {
+					SwingUtilities.invokeAndWait(new Runnable() {
+
+					    public void run () {
+							updateOpponentPanel();
+							updateGamePanel();
+							updatePlayerPanel();
+							playerScreen.repaint();
+					    }
+					});
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+	        }
+	    };
+	    t.start();
 	}
 	
 	/**
@@ -648,7 +667,7 @@ public class TestGUI implements GUI {
 	}
 
 	@Override
-	public void displayMessage(String message) {
+	public void displayMessage(final String message) {
 		
 		//Manages the field to give enough room for the scrollbar, if visible
 		if(logScrollPane.getVerticalScrollBar().isShowing())
@@ -679,17 +698,30 @@ public class TestGUI implements GUI {
 		dialogSpawner = new JOptionPane(prompt, JOptionPane.QUESTION_MESSAGE,
 				JOptionPane.DEFAULT_OPTION, null, choices, null);
 		
-		JDialog dialog = dialogSpawner.createDialog(playerScreen, title);
+		final JDialog dialog = dialogSpawner.createDialog(null, title);
 		dialog.setModal(false);
+		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		
+		Thread t = new Thread() {
+		     public void run () {
+		         try {
+					SwingUtilities.invokeAndWait(new Runnable() {
+					        public void run () {
+					        	dialog.setVisible(true);
+					        }
+			         });
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+		      }
+		};
+		t.start();		
 		
 		Object result = null;
 		while(result == null || result.equals(JOptionPane.UNINITIALIZED_VALUE))
 		{
-			//We make sure the user can't hide the dialog
-			if(!dialog.isVisible())
-			{
-				dialog.setVisible(true);
-			}
 			result = dialogSpawner.getValue();
 		}
 		
