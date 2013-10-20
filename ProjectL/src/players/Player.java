@@ -202,41 +202,22 @@ public class Player {
 			return null;
 		}
 		
+		Card[] cards = new Card[hand.size()];
+		cards = hand.toArray(cards);
+		Card chosenCard = null;
+		
+		
 		if(CPU)
-		{
-			Card[] cards = new Card[hand.size()];
-			cards = hand.toArray(cards);
-			
-			Card chosenCard = ai.chooseCard(this, cards, new GameState(state));
-			return chosenCard;
+		{	
+			chosenCard = ai.chooseCard(this, cards, new GameState(state));
 		}
 		else
 		{	
-			while(true)
-			{	
-				System.out.println("You have availible cards: ");
-				
-				for(Card c : hand)
-				{
-					System.out.print(state.getDeck().abbreviatedName(c) + " ");
-				}
-				
-				System.out.println();
-				System.out.println("Please choose one of these cards");
-				
-				DebugMenu menu = new DebugMenu();
-				
-				String choice = menu.launch(state);
-				
-				for(Card c : hand)
-				{
-					if(state.getDeck().abbreviatedName(c).equals(choice))
-					{
-						return c;
-					}
-				}
-			}
+			chosenCard = gui.makeChoice
+					("Please choose a card from your hand to play", cards);
 		}
+		
+		return chosenCard;
 	}
 	
 	public GameState chooseState(GameState[] states, Card card)

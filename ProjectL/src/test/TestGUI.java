@@ -20,9 +20,11 @@ import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -63,6 +65,9 @@ public class TestGUI implements GUI {
 	private HashMap<Color, HashMap<Integer, Icon>> cardIconMap;
 	//A map to help connect treasures to icons that represent them
 	private HashMap<String, Icon> treasureIconMap;
+	//The component that spawns all user prompt dialogs
+	private JOptionPane dialogSpawner;
+	private Object result;
 	
 	private static final int GUI_WIDTH = 800;
 	private static final int GUI_HEIGHT = 660;
@@ -653,13 +658,96 @@ public class TestGUI implements GUI {
 		}
 		else
 		{
-			log.setMargin(new Insets(0,LOG_LEFT_MARGIN,0,0));
+			log.setMargin(new Insets(0,LOG_LEFT_MARGIN,0,LOG_LEFT_MARGIN));
 		}
 		//Save the old position of the bar so it doesn't snap back to the top
 		int val = logScrollPane.getVerticalScrollBar().getValue();
 		log.setText(log.getText() + "\n" + message);
 		logScrollPane.getVerticalScrollBar().setValue(val);
 		
+	}
+
+	@Override
+	public Card makeChoice(String prompt, Card[] cards) {
+		result = null;
+		
+		HashMap<Icon, Card> dict = new HashMap<Icon, Card>();
+		Icon[] icons = new Icon[cards.length];
+		int index = 0;
+		
+		for(Card c : cards)
+		{
+			ImageIcon icon = (ImageIcon) getCardIcon(c);
+			
+			ImageIcon resized = new ImageIcon(icon.getImage()
+					.getScaledInstance(CARD_WIDTH, CARD_HEIGHT, 0));
+			
+			icons[index] = resized;
+			index++;
+			dict.put(resized, c);
+		}
+		
+		final JFrame frame = new JFrame("Card choice");
+		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		frame.setSize(400, 400);
+		frame.setLayout(new BorderLayout());
+		frame.add(new JLabel(prompt, JLabel.CENTER), 
+				BorderLayout.NORTH);
+		
+		JPanel choicePanel = new JPanel();
+		choicePanel.setLayout(new GridLayout(1, icons.length));
+		
+		for(final Icon icon : icons)
+		{
+			JButton btn = new JButton();
+			btn.setIcon(icon);
+			btn.addMouseListener(new MouseListener(){
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					result = icon;
+					frame.dispose();
+				}
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+				}
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+				}
+				@Override
+				public void mousePressed(MouseEvent arg0) {	
+				}
+				@Override
+				public void mouseReleased(MouseEvent arg0) {	
+				}
+			});
+			
+			choicePanel.add(btn);
+		}
+		
+		frame.add(choicePanel, BorderLayout.CENTER);
+		frame.pack();
+		
+		while(result == null)
+		{
+			if(!frame.isVisible())
+			{
+				frame.setVisible(true);
+			}
+		}
+		
+		return dict.get(result);
+	}
+
+	@Override
+	public String makeChoice(String prompt, Loot loot) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String makeChoice(String prompt, String[] choices) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
