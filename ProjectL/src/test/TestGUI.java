@@ -665,6 +665,38 @@ public class TestGUI implements GUI {
 		logScrollPane.getVerticalScrollBar().setValue(val);
 		
 	}
+	
+	/**
+	 * Helper method to spawn a dialog window for given choices
+	 * @param title the title of the dialog window
+	 * @param prompt the text prompt displayed inside the window
+	 * @param choices the choices the user has to pick from
+	 * @return the choice that the user decides
+	 */
+	private Object spawnChoiceWindow(String title, String prompt, Object[] choices)
+	{
+		//This will create the dialogue window
+		dialogSpawner = new JOptionPane(prompt, JOptionPane.QUESTION_MESSAGE,
+				JOptionPane.DEFAULT_OPTION, null, choices, null);
+		
+		JDialog dialog = dialogSpawner.createDialog(playerScreen, title);
+		dialog.setModal(false);
+		
+		Object result = null;
+		while(result == null || result.equals(JOptionPane.UNINITIALIZED_VALUE))
+		{
+			//We make sure the user can't hide the dialog
+			if(!dialog.isVisible())
+			{
+				dialog.setVisible(true);
+			}
+			result = dialogSpawner.getValue();
+		}
+		
+		dialog.dispose();
+		
+		return result;
+	}
 
 	@Override
 	public Card makeChoice(String prompt, Card[] cards) {
@@ -684,35 +716,49 @@ public class TestGUI implements GUI {
 			dict.put(resized, c);
 		}
 		
-		dialogSpawner = new JOptionPane(prompt, JOptionPane.QUESTION_MESSAGE,
-				JOptionPane.DEFAULT_OPTION, null, icons, null);
-		
-		JDialog dialog = dialogSpawner.createDialog(playerScreen, "Card choice");
-		dialog.setModal(false);
-		Object result = null;
-		
-		while(result == null || result.equals(JOptionPane.UNINITIALIZED_VALUE))
-		{
-			if(!dialog.isVisible())
-			{
-				dialog.setVisible(true);
-			}
-			result = dialogSpawner.getValue();
-		}
+		Object result = spawnChoiceWindow("Card choice", prompt, icons);
 		
 		return dict.get(result);
 	}
 
 	@Override
 	public String makeChoice(String prompt, Loot loot) {
-		// TODO Auto-generated method stub
-		return null;
+		HashMap<Icon, String> dict = new HashMap<Icon, String>();
+		int allTreasures = 0;
+		
+		for(String treasure : Treasure.allTreasures())
+		{
+			allTreasures += loot.countTreasure(treasure);
+		}
+		
+		Icon[] icons = new Icon[allTreasures];
+		int index = 0;
+		
+		for(String treasure : Treasure.allTreasures())
+		{
+			//We create an icon for each treasure, even if they are duplicates
+			int tCount = loot.countTreasure(treasure);
+			while(tCount > 0)
+			{
+				tCount--;
+				Icon resized = new ImageIcon(((ImageIcon) getTreasureIcon(treasure))
+					.getImage().getScaledInstance(CARD_WIDTH, CARD_HEIGHT, 0));
+				icons[index] = resized;
+				index++;
+				dict.put(resized, treasure);
+			}
+		}
+		
+		Object result = spawnChoiceWindow("Treasure choice", prompt, icons);
+		
+		return dict.get(result);
 	}
 
 	@Override
 	public String makeChoice(String prompt, String[] choices) {
-		// TODO Auto-generated method stub
-		return null;
+		Object result = spawnChoiceWindow("Choice", prompt, choices);
+		
+		return (String) result;
 	}
 
 }

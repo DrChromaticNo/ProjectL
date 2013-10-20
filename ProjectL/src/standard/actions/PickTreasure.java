@@ -24,51 +24,28 @@ public class PickTreasure implements Action {
 	public GameState doAction(GameState state, Card card, int time) 
 	{
 		Color faction = card.getFaction();
-		if(!state.getPlayer(faction).checkCPU())
+		Player player = state.getPlayer(faction);
+		if(!player.checkCPU())
 		{	
 			//First we just display all the possible choices for treasure
 			String choice = "";
 			Loot Lbag = state.getBoard().getLoot(state.getDay());
-			boolean allZero = false;
-			while(Lbag.countTreasure(choice) == 0 && !allZero)
-			{
-				allZero = true;
-				int treasureMap = 0;
-				HashMap<Integer, String> tMap = new HashMap<Integer, String>();
-				
-				System.out.println("The following treasures are availible: ");
-				
-				for(String s : Treasure.allTreasures())
-				{
-					if(Lbag.countTreasure(s) != 0)
-					{
-						allZero = false;
-						System.out.println(treasureMap + ": " + s + " x" + Lbag.countTreasure(s));
-						tMap.put(treasureMap, s);
-						treasureMap++;
-					}
-				}
-				
-				if(!allZero) //providing there are any, we ask the player to choose one of them
-				{
-					System.out.println("Please choose one treasure:");
-					DebugMenu menu = new DebugMenu();
-					int pick = Integer.parseInt(menu.launch(state));
-					choice = tMap.get(pick);
-				}
-			}
+			choice = player.getGUI().makeChoice("Please choose one treasure:", Lbag);
 			
 			Lbag.addLoot(choice, -1);
 			state.getBoard().setLoot(state.getDay(), Lbag);
-			state.getPlayer(faction).getLoot().addLoot(choice, 1);
-			state.messageAllGUIs(Faction.getPirateName(faction) + " chose " + choice);
+			player.getLoot().addLoot(choice, 1);
+			if(!choice.equals(Treasure.SABER))
+			{
+				state.messageAllGUIs(Faction.getPirateName(faction) + " chose " + choice);
+			}
 			
 			//There are a few special cases that we need to case on (with standard rules)
 			
 			if(choice.equals(Treasure.OFFICER))
 			{
 				state.getBoard().removeCard(card);
-				state.getPlayer(faction).addToDiscard(card);
+				player.addToDiscard(card);
 			}
 			else if(choice.equals(Treasure.SABER))
 			{
@@ -99,7 +76,6 @@ public class PickTreasure implements Action {
 	{
 		if(!state.getPlayer(faction).checkCPU())
 		{
-			
 			//First we need to find the player's index in the list
 			int playerIndex = 0;
 			for(int i = 0; i < state.getPlayerList().length; i++)
@@ -136,65 +112,62 @@ public class PickTreasure implements Action {
 			if(leftP != null || rightP != null) //if there are neighbors
 			{
 				//we figure out if they have killable pirates
-				String choice = "";
-				while(true)
+				HashSet<Card> leftSet = new HashSet<Card>();
+				if(!leftP.getFaction().equals(faction))
 				{
-					HashSet<Card> leftSet = new HashSet<Card>();
-					if(!leftP.getFaction().equals(faction))
+					for(Card c : leftP.getDen())
 					{
-						System.out.println(Faction.getPirateName(leftP.getFaction()) + " has \n");
-						for(Card c : leftP.getDen())
-						{
-							System.out.print(" " + c.abbreviate() + " ");
-							leftSet.add(c);
-						}
+						leftSet.add(c);
 					}
+				}
 					
-					HashSet<Card> rightSet = new HashSet<Card>();
-					if(!rightP.getFaction().equals(faction) && !rightP.getFaction().equals(leftP.getFaction()))
+				HashSet<Card> rightSet = new HashSet<Card>();
+				if(!rightP.getFaction().equals(faction) && !rightP.getFaction().equals(leftP.getFaction()))
+				{
+					for(Card c : rightP.getDen())
 					{
-						System.out.println(Faction.getPirateName(rightP.getFaction()) + " has \n");
-						for(Card c : rightP.getDen())
-						{
-							System.out.print(" " + c.abbreviate() + " ");
-							rightSet.add(c);
-						}
+						rightSet.add(c);
 					}
+				}
 					
-					if(leftSet.isEmpty() && rightSet.isEmpty()) //if there are none we just return
+				if(leftSet.isEmpty() && rightSet.isEmpty()) //if there are none we just return
+				{
+					state.messageAllGUIs(Faction.getPirateName(faction) + " chose a saber" +
+							" but couldn't kill anyone");
+					return state;
+				}
+					
+				//otherwise we prompt the user to kill one of them
+				
+				HashSet<Card> total = new HashSet<Card>(leftSet);
+				total.addAll(rightSet);
+				
+				Card choice = state.getPlayer(faction).getGUI().makeChoice("Since you chose a saber, " +
+						"choose a pirate in one of your neighbor's dens to kill", 
+						total.toArray(new Card[total.size()]));
+				
+				
+				for(Card c : leftSet)
+				{
+					if(c.equals(choice))
 					{
+						state.getPlayer(leftP.getFaction()).removeFromDen(c);
+						state.getPlayer(leftP.getFaction()).addToDiscard(c);
+						state.messageAllGUIs(Faction.getPirateName(faction) + " chose a saber" +
+								" and killed " + c.abbreviate());
 						return state;
 					}
-					
-					while(true) //otherwise we prompt the user to kill one of them
+				}
+				
+				for(Card c : rightSet)
+				{
+					if(c.equals(choice))
 					{
-						System.out.println("\nChoose a pirate to kill: ");
-					
-						DebugMenu menu = new DebugMenu();
-						
-						choice = menu.launch(state);
-						
-						for(Card c : leftSet)
-						{
-							if(c.abbreviate().equals(choice))
-							{
-								state.getPlayer(leftP.getFaction()).removeFromDen(c);
-								state.getPlayer(leftP.getFaction()).addToDiscard(c);
-								System.out.println(" and killed " + c.abbreviate());
-								return state;
-							}
-						}
-						
-						for(Card c : rightSet)
-						{
-							if(c.abbreviate().equals(choice))
-							{
-								state.getPlayer(rightP.getFaction()).removeFromDen(c);
-								state.getPlayer(rightP.getFaction()).addToDiscard(c);
-								System.out.println(" and killed " + c.abbreviate());
-								return state;
-							}
-						}
+						state.getPlayer(rightP.getFaction()).removeFromDen(c);
+						state.getPlayer(rightP.getFaction()).addToDiscard(c);
+						state.messageAllGUIs(Faction.getPirateName(faction) + " chose a saber" +
+								" and killed " + c.abbreviate());
+						return state;
 					}
 				}
 			}
