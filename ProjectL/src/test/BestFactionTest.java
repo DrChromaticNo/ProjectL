@@ -14,7 +14,6 @@ import org.junit.Test;
 
 import players.Faction;
 import players.Player;
-import ai.DepthEstAI;
 import ai.SimpleAI;
 
 import cards.Deck;
@@ -108,6 +107,8 @@ public class BestFactionTest {
 					Wwins++;
 				}
 			}
+			
+			System.err.println("Test " + i);
 		}
 		
 		System.out.println("BKwins: " + BKwins);
