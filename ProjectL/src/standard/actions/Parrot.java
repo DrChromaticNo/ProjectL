@@ -15,7 +15,7 @@ import cards.Card;
  * Class that represents the parrot card
  * 
  * Day: The parrot card is discarded and replaced by a card from your hand (in the appropriate place)
- * Evening: N/A
+ * Dusk: N/A
  * Night: N/A
  * End: N/A
  * 

@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -37,6 +38,7 @@ import players.Faction;
 import players.Player;
 import score.Loot;
 import score.Treasure;
+import standard.DescServer;
 import standard.IconServer;
 
 import main.GameState;
@@ -61,8 +63,10 @@ public class TestGUI implements GUI {
 	private JFrame playerScreen;
 	//The gamestate that this UI will pull its info from
 	private GameState latest;
-	//The class to serve the various icon
-	private IconServer server;
+	//The object to serve the various icons
+	private IconServer iServer;
+	//The object to serve the various card descriptions
+	private DescServer dServer;
 	//A map to help connect cards to icons that represent them
 	private HashMap<Color, HashMap<Integer, Icon>> cardIconMap;
 	//A map to help connect treasures to icons that represent them
@@ -83,7 +87,8 @@ public class TestGUI implements GUI {
 		
 		//First, we handle the main player GUI
 		this.faction = faction;
-		server = new IconServer();
+		iServer = new IconServer();
+		dServer = new DescServer();
 		cardIconMap = createCardIconMap();
 		treasureIconMap = createTreasureIconMap();
 		
@@ -136,7 +141,7 @@ public class TestGUI implements GUI {
 			map.put(faction, new HashMap<Integer, Icon>());
 			for(int i = 1; i <= 9; i++)
 			{
-				map.get(faction).put(i, server.getCardIcon(faction, i));
+				map.get(faction).put(i, iServer.getCardIcon(faction, i));
 			}
 		}
 		
@@ -153,7 +158,7 @@ public class TestGUI implements GUI {
 		
 		for(String treasure : Treasure.allTreasures())
 		{
-			map.put(treasure, server.getTreasureIcon(treasure));
+			map.put(treasure, iServer.getTreasureIcon(treasure));
 		}
 		
 		return map;
@@ -447,7 +452,7 @@ public class TestGUI implements GUI {
 		
 		JButton bagButton = new JButton();
 		
-		ImageIcon bagIcon = new ImageIcon(server.bag.getImage()
+		ImageIcon bagIcon = new ImageIcon(iServer.bag.getImage()
 				.getScaledInstance(CARD_WIDTH, CARD_HEIGHT, 1));
 		
 		bagButton.setIcon(bagIcon);
@@ -541,7 +546,7 @@ public class TestGUI implements GUI {
 	 * @param c the card to get the clickable lavel for
 	 * @return the clickable label with the card icon
 	 */
-	private JLabel getClickableCardLabel(Card c)
+	private JLabel getClickableCardLabel(final Card c)
 	{
 		JLabel label = new JLabel();
 		
@@ -561,7 +566,14 @@ public class TestGUI implements GUI {
 				JFrame frame = new JFrame();
 				JPanel image = new JPanel();
 				frame.add(image);
-				image.add(new JLabel(icon));
+				image.setLayout(new BorderLayout());
+				
+				ImageIcon resized = new ImageIcon(icon.getImage()
+						.getScaledInstance(icon.getIconWidth()/2, 
+								icon.getIconHeight()/2, 0));
+				
+				image.add(new JLabel(resized), BorderLayout.SOUTH);
+				image.add(getFullCardInfoPanel(c), BorderLayout.CENTER);
 				frame.pack();
 				frame.setVisible(true);
 
@@ -791,6 +803,40 @@ public class TestGUI implements GUI {
 		Object result = spawnChoiceWindow("Choice", prompt, choices);
 		
 		return (String) result;
+	}
+	
+	/**
+	 * Creats a panel with the silver number and action description for a given card
+	 * @param card the card to get the info panel for
+	 * @return the info panel for that card
+	 */
+	private JPanel getFullCardInfoPanel(Card card)
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		
+		int silver = latest.getDeck()
+			.getSilverNum(card.getFaction(), card.getValue());
+		
+		String desc = dServer.getCardDesc(card.getValue());
+		
+		String valueInfo = "Value: " + card.getValue();
+		
+		String silverInfo = "Silver number: " + silver;
+		
+		panel.add(new JLabel(valueInfo));
+		panel.add(new JLabel(silverInfo));
+		
+		Scanner scanner = new Scanner(desc);
+		scanner.useDelimiter("\n");
+		while(scanner.hasNext())
+		{
+			String next = scanner.next();
+			panel.add(new JLabel(next));
+		}
+		scanner.close();
+		
+		return panel;
 	}
 
 }
