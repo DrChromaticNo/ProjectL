@@ -139,7 +139,7 @@ public class TestGUI implements GUI {
 		for(Color faction : Faction.allFactions())
 		{
 			map.put(faction, new HashMap<Integer, Icon>());
-			for(int i = 1; i <= 9; i++)
+			for(int i = 1; i <= 30; i++)
 			{
 				map.get(faction).put(i, iServer.getCardIcon(faction, i));
 			}
@@ -563,7 +563,9 @@ public class TestGUI implements GUI {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				
-				JFrame frame = new JFrame();
+				JFrame frame = new JFrame(dServer
+						.getCardName(c.getValue()));
+				
 				JPanel image = new JPanel();
 				frame.add(image);
 				image.setLayout(new BorderLayout());

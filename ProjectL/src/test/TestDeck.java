@@ -12,6 +12,7 @@ import standard.actions.Barkeep;
 import standard.actions.Beggar;
 import standard.actions.CabinBoy;
 import standard.actions.Carpenter;
+import standard.actions.FrenchOfficer;
 import standard.actions.Monkey;
 import standard.actions.Parrot;
 import standard.actions.Preacher;
@@ -95,7 +96,7 @@ public class TestDeck implements Deck {
 		}
 		for(int i = 27; i < 30; i++)
 		{
-			cards.add(new Integer(1));
+			cards.add(new Integer(10));
 		}
 		return cards;
 	}
@@ -207,6 +208,7 @@ public class TestDeck implements Deck {
 		map.put(7, new Barkeep());
 		map.put(8, new Waitress());
 		map.put(9, new Carpenter());
+		map.put(10, new FrenchOfficer());
 		
 		return map;
 	}

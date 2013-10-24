@@ -55,6 +55,11 @@ public class DescServer {
 			"\nNight: N/A" +
 			"\nEnd: Score 10 gold\n";
 	
+	final static String FRENCH_OFFICER = "Day: Gain 5 gold if you have less than 9 gold" +
+			"\nDusk: Choose 1 treasure" + 
+			"\nNight: N/A" +
+			"\nEnd: N/A\n";
+	
 	
 	/**
 	 * Returns the description for a given card value
@@ -73,6 +78,29 @@ public class DescServer {
 			case 7: return BARKEEP;
 			case 8: return WAITRESS;
 			case 9: return CARPENTER;
+			case 10: return FRENCH_OFFICER;
+			}
+			return "";
+	}
+	
+	/**
+	 * Returns the name for a given card value
+	 * @param value the value of the card to get the name for
+	 * @return the name for this value of card
+	 */
+	public String getCardName(int value)
+	{
+		switch(value){
+		case 1: return "Parrot";
+		case 2: return "Monkey";
+		case 3: return "Beggar";
+		case 4: return "Recruiter";
+		case 5: return "Cabin Boy";
+		case 6: return "Preacher";
+		case 7: return "Barkeep";
+		case 8: return "Waitress";
+		case 9: return "Carpenter";
+		case 10: return "French Officer";
 		}
 		return "";
 	}

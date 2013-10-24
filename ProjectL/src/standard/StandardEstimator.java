@@ -46,12 +46,34 @@ public class StandardEstimator implements Estimator {
 				break;
 			case 9: estimate = carpenterEst(state,card);
 				break;
+			case 10: estimate = frenchofficerEst(state,card);
+				break;
 			}
 		}
 		
 		return estimate;
 	}
 	
+	/**
+	 * The estimate for the french officer card
+	 * @param state state the french officer is being played in
+	 * @param card the card being played
+	 * @return the estimate for the french officer
+	 */
+	private int frenchofficerEst(GameState state, Card card) {
+		Color faction = card.getFaction();
+		//If the player has less than 9 gold, they get 5 more
+		//Otherwise, the card does nothing
+		if(state.getPlayer(faction).getGold() < 9)
+		{
+			return 5;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
 	/**
 	 * The estimate for the parrot card
 	 * @param state state the parrot is being played in
