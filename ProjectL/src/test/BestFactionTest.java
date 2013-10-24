@@ -21,6 +21,7 @@ import cards.Deck;
 import score.ScoreCounter;
 import score.TreasureBag;
 import standard.StandardScoreCounter;
+import standard.StandardSettings;
 import standard.StandardTreasureBag;
 
 public class BestFactionTest {
@@ -78,7 +79,7 @@ public class BestFactionTest {
 			
 			GameState state = new GameState(playerList, new Board(), gameDeck, gameBag, score);
 			
-			Set<Player> winners = Game.run(state);
+			Set<Player> winners = Game.run(state, new StandardSettings());
 			
 			for(Player p : winners)
 			{

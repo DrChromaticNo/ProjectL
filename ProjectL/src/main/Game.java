@@ -22,6 +22,7 @@ import score.ScoreCounter;
 import score.Treasure;
 import score.TreasureBag;
 import standard.StandardScoreCounter;
+import standard.StandardSettings;
 import standard.StandardTreasureBag;
 import test.TestDeck;
 import test.TestGUI;
@@ -30,6 +31,8 @@ import cards.Deck;
 
 public class Game {
 
+	private static GameSettings settings;
+	
 	/**
 	 * @param args
 	 */
@@ -74,7 +77,7 @@ public class Game {
 		
 		state.messageAllGUIs("The game is starting!\nLook for a log of game events here");
 		
-		run(state);
+		run(state, new StandardSettings());
 
 	}
 	
@@ -91,15 +94,19 @@ public class Game {
 	}
 	
 	/**
-	 * The main game loop, iterates through 3 weeks of play
+	 * The main game loop, iterates through x weeks of play
 	 * @param state the initial state
 	 */
-	public static Set<Player> run(GameState state)
+	public static Set<Player> run(GameState state, GameSettings settings)
 	{
+		//Setup global game settings
+		Game.settings = settings;
+		
 		//get the list of all the drawable cards
 		ArrayList<Integer> availibleCards = state.getDeck().allCards();
 		
-		for(int week = state.getWeek(); week < 3; week++)
+		for(int week = state.getWeek(); 
+				week < settings.weekAmt(); week++)
 		{
 			state.setWeek(week);
 			
@@ -107,17 +114,12 @@ public class Game {
 			{
 				state.getBag().resetBag();
 				placeTreasures(state);
-				distributeInitialGold(state, 10);
+				distributeInitialGold(state, 
+						settings.initialGold());
 				//this section either draws the initial hand (at the start of the game)
 				//or adds six cards to the existing hands
-				if(week == 0)
-				{
-					drawCards(state, availibleCards, 9);
-				}
-				else
-				{
-					drawCards(state, availibleCards, 6);
-				}
+				drawCards(state, availibleCards,
+						settings.cardAmt(week));
 			}
 			
 			state.updateGUIs();
@@ -301,7 +303,7 @@ public class Game {
 			if(state.getTime() == Time.PICK_CARDS)
 			{
 				pickCards(state);
-				state.messageAllGUIs(("~DAY PHASE (" + (day+1) + ")~"));
+				state.messageAllGUIs("~DAY PHASE (" + (day+1) + ")~");
 				state.setTime(Time.DAY);
 				state.updateGUIs();
 			}
@@ -342,7 +344,7 @@ public class Game {
 			
 			if(index >= deck.length)
 			{
-				state.messageAllGUIs(("~DUSK PHASE~"));
+				state.messageAllGUIs("~DUSK PHASE~");
 				state.setTime(Time.DUSK);
 			}
 			else

@@ -17,13 +17,13 @@ import org.junit.Test;
 import players.Faction;
 import players.Player;
 import ai.DepthEstAI;
-import ai.SimpleAI;
 
 import cards.Deck;
 
 import score.ScoreCounter;
 import score.TreasureBag;
 import standard.StandardScoreCounter;
+import standard.StandardSettings;
 import standard.StandardTreasureBag;
 
 public class AISmallCompete {
@@ -73,7 +73,7 @@ public class AISmallCompete {
 			
 			GameState state = new GameState(playerList, new Board(), gameDeck, gameBag, score);
 			
-			Set<Player> winners = Game.run(state);
+			Set<Player> winners = Game.run(state, new StandardSettings());
 			
 			boolean won = false;
 			for(Player p : winners)

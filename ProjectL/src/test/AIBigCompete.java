@@ -24,6 +24,7 @@ import cards.Deck;
 import score.ScoreCounter;
 import score.TreasureBag;
 import standard.StandardScoreCounter;
+import standard.StandardSettings;
 import standard.StandardTreasureBag;
 
 public class AIBigCompete {
@@ -81,7 +82,7 @@ public class AIBigCompete {
 			
 			GameState state = new GameState(playerList, new Board(), gameDeck, gameBag, score);
 			
-			Set<Player> winners = Game.run(state);
+			Set<Player> winners = Game.run(state, new StandardSettings());
 			
 			boolean won = false;
 			for(Player p : winners)

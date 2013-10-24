@@ -16,8 +16,6 @@ import org.junit.Test;
 
 import ai.DepthAI;
 import ai.DepthEstAI;
-import ai.EstAI;
-import ai.FullAI;
 import ai.SimpleAI;
 
 import players.Faction;
@@ -26,6 +24,7 @@ import players.Player;
 import score.ScoreCounter;
 import score.TreasureBag;
 import standard.StandardScoreCounter;
+import standard.StandardSettings;
 import standard.StandardTreasureBag;
 import cards.Deck;
 
@@ -71,7 +70,7 @@ public class AISanityTest {
 			
 			GameState state = new GameState(playerList, new Board(), gameDeck, gameBag, score);
 			
-			Set<Player> winners = Game.run(state);
+			Set<Player> winners = Game.run(state, new StandardSettings());
 			
 			boolean won = false;
 			for(Player p : winners)
@@ -118,7 +117,7 @@ public class AISanityTest {
 			
 			GameState state = new GameState(playerList, new Board(), gameDeck, gameBag, score);
 			
-			Set<Player> winners = Game.run(state);
+			Set<Player> winners = Game.run(state, new StandardSettings());
 			
 			boolean won = false;
 			for(Player p : winners)
@@ -169,7 +168,7 @@ public class AISanityTest {
 			
 			GameState state = new GameState(playerList, new Board(), gameDeck, gameBag, score);
 			
-			Set<Player> winners = Game.run(state);
+			Set<Player> winners = Game.run(state, new StandardSettings());
 			
 			boolean won = false;
 			for(Player p : winners)
@@ -216,7 +215,7 @@ public class AISanityTest {
 			
 			GameState state = new GameState(playerList, new Board(), gameDeck, gameBag, score);
 			
-			Set<Player> winners = Game.run(state);
+			Set<Player> winners = Game.run(state, new StandardSettings());
 			
 			boolean won = false;
 			for(Player p : winners)
@@ -263,7 +262,7 @@ public class AISanityTest {
 			
 			GameState state = new GameState(playerList, new Board(), gameDeck, gameBag, score);
 			
-			Set<Player> winners = Game.run(state);
+			Set<Player> winners = Game.run(state, new StandardSettings());
 			
 			boolean won = false;
 			for(Player p : winners)
@@ -314,7 +313,7 @@ public class AISanityTest {
 			
 			GameState state = new GameState(playerList, new Board(), gameDeck, gameBag, score);
 			
-			Set<Player> winners = Game.run(state);
+			Set<Player> winners = Game.run(state, new StandardSettings());
 			
 			boolean won = false;
 			for(Player p : winners)
@@ -365,7 +364,7 @@ public class AISanityTest {
 			
 			GameState state = new GameState(playerList, new Board(), gameDeck, gameBag, score);
 			
-			Set<Player> winners = Game.run(state);
+			Set<Player> winners = Game.run(state, new StandardSettings());
 			
 			boolean won = false;
 			for(Player p : winners)
@@ -416,7 +415,7 @@ public class AISanityTest {
 			
 			GameState state = new GameState(playerList, new Board(), gameDeck, gameBag, score);
 			
-			Set<Player> winners = Game.run(state);
+			Set<Player> winners = Game.run(state, new StandardSettings());
 			
 			boolean won = false;
 			for(Player p : winners)
