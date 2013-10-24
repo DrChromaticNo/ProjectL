@@ -30,7 +30,7 @@ public class Monkey implements Action {
 		
 		if(time == Time.DAY)
 		{
-			state = monkeyDay(state, card);
+			state = monkeyDay(state, card, true);
 		}
 		else if(time == Time.DUSK)
 		{
@@ -49,9 +49,10 @@ public class Monkey implements Action {
 	 * Transfers cursed relics from your den to the den to your left
 	 * @param state the state of the game before this action
 	 * @param card the card doing this action
+	 * @param output if running this method should print output to the gui
 	 * @return the state after the relics have been transferred
 	 */
-	private GameState monkeyDay(GameState state, Card card)
+	private GameState monkeyDay(GameState state, Card card, boolean output)
 	{
 		Color faction = card.getFaction();
 		//get the players' index
@@ -93,51 +94,6 @@ public class Monkey implements Action {
 		
 		return state;
 	}
-	
-	/**
-	 * Transfers cursed relics from your den to the den to your left with NO text output
-	 * @param state the state of the game before this action
-	 * @param card the card doing this action
-	 * @return the state after the relics have been transferred
-	 */
-	private GameState monkeyDayAll(GameState state, Card card)
-	{
-		Color faction = card.getFaction();
-		//get the players' index
-		int playerIndex = 0;
-		for(int i = 0; i < state.getPlayerList().length; i++)
-		{
-			if(state.getPlayerList()[i].getFaction().equals(faction))
-			{
-				playerIndex = i;
-			}
-		}
-		
-		//Determine left neighbor
-		
-		Player leftP = null;
-		if(playerIndex-1 >= 0)
-		{
-			leftP = state.getPlayerList()[playerIndex-1];
-		}
-		else
-		{
-			leftP = state.getPlayerList()[state.getPlayerList().length-1];
-		}
-		
-		if(leftP.getFaction().equals(faction))
-		{
-			throw new RuntimeException("only one player!");
-		}
-		else //transfer relics to the left
-		{
-			int relics = state.getPlayer(faction).getLoot().countTreasure(Treasure.RELIC);
-			state.getPlayer(faction).getLoot().addLoot(Treasure.RELIC, -relics);
-			state.getPlayer(leftP.getFaction()).getLoot().addLoot(Treasure.RELIC, relics);
-		}
-		
-		return state;
-	}
 
 	@Override
 	public GameState[] allActions(GameState state, Card card, int time) {
@@ -147,7 +103,7 @@ public class Monkey implements Action {
 		
 		if(time == Time.DAY)
 		{
-			states[0] = monkeyDayAll(new GameState(state), card);
+			states[0] = monkeyDay(new GameState(state), card, false);
 		}
 		else if(time == Time.DUSK)
 		{
