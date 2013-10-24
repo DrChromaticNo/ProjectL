@@ -40,6 +40,7 @@ import score.Loot;
 import score.Treasure;
 import standard.DescServer;
 import standard.IconServer;
+import utility.Cache;
 
 import main.GameState;
 
@@ -71,6 +72,8 @@ public class TestGUI implements GUI {
 	private HashMap<String, Icon> treasureIconMap;
 	//The component that spawns all user prompt dialogs
 	private JOptionPane dialogSpawner;
+	//The cache to hold the icons
+	private Cache<Card,Icon> iconCache;
 	
 	private static final int GUI_WIDTH = 800;
 	private static final int GUI_HEIGHT = 660;
@@ -79,11 +82,14 @@ public class TestGUI implements GUI {
 	private static final int LOG_LEFT_MARGIN = 5;
 	private static final int CARD_WIDTH = 40;
 	private static final int CARD_HEIGHT = 56;
+	private static final int ICON_CACHE_SIZE = 10;
 	
 	public TestGUI(Color faction)
 	{
+		//Setting up the icon cache
+		iconCache = new Cache<Card,Icon>(ICON_CACHE_SIZE);
 		
-		//First, we handle the main player GUI
+		//Handling the main player GUI
 		this.faction = faction;
 		iServer = new IconServer();
 		dServer = new DescServer();
@@ -644,8 +650,17 @@ public class TestGUI implements GUI {
 	 */
 	private Icon getCardIcon(Card card) {
 		
-		return iServer.getCardIcon(
-				card.getFaction(), card.getValue());
+		Icon icon = iconCache.get(card);
+		
+		if(icon == null)
+		{
+			iconCache.put(card, iServer.getCardIcon(
+				card.getFaction(), card.getValue()));
+		}
+		
+		icon = iconCache.get(card);
+		
+		return icon;
 	}
 	
 	/**
