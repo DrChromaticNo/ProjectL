@@ -46,12 +46,12 @@ public class Cache<K,V> {
 		{
 			queue.remove(key);
 		}
-		queue.add(key);
+		queue.add(0, key);
 		map.put(key, value);
 		
 		if(queue.size() > maxSize)
 		{
-			K old = queue.remove(queue.size());
+			K old = queue.remove(queue.size()-1);
 			map.remove(old);
 		}
 	}

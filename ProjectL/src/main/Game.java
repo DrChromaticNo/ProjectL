@@ -97,10 +97,10 @@ public class Game {
 	 * The main game loop, iterates through x weeks of play
 	 * @param state the initial state
 	 */
-	public static Set<Player> run(GameState state, GameSettings settings)
+	public static Set<Player> run(GameState state, GameSettings gSettings)
 	{
 		//Setup global game settings
-		Game.settings = settings;
+		settings = gSettings;
 		
 		//get the list of all the drawable cards
 		ArrayList<Integer> availibleCards = state.getDeck().allCards();
