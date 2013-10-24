@@ -67,8 +67,6 @@ public class TestGUI implements GUI {
 	private IconServer iServer;
 	//The object to serve the various card descriptions
 	private DescServer dServer;
-	//A map to help connect cards to icons that represent them
-	private HashMap<Color, HashMap<Integer, Icon>> cardIconMap;
 	//A map to help connect treasures to icons that represent them
 	private HashMap<String, Icon> treasureIconMap;
 	//The component that spawns all user prompt dialogs
@@ -89,7 +87,6 @@ public class TestGUI implements GUI {
 		this.faction = faction;
 		iServer = new IconServer();
 		dServer = new DescServer();
-		cardIconMap = createCardIconMap();
 		treasureIconMap = createTreasureIconMap();
 		
 		playerScreen = new JFrame("Project L");
@@ -126,26 +123,6 @@ public class TestGUI implements GUI {
 		logFrame.add(logScrollPane, BorderLayout.CENTER);
 		logScrollPane.setVisible(true);
 		logScrollPane.setPreferredSize(new Dimension(LOG_WIDTH,GUI_HEIGHT));
-	}
-	
-	/**
-	 * Generates a map that links color and value to an icon
-	 * @return the map that links color and value to the icon that represents the analogous card
-	 */
-	private HashMap<Color, HashMap<Integer, Icon>> createCardIconMap()
-	{
-		HashMap<Color, HashMap<Integer, Icon>> map = new HashMap<Color, HashMap<Integer, Icon>>();
-		
-		for(Color faction : Faction.allFactions())
-		{
-			map.put(faction, new HashMap<Integer, Icon>());
-			for(int i = 1; i <= 30; i++)
-			{
-				map.get(faction).put(i, iServer.getCardIcon(faction, i));
-			}
-		}
-		
-		return map;
 	}
 	
 	/**
@@ -667,8 +644,8 @@ public class TestGUI implements GUI {
 	 */
 	private Icon getCardIcon(Card card) {
 		
-		return cardIconMap.get(card.getFaction())
-				.get(card.getValue());
+		return iServer.getCardIcon(
+				card.getFaction(), card.getValue());
 	}
 	
 	/**
