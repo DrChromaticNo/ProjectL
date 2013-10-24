@@ -1,5 +1,6 @@
 package standard;
 
+import test.CustomSettings;
 import main.GameSettings;
 
 /**
@@ -10,22 +11,26 @@ import main.GameSettings;
 
 public class StandardSettings implements GameSettings {
 
+	GameSettings settings;
+	
+	public StandardSettings()
+	{
+		settings = new CustomSettings(10, 9, 6, 3);
+	}
+	
 	@Override
 	public int initialGold() {
-		return 10;
+		return settings.initialGold();
 	}
 
 	@Override
 	public int cardAmt(int week) {
-		if(week == 0)
-			return 9;
-		else
-			return 6;
+		return settings.cardAmt(week);
 	}
 
 	@Override
 	public int weekAmt() {
-		return 3;
+		return settings.weekAmt();
 	}
 
 }
