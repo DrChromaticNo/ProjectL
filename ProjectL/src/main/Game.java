@@ -6,6 +6,8 @@
 package main;
 
 
+import gui.frontmenu.FrontMenu;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
