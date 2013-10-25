@@ -3,6 +3,8 @@ package gui.frontmenu;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -16,9 +18,10 @@ public class FrontMenu {
 	private static final int MENU_Y = 400;
 	private static final int BUTTON_X = 100;
 	private static final int BUTTON_Y = 100;
-	private static final float GAME_TITLE_SIZE = 64.0f;
+	private static final float GAME_TITLE_SIZE = 60.0f;
+	private static final float GAME_SUBTITLE_SIZE = 10.0f;
 	private static final String MENU_TITLE = "Main Menu";
-	private static final String GAME_TITLE = "Project L";
+	private static final String GAME_TITLE = "Libertalia";
 	
 	public static void main(String[] args)
 	{
@@ -42,8 +45,14 @@ public class FrontMenu {
 		gameTitle.setFont(gameTitle.getFont()
 				.deriveFont(GAME_TITLE_SIZE));
 		
+		JLabel gameSubtitle = new JLabel(getSubtitle());
+		gameSubtitle.setFont(gameSubtitle.getFont()
+				.deriveFont(GAME_SUBTITLE_SIZE));
+		
 		panel.add(gameTitle);
+		panel.add(gameSubtitle);
 		gameTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+		gameSubtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 		addButtons(panel);
 		
 		frame.setVisible(true);
@@ -81,6 +90,25 @@ public class FrontMenu {
 		play.setAlignmentX(Component.CENTER_ALIGNMENT);
 		host.setAlignmentX(Component.CENTER_ALIGNMENT);
 		join.setAlignmentX(Component.CENTER_ALIGNMENT);
+	}
+	
+	/**
+	 * Returns some goofy subtitle
+	 * @return the subtitle to display
+	 */
+	private static String getSubtitle()
+	{
+		ArrayList<String> list = new ArrayList<String>();
+		list.add("(sort of)");
+		list.add("(Dirk Chivers is overpowered)");
+		list.add("(apologies to Paolo Mori)");
+		list.add("(have fun playing this game)");
+		list.add("(if you're not me and you're reading this, i'm surprised)");
+		list.add("(if you're a lawyer, i'm sorry)");
+		
+		Random random = new Random();
+		return list.get(random.nextInt(list.size()));
+		
 	}
 	
 }
