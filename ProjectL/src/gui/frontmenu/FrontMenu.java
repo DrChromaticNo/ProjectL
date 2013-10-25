@@ -105,6 +105,8 @@ public class FrontMenu {
 		list.add("(have fun playing this game)");
 		list.add("(if you're not me and you're reading this, i'm surprised)");
 		list.add("(if you're a lawyer, i'm sorry)");
+		list.add("(i'd rather be playing apocalypse world)");
+		list.add("(i'm going to write 100 of these)");
 		
 		Random random = new Random();
 		return list.get(random.nextInt(list.size()));
