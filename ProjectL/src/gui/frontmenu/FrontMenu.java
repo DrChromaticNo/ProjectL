@@ -3,6 +3,8 @@ package gui.frontmenu;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -12,7 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public class FrontMenu {
+public class FrontMenu implements ActionListener {
 	
 	private static final int MENU_X = 290;
 	private static final int MENU_Y = 400;
@@ -22,6 +24,7 @@ public class FrontMenu {
 	private static final float GAME_SUBTITLE_SIZE = 10.0f;
 	private static final String MENU_TITLE = "Main Menu";
 	private static final String GAME_TITLE = "Libertalia";
+	private static final String PLAY_ACTION = "play";
 	
 	public static void main(String[] args)
 	{
@@ -66,6 +69,7 @@ public class FrontMenu {
 	private static void addButtons(Container panel)
 	{
 		JButton play = new JButton("Play");
+		play.setActionCommand(PLAY_ACTION);
 		
 		JButton host = new JButton("Host");
 		
@@ -111,6 +115,14 @@ public class FrontMenu {
 		Random random = new Random();
 		return list.get(random.nextInt(list.size()));
 		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		if(arg0.equals(PLAY_ACTION))
+		{
+			
+		}
 	}
 	
 }
