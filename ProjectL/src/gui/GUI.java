@@ -48,4 +48,11 @@ public interface GUI {
 	 * @return the choice that the user makes
 	 */
 	public String makeChoice(String prompt, String[] choices);
+	
+	/**
+	 * Returns the name of this GUI
+	 * @return the name of this GUI
+	 */
+	public String getName();
+	
 }

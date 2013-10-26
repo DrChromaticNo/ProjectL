@@ -25,18 +25,20 @@ public class FrontMenu implements ActionListener {
 	private static final String MENU_TITLE = "Main Menu";
 	private static final String GAME_TITLE = "Libertalia";
 	private static final String PLAY_ACTION = "play";
+	private JFrame frame;
 	
 	public static void main(String[] args)
 	{
-		launch();
+		FrontMenu menu = new FrontMenu();
+		menu.launch();
 	}
 	
 	/**
 	 * Launches the front menu for the game
 	 */
-	public static void launch()
+	public void launch()
 	{
-		JFrame frame = new JFrame(MENU_TITLE);
+		frame = new JFrame(MENU_TITLE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(MENU_X, MENU_Y);
 		frame.setResizable(false);
@@ -66,10 +68,11 @@ public class FrontMenu implements ActionListener {
 	 * Sets up the button layout in the menu
 	 * @param panel the panel to add the buttons to
 	 */
-	private static void addButtons(Container panel)
+	private void addButtons(Container panel)
 	{
 		JButton play = new JButton("Play");
 		play.setActionCommand(PLAY_ACTION);
+		play.addActionListener(this);
 		
 		JButton host = new JButton("Host");
 		
@@ -119,9 +122,11 @@ public class FrontMenu implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		if(arg0.equals(PLAY_ACTION))
+		if(arg0.getActionCommand().equals(PLAY_ACTION))
 		{
-			
+			PlayMenu play = new PlayMenu();
+			play.launch();
+			frame.dispose();
 		}
 	}
 	
