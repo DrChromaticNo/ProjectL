@@ -1,8 +1,13 @@
 package gui.frontmenu;
 
+import gui.GUI;
+
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -162,10 +167,14 @@ public class PlayMenu implements ActionListener {
 		private String playerType = AI;
 		private JPanel panel;
 		private JComboBox<String> specificType;
+		private Class<GUI>[] guis;
+		private String[] guiNames;
 		
 		public playerInfo()
 		{
 			panel = new JPanel();
+			guis = GUIList.get();
+			guiNames = GUIList.getNames();
 			
 			JComboBox<String> type = new JComboBox<String>(new String[]{AI,HUMAN});
 			type.setSelectedIndex(0);
@@ -192,18 +201,60 @@ public class PlayMenu implements ActionListener {
 			}
 			else
 			{
-				specificType = new JComboBox<String>(new String[]{"human blah"});
+				specificType = new JComboBox<String>(guiNames);
 			}
 			
 			panel.add(specificType);
 			panel.revalidate();
+		}
+		
+		/**
+		 * Returns the selected GUI initialized with the given faction, if applicable
+		 * @param faction the faction the initialize
+		 * @return  the GUI initialized with the given faction, if applicable
+		 */
+		@SuppressWarnings("unchecked")
+		private GUI getGUI(Color faction)
+		{
+			if(playerType.equals(HUMAN))
+			{
+				@SuppressWarnings("rawtypes")
+				Class gui = guis[specificType.getSelectedIndex()];
+				@SuppressWarnings("rawtypes")
+				Constructor cntr = null;
+				try {
+					cntr = gui.getConstructor(new Class[]{Color.class});
+				} catch (NoSuchMethodException e1) {
+					e1.printStackTrace();
+				} catch (SecurityException e1) {
+					e1.printStackTrace();
+				}
+				
+				GUI playerGUI = null;
+				try {
+					playerGUI = (GUI) cntr.newInstance(faction);
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				
+				return playerGUI;
+			}
+			return null;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if(arg0.getActionCommand().equals(CHANGE_COMMAND))
 			{
-				JComboBox cb = (JComboBox) arg0.getSource();
+				@SuppressWarnings("unchecked")
+				JComboBox<String> cb = (JComboBox<String>)
+						arg0.getSource();
 				playerType = (String) cb.getSelectedItem();
 				updateTypeMenu();
 			}
