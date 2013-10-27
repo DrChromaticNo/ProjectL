@@ -50,12 +50,6 @@ public interface GUI {
 	public String makeChoice(String prompt, String[] choices);
 	
 	/**
-	 * Returns the name of this GUI
-	 * @return the name of this GUI
-	 */
-	public String getName();
-	
-	/**
 	 * Makes the GUI visible
 	 */
 	public void launch();

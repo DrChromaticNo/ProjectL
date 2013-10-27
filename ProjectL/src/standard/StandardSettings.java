@@ -1,6 +1,5 @@
 package standard;
 
-import test.CustomSettings;
 import main.GameSettings;
 
 /**

@@ -60,11 +60,5 @@ public interface Deck {
 	 */
 	public String abbreviatedName(Card card);
 	
-	/**
-	 * Returns the name of this deck
-	 * @return the name of this deck
-	 */
-	public String getName();
-	
 
 }

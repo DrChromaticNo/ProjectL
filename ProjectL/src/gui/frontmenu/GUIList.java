@@ -10,6 +10,7 @@ import test.TestGUI;
  */
 public class GUIList {
 
+	@SuppressWarnings("unchecked")
 	public static Class<GUI>[] get()
 	{
 		return new Class[]{TestGUI.class};

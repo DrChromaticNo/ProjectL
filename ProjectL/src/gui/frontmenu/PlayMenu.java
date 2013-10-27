@@ -6,13 +6,17 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,10 +24,14 @@ import javax.swing.SwingUtilities;
 
 import main.Board;
 import main.Game;
+import main.GameSettings;
 import main.GameState;
 
 import players.Faction;
 import players.Player;
+import score.ScoreCounter;
+import score.TreasureBag;
+import standard.CustomSettings;
 import standard.StandardScoreCounter;
 import standard.StandardSettings;
 import standard.StandardTreasureBag;
@@ -36,18 +44,33 @@ import ai.AI;
  * @author Chris
  *
  */
-public class PlayMenu implements ActionListener {
+public class PlayMenu implements ActionListener, PropertyChangeListener {
 	
 	private static final String PLAYER_NUM_COMMAND = "player number";
 	private static final String PLAY_COMMAND = "play";
 	private static final String MENU_COMMAND = "menu";
+	private static final String SETTINGS_COMMAND = "settings";
+	private static final String DEFAULT_COMMAND = "default";
 	private Class<Deck>[] decks;
+	private Class<TreasureBag>[] bags;
+	private Class<ScoreCounter>[] counters;
 	private JFrame frame;
+	private JFrame settingsFrame;
 	private int playerNumber;
 	private JPanel playerList;
 	private PlayerInfo[] infos;
 	private JComboBox<String> deckSelect;
+	private JComboBox<String> bagSelect;
+	private JComboBox<String> counterSelect;
+	private JFormattedTextField initalGold;
+	private JFormattedTextField initalCardDraw;
+	private JFormattedTextField cardDraw;
+	private JFormattedTextField weekNumber;
 	
+	
+	/**
+	 * Sets up and displays the play menu
+	 */
 	public void launch()
 	{
 		frame = new JFrame("Play");
@@ -59,8 +82,12 @@ public class PlayMenu implements ActionListener {
 		panel.add(new JLabel("Number of players:"));
 		panel.add(getPlayerNumberSelect());
 		
-		panel.add(new JLabel("Deck:"));
-		panel.add(getDeckSelect());
+		JButton settingsBtn = new JButton("Advanced Settings");
+		settingsBtn.setActionCommand(SETTINGS_COMMAND);
+		settingsBtn.addActionListener(this);
+		panel.add(settingsBtn);
+		
+		createSettingsPanel();
 		
 		JButton playBtn = new JButton("Play");
 		playBtn.setActionCommand(PLAY_COMMAND);
@@ -80,6 +107,124 @@ public class PlayMenu implements ActionListener {
 		
 		frame.pack();
 		frame.setVisible(true);
+	}
+	
+	/**
+	 * Creates the advanced settings panel
+	 */
+	private void createSettingsPanel()
+	{
+		settingsFrame = new JFrame("Advanced Settings");
+		settingsFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		
+		JPanel panel = new JPanel();
+		settingsFrame.add(panel);
+		
+		panel.add(getFieldsPanel());
+		
+		JPanel dropDown = new JPanel();
+		dropDown.setLayout(new BoxLayout(dropDown, BoxLayout.Y_AXIS));
+		
+		JPanel deckPanel = new JPanel();
+		deckPanel.add(new JLabel("Deck:"));
+		deckPanel.add(getDeckSelect());
+		dropDown.add(deckPanel);
+		
+		JPanel bagPanel = new JPanel();
+		bagPanel.add(new JLabel("Treasure Bag:"));
+		bagPanel.add(getBagSelect());
+		dropDown.add(bagPanel);
+		
+		JPanel scorePanel = new JPanel();
+		scorePanel.add(new JLabel("Score Counter:"));
+		scorePanel.add(getScoreSelect());
+		dropDown.add(scorePanel);
+		
+		panel.add(dropDown);
+		
+		JButton defaultSettings = new JButton("Reset to Default");
+		defaultSettings.setActionCommand(DEFAULT_COMMAND);
+		defaultSettings.addActionListener(this);
+		panel.add(defaultSettings);
+		
+		settingsFrame.pack();
+	}
+	
+	/**
+	 * Creates the panel that has all the optional fields to create a game setting object
+	 * @return
+	 */
+	private JPanel getFieldsPanel()
+	{
+		int cols = 5;
+		JPanel fieldsPanel = new JPanel();
+		fieldsPanel.setLayout(new BoxLayout(fieldsPanel, BoxLayout.Y_AXIS));
+		
+		JPanel initalGoldPanel = new JPanel();
+		initalGoldPanel.add(new JLabel("Initial Gold: "));
+		initalGold = new JFormattedTextField();
+		initalGold.setValue(new Integer(10));
+		initalGold.addPropertyChangeListener("value", this);
+		initalGold.setColumns(cols);
+		initalGoldPanel.add(initalGold);
+		fieldsPanel.add(initalGoldPanel);
+		
+		JPanel initalDrawPanel = new JPanel();
+		initalDrawPanel.add(new JLabel("Initial Number of Cards: "));
+		initalCardDraw = new JFormattedTextField();
+		initalCardDraw.setValue(new Integer(9));
+		initalCardDraw.addPropertyChangeListener("value", this);
+		initalCardDraw.setColumns(cols);
+		initalDrawPanel.add(initalCardDraw);
+		fieldsPanel.add(initalDrawPanel);
+		
+		JPanel drawPanel = new JPanel();
+		drawPanel.add(new JLabel("Card draw after the first week: "));
+		cardDraw = new JFormattedTextField();
+		cardDraw.setValue(new Integer(6));
+		cardDraw.addPropertyChangeListener("value", this);
+		cardDraw.setColumns(cols);
+		drawPanel.add(cardDraw);
+		fieldsPanel.add(drawPanel);
+		
+		JPanel weekPanel = new JPanel();
+		weekPanel.add(new JLabel("Number of weeks: "));
+		weekNumber = new JFormattedTextField();
+		weekNumber.setValue(new Integer(3));
+		weekNumber.addPropertyChangeListener("value", this);
+		weekNumber.setColumns(cols);
+		weekPanel.add(weekNumber);
+		fieldsPanel.add(weekPanel);
+		
+		return fieldsPanel;
+	}
+	
+	/**
+	 * Resets the advanced settings to their defaults
+	 */
+	private void defaultSettings()
+	{
+		initalGold.setValue(new Integer(10));
+		initalCardDraw.setValue(new Integer(9));
+		cardDraw.setValue(new Integer(6));
+		weekNumber.setValue(new Integer(3));
+		deckSelect.setSelectedIndex(0);
+		bagSelect.setSelectedIndex(0);
+		counterSelect.setSelectedIndex(0);
+	}
+	
+	/**
+	 * Based on the fields, create a game settings object
+	 * @return creates a game settings object based on the fields
+	 */
+	private GameSettings getSettings()
+	{
+		int gold = (int) initalGold.getValue();
+		int initalDraw = (int) initalCardDraw.getValue();
+		int draw = (int) cardDraw.getValue();
+		int weeks = (int) weekNumber.getValue();
+		
+		return new CustomSettings(gold, initalDraw, draw, weeks);
 	}
 	
 	/**
@@ -110,22 +255,7 @@ public class PlayMenu implements ActionListener {
 	private JComboBox<String> getDeckSelect()
 	{
 		decks = DeckList.get();
-		String[] deckNames = new String[decks.length];
-		int index = 0;
-		
-		for(Class<Deck> c : decks)
-		{
-			Deck d = null;
-			try {
-				d = (Deck) c.newInstance();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-			deckNames[index] = d.getName();
-			index++;
-		}
+		String[] deckNames = DeckList.getNames();
 		
 		deckSelect = new JComboBox<String>(deckNames);
 		deckSelect.setSelectedIndex(0);
@@ -133,6 +263,40 @@ public class PlayMenu implements ActionListener {
 		return deckSelect;
 	}
 	
+	/**
+	 * Gets the drop down select for the treasure bag
+	 * @return
+	 */
+	private JComboBox<String> getBagSelect()
+	{
+		bags = BagList.get();
+		String[] bagNames = BagList.getNames();
+		
+		bagSelect = new JComboBox<String>(bagNames);
+		bagSelect.setSelectedIndex(0);
+		
+		return bagSelect;
+	}
+	
+	/**
+	 * Gets the drop down select for the score counter
+	 * @return
+	 */
+	private JComboBox<String> getScoreSelect()
+	{
+		counters = ScoreList.get();
+		String[] counterNames = ScoreList.getNames();
+		
+		counterSelect = new JComboBox<String>(counterNames);
+		counterSelect.setSelectedIndex(0);
+		
+		return counterSelect;
+	}
+	
+	/**
+	 * Changes the amount of player infos that are displayed depending on the selected number
+	 * of players
+	 */
 	private void updatePlayerList()
 	{
 		playerList.removeAll();
@@ -195,26 +359,45 @@ public class PlayMenu implements ActionListener {
 		}
 		else if(e.getActionCommand().equals(MENU_COMMAND))
 		{
-			FrontMenu menu = new FrontMenu();
-			frame.dispose();
-			menu.launch();
+			Thread t = new Thread() {
+		        public void run () {
+						SwingUtilities.invokeLater(new Runnable() {
+
+						    public void run () {
+								FrontMenu menu = new FrontMenu();
+								frame.dispose();
+								menu.launch();
+						    }
+						});
+		        }
+		    };
+		    t.start();	
+		}
+		else if(e.getActionCommand().equals(SETTINGS_COMMAND))
+		{
+			Thread t = new Thread() {
+		        public void run () {
+						SwingUtilities.invokeLater(new Runnable() {
+
+						    public void run () {
+						    	settingsFrame.setVisible(true);
+						    }
+						});
+		        }
+		    };
+		    t.start();	
+		}
+		else if(e.getActionCommand().equals(DEFAULT_COMMAND))
+		{
+			defaultSettings();
 		}
 	}
 	
+	/**
+	 * Sets up and starts a game given the fields
+	 */
 	private void play()
 	{	
-		Thread t = new Thread() {
-	        public void run () {
-					SwingUtilities.invokeLater(new Runnable() {
-
-					    public void run () {
-					    	frame.dispose();
-					    }
-					});
-	        }
-	    };
-	    t.start();	
-	    
 		Player[] pList = new Player[playerNumber];
 		ArrayList<Color> factions = Faction.allFactions();
 		ArrayList<PlayerInfo> infoList = new ArrayList<PlayerInfo>(infos.length);
@@ -235,8 +418,10 @@ public class PlayMenu implements ActionListener {
 		
 		GameState temp = null;
 		try {
-			temp = new GameState(pList, new Board(), decks[deckSelect.getSelectedIndex()].newInstance(), 
-					new StandardTreasureBag(), new StandardScoreCounter());
+			temp = new GameState(pList, new Board(), 
+					decks[deckSelect.getSelectedIndex()].newInstance(), 
+					bags[bagSelect.getSelectedIndex()].newInstance(),
+					counters[counterSelect.getSelectedIndex()].newInstance());
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -247,10 +432,23 @@ public class PlayMenu implements ActionListener {
 		
 		Thread gameThread = new Thread() {
 	        public void run () {
-	        	Game.run(state, new StandardSettings());
+	        	Game.run(state, getSettings());
 	        }
 	    };
-	    gameThread.start();	
+	    gameThread.start();
+	    
+		Thread t = new Thread() {
+	        public void run () {
+					SwingUtilities.invokeLater(new Runnable() {
+
+					    public void run () {
+					    	frame.dispose();
+					    	settingsFrame.dispose();
+					    }
+					});
+	        }
+	    };
+	    t.start();	
 	}
 	
 	/**
@@ -468,6 +666,39 @@ public class PlayMenu implements ActionListener {
 				return new Player(faction, getAI());
 			}
 		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if(evt.getSource() == initalGold)
+		{
+			if((int)initalGold.getValue() < 0)
+			{
+				initalGold.setValue(new Integer(0));
+			}
+		}
+		else if(evt.getSource() == initalCardDraw)
+		{
+			if((int)initalCardDraw.getValue() < 0)
+			{
+				initalCardDraw.setValue(new Integer(0));
+			}
+		}
+		else if(evt.getSource() == cardDraw)
+		{
+			if((int)cardDraw.getValue() < 0)
+			{
+				cardDraw.setValue(new Integer(1));
+			}
+		}
+		else if(evt.getSource() == weekNumber)
+		{
+			if((int)weekNumber.getValue() < 1)
+			{
+				weekNumber.setValue(new Integer(1));
+			}
+		}
+		
 	}
 	
 }

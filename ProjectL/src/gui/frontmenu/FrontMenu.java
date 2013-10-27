@@ -131,7 +131,6 @@ public class FrontMenu implements ActionListener {
 			Thread t = new Thread() {
 		        public void run () {
 						SwingUtilities.invokeLater(new Runnable() {
-
 						    public void run () {
 						    	frame.dispose();
 						    }

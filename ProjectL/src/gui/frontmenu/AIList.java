@@ -6,6 +6,7 @@ import ai.SimpleAI;
 
 public class AIList {
 
+	@SuppressWarnings("unchecked")
 	public static Class<AI>[] get()
 	{
 		return new Class[]{SimpleAI.class, DepthEstAI.class};
@@ -16,6 +17,7 @@ public class AIList {
 		return new String[]{"Easy","Hard"};
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static Class[][] getParamTypes()
 	{
 		return new Class[][]{null, new Class[]{int.class, int.class}};

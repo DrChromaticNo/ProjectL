@@ -83,7 +83,6 @@ public class TestGUI implements GUI {
 	private static final int CARD_WIDTH = 40;
 	private static final int CARD_HEIGHT = 56;
 	private static final int ICON_CACHE_SIZE = 10;
-	private static final String GUI_NAME = "Standard GUI";
 	
 	public TestGUI(Color faction)
 	{
@@ -846,11 +845,6 @@ public class TestGUI implements GUI {
 		scanner.close();
 		
 		return panel;
-	}
-
-	@Override
-	public String getName() {
-		return GUI_NAME;
 	}
 
 }

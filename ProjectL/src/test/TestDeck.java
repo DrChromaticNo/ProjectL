@@ -32,7 +32,6 @@ public class TestDeck implements Deck {
 	private HashMap<Color, String> abbrvMap;
 	private HashMap<Integer, HashMap<Color, Integer>> silverMap;
 	private HashMap<Integer, Action> actionMap;
-	private static final String DECK_NAME = "Standard Deck";
 	
 	public TestDeck()
 	{
@@ -224,10 +223,5 @@ public class TestDeck implements Deck {
 			states = actionMap.get(card.getValue()).allActions(state, card, time);
 		}
 		return states;
-	}
-
-	@Override
-	public String getName() {
-		return DECK_NAME;
 	}
 }
