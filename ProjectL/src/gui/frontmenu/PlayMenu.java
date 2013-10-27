@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -15,7 +17,18 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import main.Board;
+import main.Game;
+import main.GameState;
+
+import players.Faction;
+import players.Player;
+import standard.StandardScoreCounter;
+import standard.StandardSettings;
+import standard.StandardTreasureBag;
+
 import cards.Deck;
+import ai.AI;
 
 /**
  * The screen to hold the assignments for the game's settings
@@ -31,6 +44,8 @@ public class PlayMenu implements ActionListener {
 	private JFrame frame;
 	private int playerNumber;
 	private JPanel playerList;
+	private PlayerInfo[] infos;
+	private JComboBox<String> deckSelect;
 	
 	public void launch()
 	{
@@ -55,6 +70,8 @@ public class PlayMenu implements ActionListener {
 		menuBtn.setActionCommand(MENU_COMMAND);
 		menuBtn.addActionListener(this);
 		panel.add(menuBtn);
+		
+		infos = new PlayerInfo[0];
 		
 		playerList = new JPanel();
 		updatePlayerList();
@@ -109,7 +126,7 @@ public class PlayMenu implements ActionListener {
 			index++;
 		}
 		
-		JComboBox<String> deckSelect = new JComboBox<String>(deckNames);
+		deckSelect = new JComboBox<String>(deckNames);
 		deckSelect.setSelectedIndex(0);
 		
 		return deckSelect;
@@ -119,12 +136,23 @@ public class PlayMenu implements ActionListener {
 	{
 		playerList.removeAll();
 		playerList.setLayout(new GridLayout(playerNumber,1));
+		PlayerInfo[] freshInfos = new PlayerInfo[playerNumber];
 		for(int i = 0; i < playerNumber; i++)
 		{
-			playerInfo info = new playerInfo();
-			playerList.add(info.getPanel());
+			if(i+1 > infos.length)
+			{
+				PlayerInfo info = new PlayerInfo();
+				playerList.add(info.getPanel());
+				freshInfos[i] = info;
+			}
+			else
+			{
+				playerList.add(infos[i].getPanel());
+				freshInfos[i] = infos[i];
+			}
 		}
 		
+		infos = freshInfos;
 		frame.pack();
 		frame.revalidate();
 	}
@@ -144,7 +172,7 @@ public class PlayMenu implements ActionListener {
 		}
 		else if(e.getActionCommand().equals(PLAY_COMMAND))
 		{
-			
+			play();
 		}
 		else if(e.getActionCommand().equals(MENU_COMMAND))
 		{
@@ -154,12 +182,58 @@ public class PlayMenu implements ActionListener {
 		}
 	}
 	
+	private void play()
+	{
+		Player[] pList = new Player[playerNumber];
+		ArrayList<Color> factions = Faction.allFactions();
+		ArrayList<PlayerInfo> infoList = new ArrayList<PlayerInfo>(infos.length);
+		for(PlayerInfo info : infos)
+		{
+			infoList.add(info);
+		}
+		
+		Random random = new Random();
+		int index = 0;
+		while(infoList.size() != 0)
+		{
+			int next = random.nextInt(infoList.size());
+			pList[index] = infoList.remove(next)
+					.getPlayer(chooseFaction(factions));
+			index++;
+		}
+		
+		GameState state = null;
+		try {
+			state = new GameState(pList, new Board(), decks[deckSelect.getSelectedIndex()].newInstance(), 
+					new StandardTreasureBag(), new StandardScoreCounter());
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		
+		frame.dispose();
+		Game.run(state, new StandardSettings());
+	}
+	
+	/**
+	 * Given an arraylist of factions, chooses a random one of them
+	 * @param factionList the list of remaining factions
+	 * @return a faction (color)
+	 */
+	private static Color chooseFaction(ArrayList<Color> factionList)
+	{
+		Random randomColor = new Random();
+		int choice = randomColor.nextInt(factionList.size());
+		return factionList.remove(choice);
+	}
+	
 	/**
 	 * This class represents one players worth of data- type and ai or gui
 	 * @author Chris
 	 *
 	 */
-	private class playerInfo implements ActionListener
+	private class PlayerInfo implements ActionListener
 	{
 		private static final String HUMAN = "Human";
 		private static final String AI = "AI";
@@ -167,14 +241,10 @@ public class PlayMenu implements ActionListener {
 		private String playerType = AI;
 		private JPanel panel;
 		private JComboBox<String> specificType;
-		private Class<GUI>[] guis;
-		private String[] guiNames;
 		
-		public playerInfo()
+		public PlayerInfo()
 		{
 			panel = new JPanel();
-			guis = GUIList.get();
-			guiNames = GUIList.getNames();
 			
 			JComboBox<String> type = new JComboBox<String>(new String[]{AI,HUMAN});
 			type.setSelectedIndex(0);
@@ -197,11 +267,11 @@ public class PlayMenu implements ActionListener {
 			
 			if(playerType.equals(AI))
 			{
-				specificType = new JComboBox<String>(new String[]{"robot blah"});
+				specificType = new JComboBox<String>(AIList.getNames());
 			}
 			else
 			{
-				specificType = new JComboBox<String>(guiNames);
+				specificType = new JComboBox<String>(GUIList.getNames());
 			}
 			
 			panel.add(specificType);
@@ -219,7 +289,7 @@ public class PlayMenu implements ActionListener {
 			if(playerType.equals(HUMAN))
 			{
 				@SuppressWarnings("rawtypes")
-				Class gui = guis[specificType.getSelectedIndex()];
+				Class gui = GUIList.get()[specificType.getSelectedIndex()];
 				@SuppressWarnings("rawtypes")
 				Constructor cntr = null;
 				try {
@@ -247,6 +317,63 @@ public class PlayMenu implements ActionListener {
 			}
 			return null;
 		}
+		
+		/**
+		 * Returns the selected AI, if applicable
+		 * @return  the AI, if applicable
+		 */
+		@SuppressWarnings("unchecked")
+		private AI getAI()
+		{
+			if(playerType.equals(AI))
+			{
+				int index = specificType.getSelectedIndex();
+				
+				@SuppressWarnings("rawtypes")
+				Class ai = AIList.get()[index];
+				
+				@SuppressWarnings("rawtypes")
+				Constructor cntr = null;
+				AI cpuAI = null;
+				
+				if(AIList.getParamTypes()[index] != null)
+				{
+					try {
+						cntr = ai.getConstructor(AIList.getParamTypes()[index]);
+					} catch (NoSuchMethodException e) {
+						e.printStackTrace();
+					} catch (SecurityException e) {
+						e.printStackTrace();
+					}
+					
+					try {
+						cpuAI = (ai.AI) cntr.newInstance(AIList.getParams()[index]);
+					} catch (InstantiationException e) {
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (IllegalArgumentException e) {
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					}
+				}
+				else
+				{
+					try {
+						cpuAI = (ai.AI) ai.newInstance();
+					} catch (InstantiationException e) {
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				return cpuAI;
+			}
+			
+			return null;
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -267,6 +394,23 @@ public class PlayMenu implements ActionListener {
 		public JPanel getPanel()
 		{
 			return panel;
+		}
+		
+		/**
+		 * Gets the player with the given info
+		 * @param faction the faction of the player
+		 * @return the player object with the select GUI or AI
+		 */
+		public Player getPlayer(Color faction)
+		{
+			if(playerType.equals(HUMAN))
+			{
+				return new Player(faction, getGUI(faction));
+			}
+			else
+			{
+				return new Player(faction, getAI());
+			}
 		}
 	}
 	
