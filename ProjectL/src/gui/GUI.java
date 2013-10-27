@@ -55,4 +55,9 @@ public interface GUI {
 	 */
 	public String getName();
 	
+	/**
+	 * Makes the GUI visible
+	 */
+	public void launch();
+	
 }

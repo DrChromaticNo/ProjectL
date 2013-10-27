@@ -13,6 +13,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 public class FrontMenu implements ActionListener {
 	
@@ -126,7 +127,18 @@ public class FrontMenu implements ActionListener {
 		{
 			PlayMenu play = new PlayMenu();
 			play.launch();
-			frame.dispose();
+			
+			Thread t = new Thread() {
+		        public void run () {
+						SwingUtilities.invokeLater(new Runnable() {
+
+						    public void run () {
+						    	frame.dispose();
+						    }
+						});
+		        }
+		    };
+		    t.start();	
 		}
 	}
 	

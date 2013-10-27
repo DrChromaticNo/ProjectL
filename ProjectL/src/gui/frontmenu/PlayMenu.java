@@ -16,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import main.Board;
 import main.Game;
@@ -153,8 +154,26 @@ public class PlayMenu implements ActionListener {
 		}
 		
 		infos = freshInfos;
-		frame.pack();
-		frame.revalidate();
+		
+		Thread t = new Thread() {
+
+	        public void run () {
+					try {
+						SwingUtilities.invokeAndWait(new Runnable() {
+
+						    public void run () {
+								frame.pack();
+								frame.revalidate();
+						    }
+						});
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					} 
+	        }
+	    };
+	    t.start();
 	}
 
 	@Override
@@ -171,7 +190,7 @@ public class PlayMenu implements ActionListener {
 			updatePlayerList();
 		}
 		else if(e.getActionCommand().equals(PLAY_COMMAND))
-		{
+		{	
 			play();
 		}
 		else if(e.getActionCommand().equals(MENU_COMMAND))
@@ -183,7 +202,19 @@ public class PlayMenu implements ActionListener {
 	}
 	
 	private void play()
-	{
+	{	
+		Thread t = new Thread() {
+	        public void run () {
+					SwingUtilities.invokeLater(new Runnable() {
+
+					    public void run () {
+					    	frame.dispose();
+					    }
+					});
+	        }
+	    };
+	    t.start();	
+	    
 		Player[] pList = new Player[playerNumber];
 		ArrayList<Color> factions = Faction.allFactions();
 		ArrayList<PlayerInfo> infoList = new ArrayList<PlayerInfo>(infos.length);
@@ -202,9 +233,9 @@ public class PlayMenu implements ActionListener {
 			index++;
 		}
 		
-		GameState state = null;
+		GameState temp = null;
 		try {
-			state = new GameState(pList, new Board(), decks[deckSelect.getSelectedIndex()].newInstance(), 
+			temp = new GameState(pList, new Board(), decks[deckSelect.getSelectedIndex()].newInstance(), 
 					new StandardTreasureBag(), new StandardScoreCounter());
 		} catch (InstantiationException e) {
 			e.printStackTrace();
@@ -212,8 +243,14 @@ public class PlayMenu implements ActionListener {
 			e.printStackTrace();
 		}
 		
-		frame.dispose();
-		Game.run(state, new StandardSettings());
+		final GameState state = temp;
+		
+		Thread gameThread = new Thread() {
+	        public void run () {
+	        	Game.run(state, new StandardSettings());
+	        }
+	    };
+	    gameThread.start();	
 	}
 	
 	/**
@@ -275,7 +312,26 @@ public class PlayMenu implements ActionListener {
 			}
 			
 			panel.add(specificType);
-			panel.revalidate();
+			
+			Thread t = new Thread() {
+
+		        public void run () {
+						try {
+							SwingUtilities.invokeAndWait(new Runnable() {
+
+							    public void run () {
+									frame.revalidate();
+									frame.pack();
+							    }
+							});
+						} catch (InvocationTargetException e) {
+							e.printStackTrace();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						} 
+		        }
+		    };
+		    t.start();
 		}
 		
 		/**
@@ -287,7 +343,7 @@ public class PlayMenu implements ActionListener {
 		private GUI getGUI(Color faction)
 		{
 			if(playerType.equals(HUMAN))
-			{
+			{	
 				@SuppressWarnings("rawtypes")
 				Class gui = GUIList.get()[specificType.getSelectedIndex()];
 				@SuppressWarnings("rawtypes")
@@ -401,11 +457,11 @@ public class PlayMenu implements ActionListener {
 		 * @param faction the faction of the player
 		 * @return the player object with the select GUI or AI
 		 */
-		public Player getPlayer(Color faction)
-		{
+		public Player getPlayer(final Color faction)
+		{	
 			if(playerType.equals(HUMAN))
-			{
-				return new Player(faction, getGUI(faction));
+			{					    
+			    return new Player(faction, getGUI(faction));
 			}
 			else
 			{

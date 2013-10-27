@@ -108,9 +108,7 @@ public class TestGUI implements GUI {
 		playerScreen.add(opponentPanel);
 		playerScreen.add(gamePanel);
 		playerScreen.add(playerPanel);
-		
-		playerScreen.setVisible(true);
-		
+	    
 		//Next, we initialize the log functionality
 		
 		logFrame = new JFrame("Log");
@@ -130,6 +128,22 @@ public class TestGUI implements GUI {
 		logFrame.add(logScrollPane, BorderLayout.CENTER);
 		logScrollPane.setVisible(true);
 		logScrollPane.setPreferredSize(new Dimension(LOG_WIDTH,GUI_HEIGHT));
+		
+	}
+	
+	public void launch()
+	{
+		Thread t = new Thread() {
+	        public void run () {
+					SwingUtilities.invokeLater(new Runnable() {
+
+					    public void run () {
+							playerScreen.setVisible(true);
+					    }
+					});
+	        }
+	    };
+	    t.start();	
 	}
 	
 	/**

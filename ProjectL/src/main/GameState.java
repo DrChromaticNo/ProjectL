@@ -165,6 +165,20 @@ public class GameState {
 	}
 	
 	/**
+	 * Tells the gamestate to launch all the GUIS attached to its various players
+	 */
+	public void launchGUIs()
+	{
+		for(Player p : pList)
+		{
+			if(!p.checkCPU())
+			{
+				p.getGUI().launch();
+			}
+		}
+	}
+	
+	/**
 	 * Sends the given message to all the GUIs
 	 * @param message the message to display in all the GUIs
 	 */

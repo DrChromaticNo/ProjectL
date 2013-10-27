@@ -104,6 +104,9 @@ public class Game {
 		//Setup global game settings
 		settings = gSettings;
 		
+		//Launch the GUIs
+		state.launchGUIs();
+		
 		//get the list of all the drawable cards
 		ArrayList<Integer> availibleCards = state.getDeck().allCards();
 		
