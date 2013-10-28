@@ -28,12 +28,6 @@ public class FrontMenu implements ActionListener {
 	private static final String PLAY_ACTION = "play";
 	private JFrame frame;
 	
-	public static void main(String[] args)
-	{
-		FrontMenu menu = new FrontMenu();
-		menu.launch();
-	}
-	
 	/**
 	 * Launches the front menu for the game
 	 */

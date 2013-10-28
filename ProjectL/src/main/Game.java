@@ -15,21 +15,11 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import ai.DepthEstAI;
-
 import players.Faction;
 import players.Player;
 
-import score.ScoreCounter;
 import score.Treasure;
-import score.TreasureBag;
-import standard.StandardScoreCounter;
-import standard.StandardSettings;
-import standard.StandardTreasureBag;
-import test.TestDeck;
-import test.TestGUI;
 import cards.Card;
-import cards.Deck;
 
 public class Game {
 
@@ -40,59 +30,9 @@ public class Game {
 	 */
 	public static void main(String[] args) {
 		
-		//create deck and treasurebag and score class to use with this game
-		Deck gameDeck = new TestDeck();
-		
-		TreasureBag gameBag = new StandardTreasureBag();
-		
-		ScoreCounter score = new StandardScoreCounter();
-		
-		int numPlayers = 4; //assume/require > 1, < 7
-		Player[] playerList = new Player[numPlayers];
-		
-		ArrayList<Color> factionList = Faction.allFactions();
-		
-		if(factionList.size() < numPlayers)
-		{
-			throw new RuntimeException("there's too many players and not enough factions");
-		}
-		
-		//randomly assign each player a faction
-	/*	for(int i = 0; i < numPlayers; i++)
-		{
-			playerList[i] = new Player(chooseFaction(factionList));
-		}
-	*/
-		
-		playerList[0] = new Player(chooseFaction(factionList), new DepthEstAI(2,1));
-		playerList[2] = new Player(chooseFaction(factionList), new DepthEstAI(2,1));
-		playerList[3] = new Player(chooseFaction(factionList), new DepthEstAI(2,1));
-		
-		Color faction = chooseFaction(factionList);
-		
-		playerList[1] = new Player(faction, new TestGUI(faction));
-		
-		//now, create the gamestate
-		GameState state = new GameState(playerList,new Board(), gameDeck, gameBag, score);
-		
-		state.updateGUIs();
-		
-		state.messageAllGUIs("The game is starting!\nLook for a log of game events here");
-		
-		run(state, new StandardSettings());
+		FrontMenu menu = new FrontMenu();
+		menu.launch();
 
-	}
-	
-	/**
-	 * Given an arraylist of factions, chooses a random one of them
-	 * @param factionList the list of remaining factions
-	 * @return a faction (color)
-	 */
-	private static Color chooseFaction(ArrayList<Color> factionList)
-	{
-		Random randomColor = new Random();
-		int choice = randomColor.nextInt(factionList.size());
-		return factionList.remove(choice);
 	}
 	
 	/**
@@ -106,6 +46,9 @@ public class Game {
 		
 		//Launch the GUIs
 		state.launchGUIs();
+		
+		//Hello!
+		state.messageAllGUIs("The game is starting!\nLook for a log of game events here");
 		
 		//get the list of all the drawable cards
 		ArrayList<Integer> availibleCards = state.getDeck().allCards();
