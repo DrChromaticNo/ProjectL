@@ -3,6 +3,7 @@ package gui.frontmenu;
 import gui.GUI;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -32,9 +34,6 @@ import players.Player;
 import score.ScoreCounter;
 import score.TreasureBag;
 import standard.CustomSettings;
-import standard.StandardScoreCounter;
-import standard.StandardSettings;
-import standard.StandardTreasureBag;
 
 import cards.Deck;
 import ai.AI;
@@ -51,6 +50,8 @@ public class PlayMenu implements ActionListener, PropertyChangeListener {
 	private static final String MENU_COMMAND = "menu";
 	private static final String SETTINGS_COMMAND = "settings";
 	private static final String DEFAULT_COMMAND = "default";
+	private static final int BUTTON_X = 150;
+	private static final int BUTTON_Y = 25;
 	private Class<Deck>[] decks;
 	private Class<TreasureBag>[] bags;
 	private Class<ScoreCounter>[] counters;
@@ -76,28 +77,49 @@ public class PlayMenu implements ActionListener, PropertyChangeListener {
 		frame = new JFrame("Play");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
+		JPanel leftSide = new JPanel();
+		leftSide.setLayout(new BoxLayout(leftSide, BoxLayout.Y_AXIS));
 		
 		frame.add(panel);
+		panel.add(leftSide);
 		
-		panel.add(new JLabel("Number of players:"));
-		panel.add(getPlayerNumberSelect());
+		//We add the elements to the left side of the menu
+		
+		leftSide.add(new JLabel("Number of players:"));
+		leftSide.add(getPlayerNumberSelect());
+		
+		Dimension buttonDim = new Dimension(BUTTON_X, BUTTON_Y);
+		
+		leftSide.add(Box.createRigidArea(new Dimension(0,25)));
 		
 		JButton settingsBtn = new JButton("Advanced Settings");
 		settingsBtn.setActionCommand(SETTINGS_COMMAND);
 		settingsBtn.addActionListener(this);
-		panel.add(settingsBtn);
+		settingsBtn.setPreferredSize(buttonDim);
+		settingsBtn.setMaximumSize(buttonDim);
+		leftSide.add(settingsBtn);
+		
+		leftSide.add(Box.createRigidArea(new Dimension(0,25)));
 		
 		createSettingsPanel();
-		
-		JButton playBtn = new JButton("Play");
-		playBtn.setActionCommand(PLAY_COMMAND);
-		playBtn.addActionListener(this);
-		panel.add(playBtn);
 		
 		JButton menuBtn = new JButton("Main Menu");
 		menuBtn.setActionCommand(MENU_COMMAND);
 		menuBtn.addActionListener(this);
-		panel.add(menuBtn);
+		menuBtn.setPreferredSize(buttonDim);
+		menuBtn.setMaximumSize(buttonDim);
+		leftSide.add(menuBtn);
+		
+		leftSide.add(Box.createRigidArea(new Dimension(0,25)));
+		
+		JButton playBtn = new JButton("Play");
+		playBtn.setActionCommand(PLAY_COMMAND);
+		playBtn.addActionListener(this);
+		playBtn.setPreferredSize(buttonDim);
+		playBtn.setMaximumSize(buttonDim);
+		leftSide.add(playBtn);
+		
+		//We add the panel for the right side of the play screen
 		
 		infos = new PlayerInfo[0];
 		
