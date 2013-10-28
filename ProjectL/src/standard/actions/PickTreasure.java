@@ -9,7 +9,6 @@ import players.Player;
 import main.GameState;
 import score.Loot;
 import score.Treasure;
-import cards.Action;
 import cards.Card;
 
 /**
@@ -17,9 +16,8 @@ import cards.Card;
  * @author Chris
  *
  */
-public class PickTreasure implements Action {
+public class PickTreasure {
 
-	@Override
 	public GameState doAction(GameState state, Card card, int time) 
 	{
 		Color faction = card.getFaction();
@@ -269,13 +267,6 @@ public class PickTreasure implements Action {
 		return choices;
 	}
 
-	@Override
-	public int score(GameState state, Card card) {
-		return 0; //this should never get called, unless some card maps directly to this action
-		//(which would be theoretically possible but weird)
-	}
-
-	@Override
 	public GameState[] allActions(GameState state, Card card, int time) {
 		
 		return state.getCounter().rankTreasures(allActionsWithTreasures(state, card, time), card);
@@ -370,15 +361,5 @@ public class PickTreasure implements Action {
 		}
 		
 		return choiceSet;
-	}
-
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public String getDesc() {
-		return "";			
 	}
 }
