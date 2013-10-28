@@ -60,6 +60,10 @@ public class DescServer {
 			"\nNight: N/A" +
 			"\nEnd: N/A\n";
 	
+	final static String VOODOO_WITCH = "Day: Gain 2 gold for every card in your discard" +
+			"\nDusk: Choose 1 treasure" + 
+			"\nNight: N/A" +
+			"\nEnd: N/A\n";
 	
 	/**
 	 * Returns the description for a given card value
@@ -79,6 +83,7 @@ public class DescServer {
 			case 8: return WAITRESS;
 			case 9: return CARPENTER;
 			case 10: return FRENCH_OFFICER;
+			case 11: return VOODOO_WITCH;
 			}
 			return "";
 	}
@@ -101,6 +106,7 @@ public class DescServer {
 		case 8: return "Waitress";
 		case 9: return "Carpenter";
 		case 10: return "French Officer";
+		case 11: return "Voodoo Witch";
 		}
 		return "";
 	}

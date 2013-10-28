@@ -8,16 +8,7 @@ import java.util.HashMap;
 import players.Faction;
 
 import main.GameState;
-import standard.actions.Barkeep;
-import standard.actions.Beggar;
-import standard.actions.CabinBoy;
-import standard.actions.Carpenter;
-import standard.actions.FrenchOfficer;
-import standard.actions.Monkey;
-import standard.actions.Parrot;
-import standard.actions.Preacher;
-import standard.actions.Recruiter;
-import standard.actions.Waitress;
+import standard.actions.*;
 import cards.Action;
 import cards.Card;
 import cards.Deck;
@@ -94,7 +85,11 @@ public class TestDeck implements Deck {
 		{
 			cards.add(new Integer(9));
 		}
-		for(int i = 27; i < 30; i++)
+		for(int i = 27; i < 29; i++)
+		{
+			cards.add(new Integer(11));
+		}
+		for(int i = 29; i < 30; i++)
 		{
 			cards.add(new Integer(10));
 		}
@@ -209,6 +204,7 @@ public class TestDeck implements Deck {
 		map.put(8, new Waitress());
 		map.put(9, new Carpenter());
 		map.put(10, new FrenchOfficer());
+		map.put(11, new VoodooWitch());
 		
 		return map;
 	}

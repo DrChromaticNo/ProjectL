@@ -48,12 +48,26 @@ public class StandardEstimator implements Estimator {
 				break;
 			case 10: estimate = frenchofficerEst(state,card);
 				break;
+			case 11: estimate = voodoowitchEst(state,card);
 			}
 		}
 		
 		return estimate;
 	}
 	
+	/**
+	 * The estimate for the voodoo witch card
+	 * @param state state the voodoo witch is being played in
+	 * @param card the card being played
+	 * @return the estimate for the voodoo witch
+	 */
+	private int voodoowitchEst(GameState state, Card card) {
+		
+		//2 times the cards in the discard
+		return state.getPlayer(card.getFaction()).getDiscard().size()*2;
+		
+	}
+
 	/**
 	 * The estimate for the french officer card
 	 * @param state state the french officer is being played in
