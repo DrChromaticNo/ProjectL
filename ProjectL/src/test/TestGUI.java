@@ -38,7 +38,6 @@ import players.Faction;
 import players.Player;
 import score.Loot;
 import score.Treasure;
-import standard.DescServer;
 import standard.IconServer;
 import utility.Cache;
 
@@ -66,8 +65,6 @@ public class TestGUI implements GUI {
 	private GameState latest;
 	//The object to serve the various icons
 	private IconServer iServer;
-	//The object to serve the various card descriptions
-	private DescServer dServer;
 	//A map to help connect treasures to icons that represent them
 	private HashMap<String, Icon> treasureIconMap;
 	//The component that spawns all user prompt dialogs
@@ -92,7 +89,6 @@ public class TestGUI implements GUI {
 		//Handling the main player GUI
 		this.faction = faction;
 		iServer = new IconServer();
-		dServer = new DescServer();
 		treasureIconMap = createTreasureIconMap();
 		
 		playerScreen = new JFrame("Project L");
@@ -560,8 +556,8 @@ public class TestGUI implements GUI {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				
-				JFrame frame = new JFrame(dServer
-						.getCardName(c.getValue()));
+				JFrame frame = new JFrame(latest
+						.getDeck().getCardName(c));
 				
 				JPanel image = new JPanel();
 				frame.add(image);
@@ -826,7 +822,7 @@ public class TestGUI implements GUI {
 		int silver = latest.getDeck()
 			.getSilverNum(card.getFaction(), card.getValue());
 		
-		String desc = dServer.getCardDesc(card.getValue());
+		String desc = latest.getDeck().getCardDesc(card);
 		
 		String valueInfo = "Value: " + card.getValue();
 		

@@ -60,5 +60,19 @@ public interface Deck {
 	 */
 	public String abbreviatedName(Card card);
 	
+	/**
+	 * Gives the full form of the card's name
+	 * @param card the card to get the name of
+	 * @return the full name of the card
+	 */
+	public String getCardName(Card card);
+	
+	/**
+	 * Gives the description of the card
+	 * @param card the card to get the description of
+	 * @return the description of the card
+	 */
+	public String getCardDesc(Card card);
+	
 
 }

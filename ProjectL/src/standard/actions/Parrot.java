@@ -160,4 +160,18 @@ public class Parrot implements Action {
 		return 0;
 	}
 
+	@Override
+	public String getName() {
+		return "Parrot";
+	}
+
+	@Override
+	public String getDesc() {
+		return "Day: The parrot card is discarded " +
+		"and replaced by a card from your hand (in the appropriate place)"+
+		"\nDusk: N/A" +
+		"\nNight: N/A" +
+	 	"\nEnd: N/A\n";
+	}
+
 }

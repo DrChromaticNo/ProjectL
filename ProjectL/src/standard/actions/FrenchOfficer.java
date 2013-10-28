@@ -105,4 +105,17 @@ public class FrenchOfficer implements Action {
 		return 0;
 	}
 
+	@Override
+	public String getName() {
+		return "French Officer";
+	}
+
+	@Override
+	public String getDesc() {
+		return "Day: Gain 5 gold if you have less than 9 gold" +
+		"\nDusk: Choose 1 treasure" + 
+		"\nNight: N/A" +
+		"\nEnd: N/A\n";
+	}
+
 }

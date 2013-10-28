@@ -40,4 +40,17 @@ public class CabinBoy implements Action {
 		return 0;
 	}
 
+	@Override
+	public String getName() {
+		return "Cabin Boy";
+	}
+
+	@Override
+	public String getDesc() {
+		return "Day: N/A" +
+		"\nDusk: N/A" + 
+		"\nNight: N/A" +
+		"\nEnd: N/A\n";
+	}
+
 }

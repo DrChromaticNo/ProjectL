@@ -34,5 +34,17 @@ public interface Action {
 	 * @return the score of the card
 	 */
 	public int score(GameState state, Card card);
+	
+	/**
+	 * Return the name of the card that has this action 
+	 * @return the name of the card that has this action 
+	 */
+	public String getName();
+	
+	/**
+	 * Return the description of this action
+	 * @return the description of this action
+	 */
+	public String getDesc();
 
 }

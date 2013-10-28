@@ -150,4 +150,17 @@ public class Waitress implements Action {
 		return 0;
 	}
 
+	@Override
+	public String getName() {
+		return "Waitress";
+	}
+
+	@Override
+	public String getDesc() {
+		return "Day: N/A" +
+		"\nDusk: Choose 1 treasure" + 
+		"\nNight: If you have at least one treasure map, you can sell it for 3 gold" +
+		"\nEnd: N/A\n";
+	}
+
 }

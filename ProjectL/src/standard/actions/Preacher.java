@@ -181,4 +181,17 @@ public class Preacher implements Action {
 		return 5;
 	}
 
+	@Override
+	public String getName() {
+		return "Preacher";
+	}
+
+	@Override
+	public String getDesc() {
+		return "Day: Lose all treasure except for 1" +
+		"\nDusk: Choose 1 treasure" + 
+		"\nNight: N/A" +
+		"\nEnd: Score 5 gold\n";
+	}
+
 }

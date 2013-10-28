@@ -144,4 +144,17 @@ public class Recruiter implements Action {
 		return 0;
 	}
 
+	@Override
+	public String getName() {
+		return "Recruiter";
+	}
+
+	@Override
+	public String getDesc() {
+		return "Day: Recruit 1 card from the den to your hand" +
+		"\nDusk: Choose 1 treasure" + 
+		"\nNight: N/A" +
+		"\nEnd: N/A\n";
+	}
+
 }

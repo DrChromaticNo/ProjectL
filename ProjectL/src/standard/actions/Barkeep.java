@@ -73,4 +73,17 @@ public class Barkeep implements Action {
 		return 0;
 	}
 
+	@Override
+	public String getName() {
+		return "Barkeep";
+	}
+
+	@Override
+	public String getDesc() {
+		return "Day: N/A" +
+				"\nDusk: Choose 1 treasure" + 
+				"\nNight: Gain 1 gold" +
+				"\nEnd: N/A\n";
+	}
+
 }

@@ -126,4 +126,18 @@ public class Monkey implements Action {
 		return 0;
 	}
 
+	@Override
+	public String getName() {
+		return "Monkey";
+	}
+
+	@Override
+	public String getDesc() {
+		return "Day: Transfer all cursed relics from your den to the " +
+		"den of the player to your left" +
+		"\nDusk: Choose 1 treasure" + 
+		"\nNight: N/A" +
+		"\nEnd: N/A\n";
+	}
+
 }

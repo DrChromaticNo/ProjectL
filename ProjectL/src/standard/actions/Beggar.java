@@ -130,4 +130,18 @@ public class Beggar implements Action {
 		return 0;
 	}
 
+	@Override
+	public String getName() {
+		return "Beggar";
+	}
+
+	@Override
+	public String getDesc() {
+		return "Day: The player with the card of highest " +
+		"rank on the ship gives you 3 gold" +
+		"\nDusk: Choose 1 treasure" + 
+		"\nNight: N/A" +
+		"\nEnd: N/A\n";
+	}
+
 }

@@ -220,4 +220,20 @@ public class TestDeck implements Deck {
 		}
 		return states;
 	}
+	
+
+	@Override
+	public String getCardName(Card card)
+	{
+		return actionMap.get(card.getValue()).getName();
+	}
+	
+
+	@Override
+	public String getCardDesc(Card card)
+	{
+		return actionMap.get(card.getValue()).getDesc();
+	}
+	
+	
 }

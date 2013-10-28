@@ -89,4 +89,17 @@ public class Carpenter implements Action {
 		return states;
 	}
 
+	@Override
+	public String getName() {
+		return "Carpenter";
+	}
+
+	@Override
+	public String getDesc() {
+		return "Day: Lose half your gold" +
+		"\nDusk: Choose 1 treasure" + 
+		"\nNight: N/A" +
+		"\nEnd: Score 10 gold\n";
+	}
+
 }

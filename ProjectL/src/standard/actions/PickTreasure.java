@@ -371,4 +371,14 @@ public class PickTreasure implements Action {
 		
 		return choiceSet;
 	}
+
+	@Override
+	public String getName() {
+		return "";
+	}
+
+	@Override
+	public String getDesc() {
+		return "";			
+	}
 }

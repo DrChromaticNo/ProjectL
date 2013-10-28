@@ -95,5 +95,18 @@ public class VoodooWitch implements Action {
 	public int score(GameState state, Card card) {
 		return 0;
 	}
+
+	@Override
+	public String getName() {
+		return "Voodoo Witch";
+	}
+
+	@Override
+	public String getDesc() {
+		return "Day: Gain 2 gold for every card in your discard" +
+				"\nDusk: Choose 1 treasure" + 
+				"\nNight: N/A" +
+				"\nEnd: N/A\n";
+	}
 	
 }
