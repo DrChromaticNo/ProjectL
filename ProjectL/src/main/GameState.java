@@ -28,6 +28,7 @@ public class GameState {
 	private ScoreCounter counter;
 	private boolean drawCards; //Represents the set-up before the game starts proper
 	//false if not yet started, true once everything is set up
+	private static final int SLEEP_TIME = 1000;
 	
 	public GameState(Player[] playerlist, Board board, Deck deck, 
 			TreasureBag bag, ScoreCounter counter)
@@ -155,12 +156,32 @@ public class GameState {
 	 */
 	public void updateGUIs()
 	{
+		boolean human = false;
 		for(Player p : pList)
 		{
 			if(!p.checkCPU())
 			{
+				human = true;
 				p.getGUI().update(this);
 			}
+		}
+		
+		if(human)
+		{
+			sleep();
+		}
+	}
+	
+	/**
+	 * Helper method to cause the GUI updates to not happen super quickly
+	 */
+	private static void sleep()
+	{
+		try {
+			Thread.sleep(SLEEP_TIME);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	

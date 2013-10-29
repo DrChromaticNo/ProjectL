@@ -22,8 +22,6 @@ import score.Treasure;
 import cards.Card;
 
 public class Game {
-
-	private static final int SLEEP_TIME = 1000;
 	private static GameSettings settings;
 	
 	/**
@@ -72,7 +70,6 @@ public class Game {
 			}
 			
 			state.updateGUIs();
-			sleep();
 			
 			state = weekLoop(state);
 		}
@@ -256,14 +253,12 @@ public class Game {
 				state.messageAllGUIs("~DAY PHASE (" + (day+1) + ")~");
 				state.setTime(Time.DAY);
 				state.updateGUIs();
-				sleep();
 			}
 			
 			while(state.getTime() != Time.PICK_CARDS)
 			{
 				state = oneAction(state);
 				state.updateGUIs();
-				sleep();
 			}
 		}
 		
@@ -393,7 +388,6 @@ public class Game {
 			p.getLoot().emptyBag();
 		}
 		state.updateGUIs();
-		sleep();
 	}
 	
 	/**
@@ -421,18 +415,4 @@ public class Game {
 			state.getBoard().setLoot(day, Treasure.getLoot());
 		}
 	}
-	
-	/**
-	 * Helper method to cause the GUI updates to not happen super quickly
-	 */
-	private static void sleep()
-	{
-		try {
-			Thread.sleep(SLEEP_TIME);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 }
