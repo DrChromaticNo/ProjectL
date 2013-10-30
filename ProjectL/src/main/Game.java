@@ -333,7 +333,7 @@ public class Game {
 			else
 			{
 				Card actionCard = deck[index];
-				state = deck[index].eveningAction(new GameState(state));
+				state = deck[index].duskAction(new GameState(state));
 				
 				//Check to make sure the card is still in play
 				if(state.getBoard().getDeck().length > index 

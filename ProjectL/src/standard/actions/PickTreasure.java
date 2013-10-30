@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import ai.DepthEstAI;
+
 import players.Faction;
 import players.Player;
 import main.GameState;
@@ -268,8 +270,16 @@ public class PickTreasure {
 	}
 
 	public GameState[] allActions(GameState state, Card card, int time) {
-		
-		return state.getCounter().rankTreasures(allActionsWithTreasures(state, card, time), card);
+		if(state.getPlayer(card.getFaction()).getAI() instanceof DepthEstAI)
+		{
+			//Temporary fix until I figure out a way to rank the treasures inside of the AI itself
+			DepthEstAI ai = (DepthEstAI) state.getPlayer(card.getFaction()).getAI();
+			return ai.getEstimator().rankTreasures(allActionsWithTreasures(state, card, time), card);
+		}
+		else
+		{
+			return allActionsWithTreasures(state, card, time).keySet().toArray(new GameState[0]);
+		}
 	}
 	
 	/**

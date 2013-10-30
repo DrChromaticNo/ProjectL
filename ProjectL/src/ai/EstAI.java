@@ -15,10 +15,12 @@ import cards.Card;
 public class EstAI extends FullAI {
 
 	private int cardBreadth;
+	private Estimator est;
 	
-	public EstAI(int cardBreadth)
+	public EstAI(int cardBreadth, Estimator est)
 	{
 		this.cardBreadth = cardBreadth;
+		this.est = est;
 	}
 	
 	/**
@@ -53,7 +55,7 @@ public class EstAI extends FullAI {
 		{
 			//otherwise, we iterate through all the possibilities of a given player's card choices
 			Color pColor = playerList.remove(0);
-			Card[] cardList = state.getCounter()
+			Card[] cardList = est
 					.rankCards(state, state.getPlayer(pColor).getHand().toArray(new Card[0]));
 			
 			if(faction.equals(pColor))

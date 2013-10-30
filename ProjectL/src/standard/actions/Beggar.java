@@ -21,6 +21,8 @@ import cards.Card;
  */
 public class Beggar implements Action {
 
+	public static final String NAME = "Beggar";
+	
 	@Override
 	public GameState doAction(GameState state, Card card, int time) {
 		if(time == Time.DAY)
@@ -132,7 +134,7 @@ public class Beggar implements Action {
 
 	@Override
 	public String getName() {
-		return "Beggar";
+		return NAME;
 	}
 
 	@Override

@@ -22,6 +22,8 @@ import cards.Card;
  */
 public class Waitress implements Action {
 
+	public static final String NAME = "Waitress";
+	
 	@Override
 	public GameState doAction(GameState state, Card card, int time) {
 		if(time == Time.DAY)
@@ -152,7 +154,7 @@ public class Waitress implements Action {
 
 	@Override
 	public String getName() {
-		return "Waitress";
+		return NAME;
 	}
 
 	@Override

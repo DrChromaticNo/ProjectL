@@ -238,6 +238,11 @@ public class Player {
 		return gui;
 	}
 	
+	public AI getAI()
+	{
+		return ai;
+	}
+	
 	@Override public boolean equals(Object other)
 	{
 		if(other instanceof Player)

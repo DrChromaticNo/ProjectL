@@ -22,6 +22,7 @@ import cards.Deck;
 
 import score.ScoreCounter;
 import score.TreasureBag;
+import standard.StandardEstimator;
 import standard.StandardScoreCounter;
 import standard.StandardSettings;
 import standard.StandardTreasureBag;
@@ -31,8 +32,6 @@ public class AISmallCompete {
 	private int BIG_INT = 1000;
 	private double p1Wins;
 	private double p2Wins;
-	private double loss;
-	private double tie;
 	Deck gameDeck;
 	TreasureBag gameBag;
 	ScoreCounter score;
@@ -48,8 +47,6 @@ public class AISmallCompete {
 		
 		p1Wins = 0;
 		p2Wins = 0;
-		loss = 0;
-		tie = 0;
 	}
 	
 	@Test
@@ -62,9 +59,9 @@ public class AISmallCompete {
 			
 			ArrayList<Color> factionList = Faction.allFactions();
 			
-			playerList[0] = new Player(chooseFaction(factionList), new DepthEstAI(0,2));
+			playerList[0] = new Player(chooseFaction(factionList), new DepthEstAI(0,2, new StandardEstimator()));
 			
-			playerList[1] = new Player(chooseFaction(factionList), new DepthEstAI(2,1));
+			playerList[1] = new Player(chooseFaction(factionList), new DepthEstAI(2,1, new StandardEstimator()));
 			
 			//P1 is 0,2
 			Color check1 = playerList[0].getFaction();
@@ -75,29 +72,15 @@ public class AISmallCompete {
 			
 			Set<Player> winners = Game.run(state, new StandardSettings());
 			
-			boolean won = false;
 			for(Player p : winners)
 			{
 				if(p.getFaction().equals(check1))
 				{
 					p1Wins++;
-					won = true;
 				}
 				else if(p.getFaction().equals(check2))
 				{
 					p2Wins++;
-					won = true;
-				}
-			}
-			if(!won)
-			{
-				loss++;
-			}
-			else
-			{
-				if(winners.size() > 1)
-				{
-					tie++;
 				}
 			}
 			

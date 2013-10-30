@@ -25,6 +25,8 @@ import cards.Card;
 
 public class Monkey implements Action {
 
+	public static final String NAME = "Monkey";
+	
 	@Override
 	public GameState doAction(GameState state, Card card, int time) {
 		
@@ -128,7 +130,7 @@ public class Monkey implements Action {
 
 	@Override
 	public String getName() {
-		return "Monkey";
+		return NAME;
 	}
 
 	@Override

@@ -1,7 +1,9 @@
 package gui.frontmenu;
 
+import standard.StandardEstimator;
 import ai.AI;
 import ai.DepthEstAI;
+import ai.Estimator;
 import ai.SimpleAI;
 
 public class AIList {
@@ -20,12 +22,12 @@ public class AIList {
 	@SuppressWarnings("rawtypes")
 	public static Class[][] getParamTypes()
 	{
-		return new Class[][]{null, new Class[]{int.class, int.class}};
+		return new Class[][]{null, new Class[]{int.class, int.class, Estimator.class}};
 	}
 	
 	public static Object[][] getParams()
 	{
-		return new Object[][]{null, new Object[]{2,1}};
+		return new Object[][]{null, new Object[]{2,1,new StandardEstimator()}};
 	}
 	
 }

@@ -23,6 +23,7 @@ import cards.Deck;
 
 import score.ScoreCounter;
 import score.TreasureBag;
+import standard.StandardEstimator;
 import standard.StandardScoreCounter;
 import standard.StandardSettings;
 import standard.StandardTreasureBag;
@@ -65,9 +66,9 @@ public class AIBigCompete {
 		
 			playerList[0] = new Player(chooseFaction(factionList), new SimpleAI());
 			
-			playerList[1] = new Player(chooseFaction(factionList), new DepthEstAI(0,2));
+			playerList[1] = new Player(chooseFaction(factionList), new DepthEstAI(0,2, new StandardEstimator()));
 			
-			playerList[2] = new Player(chooseFaction(factionList), new DepthEstAI(2,1));
+			playerList[2] = new Player(chooseFaction(factionList), new DepthEstAI(2,1, new StandardEstimator()));
 			
 			playerList[3] = new Player(chooseFaction(factionList), new SimpleAI());
 			

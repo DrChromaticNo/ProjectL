@@ -23,6 +23,8 @@ import cards.Card;
  */
 public class Recruiter implements Action {
 
+	public static final String NAME = "Recruiter";
+	
 	@Override
 	public GameState doAction(GameState state, Card card, int time) {
 		if(time == Time.DAY)
@@ -146,7 +148,7 @@ public class Recruiter implements Action {
 
 	@Override
 	public String getName() {
-		return "Recruiter";
+		return NAME;
 	}
 
 	@Override

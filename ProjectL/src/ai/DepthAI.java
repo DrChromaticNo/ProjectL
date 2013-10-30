@@ -256,7 +256,7 @@ public class DepthAI implements AI {
 				Card actionCard = shipDeck[index];
 				
 				GameState[] states = shipDeck[index]
-						.possibleEveningActions(new GameState(state));
+						.possibleDuskActions(new GameState(state));
 				
 				for(GameState s : states)
 				{

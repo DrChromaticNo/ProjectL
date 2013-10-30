@@ -162,7 +162,7 @@ public class Card implements Comparable<Card>{
 	 * @param state the state of the game before the action
 	 * @return the state of the game after the action is performed
 	 */
-	public GameState eveningAction(GameState state)
+	public GameState duskAction(GameState state)
 	{
 		GameState end = deck.doPhase(Time.DUSK, this, state);
 		return end;
@@ -173,7 +173,7 @@ public class Card implements Comparable<Card>{
 	 * @param state the state before the action
 	 * @return the states of the game after this action is performed
 	 */
-	public GameState[] possibleEveningActions(GameState state)
+	public GameState[] possibleDuskActions(GameState state)
 	{
 		GameState[] states = deck.getPossiblePhases(Time.DUSK, this, state);
 		return states;

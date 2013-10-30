@@ -21,6 +21,8 @@ import cards.Card;
  */
 public class Carpenter implements Action {
 
+	public static final String NAME = "Carpenter";
+	
 	@Override
 	public GameState doAction(GameState state, Card card, int time) 
 	{
@@ -91,7 +93,7 @@ public class Carpenter implements Action {
 
 	@Override
 	public String getName() {
-		return "Carpenter";
+		return NAME;
 	}
 
 	@Override

@@ -18,6 +18,8 @@ import cards.Card;
  */
 public class Barkeep implements Action {
 
+	public static final String NAME = "Barkeep";
+	
 	@Override
 	public GameState doAction(GameState state, Card card, int time) {
 		if(time == Time.DAY)
@@ -75,7 +77,7 @@ public class Barkeep implements Action {
 
 	@Override
 	public String getName() {
-		return "Barkeep";
+		return NAME;
 	}
 
 	@Override

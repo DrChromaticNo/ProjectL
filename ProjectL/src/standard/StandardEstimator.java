@@ -1,16 +1,33 @@
 package standard;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+
+import ai.Estimator;
 
 import players.Player;
 
 import score.Loot;
 import score.Treasure;
+import standard.actions.Barkeep;
+import standard.actions.Beggar;
+import standard.actions.CabinBoy;
+import standard.actions.Carpenter;
+import standard.actions.FrenchOfficer;
+import standard.actions.Monkey;
+import standard.actions.Parrot;
+import standard.actions.Preacher;
+import standard.actions.Recruiter;
+import standard.actions.VoodooWitch;
+import standard.actions.Waitress;
 
 import main.GameState;
 import main.Time;
 import cards.Card;
-import cards.Estimator;
 
 /**
  * The Estimator to be used with the standard deck, and standard scorer
@@ -26,33 +43,33 @@ public class StandardEstimator implements Estimator {
 		if(state.getTime() == Time.PICK_CARDS) //In order to use this class we assume 
 			//(and enforce) that we're in the card picking stage
 		{
-			switch(card.getValue()) {
+			switch(state.getDeck().getCardName(card)) {
 		
-			case 1: estimate = parrotEst(state,card);
+			case Parrot.NAME: estimate = parrotEst(state,card);
 				break;
-			case 2: estimate = monkeyEst(state,card);
+			case Monkey.NAME: estimate = monkeyEst(state,card);
 				break;
-			case 3: estimate = beggarEst(state,card);
+			case Beggar.NAME: estimate = beggarEst(state,card);
 				break;
-			case 4: estimate = recruiterEst(state,card);
+			case Recruiter.NAME: estimate = recruiterEst(state,card);
 				break;
-			case 5: estimate = cabinboyEst(state,card);
+			case CabinBoy.NAME: estimate = cabinboyEst(state,card);
 				break;
-			case 6: estimate = preacherEst(state,card);
+			case Preacher.NAME: estimate = preacherEst(state,card);
 				break;
-			case 7: estimate = barkeepEst(state,card);
+			case Barkeep.NAME: estimate = barkeepEst(state,card);
 				break;
-			case 8: estimate = waitressEst(state,card);
+			case Waitress.NAME: estimate = waitressEst(state,card);
 				break;
-			case 9: estimate = carpenterEst(state,card);
+			case Carpenter.NAME: estimate = carpenterEst(state,card);
 				break;
-			case 10: estimate = frenchofficerEst(state,card);
+			case FrenchOfficer.NAME: estimate = frenchofficerEst(state,card);
 				break;
-			case 11: estimate = voodoowitchEst(state,card);
+			case VoodooWitch.NAME: estimate = voodoowitchEst(state,card);
 			}
 		}
 		
-		return estimate;
+		return estimate + card.getValue();
 	}
 	
 	/**
@@ -365,6 +382,56 @@ public class StandardEstimator implements Estimator {
 		}
 		
 		return value;
+	}
+	
+	@Override
+	public Card[] rankCards(final GameState state, Card[] cards) {
+		ArrayList<Card> list = new ArrayList<Card>();
+		for(Card c : cards)
+		{
+			list.add(c);
+		}
+		
+		final HashMap<Card, Integer> map = new HashMap<Card, Integer>();
+		
+		for(Card c : cards)
+		{
+			map.put(c, estimate(state, c));
+		}
+		
+		//we sort the arraylist with respect to the estimator class
+		Collections.sort(list, new Comparator<Card>() {
+			@Override
+			public int compare(cards.Card arg0, cards.Card arg1) {
+				return -1*(map.get(arg0) - map.get(arg1));
+			}});
+		
+		return list.toArray(cards);
+	}
+
+	@Override
+	public GameState[] rankTreasures(Map<GameState, String> treasureMap, Card card) {
+		ArrayList<GameState> list = new ArrayList<GameState>();
+		for(GameState state : treasureMap.keySet())
+		{
+			list.add(state);
+		}
+		
+		final HashMap<GameState, Integer> map = new HashMap<GameState, Integer>();
+		
+		for(GameState state : treasureMap.keySet())
+		{
+			map.put(state, treasureValue(state, card, treasureMap.get(state)));
+		}
+		
+		//we sort the arraylist with respect to the estimator class
+		Collections.sort(list, new Comparator<GameState>() {
+			@Override
+			public int compare(main.GameState arg0, main.GameState arg1) {
+				return -1*(map.get(arg0) - map.get(arg1));
+			}});
+		
+		return list.toArray(new GameState[map.keySet().size()]);
 	}
 
 }

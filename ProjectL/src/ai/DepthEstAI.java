@@ -18,11 +18,18 @@ public class DepthEstAI implements AI {
 
 	private int maxDepth;
 	private int cardBreadth;
+	private Estimator est;
 	
-	public DepthEstAI(int depth, int breadth)
+	public DepthEstAI(int depth, int breadth, Estimator est)
 	{
 		maxDepth = depth;
 		cardBreadth = breadth;
+		this.est = est;
+	}
+	
+	public Estimator getEstimator()
+	{
+		return est;
 	}
 	
 	@Override
@@ -256,7 +263,7 @@ public class DepthEstAI implements AI {
 				Card actionCard = shipDeck[index];
 				
 				GameState[] states = shipDeck[index]
-						.possibleEveningActions(new GameState(state));
+						.possibleDuskActions(new GameState(state));
 				
 				for(GameState s : states)
 				{
@@ -421,7 +428,7 @@ public class DepthEstAI implements AI {
 		{
 			//otherwise, we iterate through all the possibilities of a given player's card choices
 			Color pColor = playerList.remove(0);
-			Card[] cardList = state.getCounter()
+			Card[] cardList = est
 					.rankCards(state, state.getPlayer(pColor).getHand().toArray(new Card[0]));
 			
 			if(faction.equals(pColor))

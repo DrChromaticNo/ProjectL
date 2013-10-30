@@ -21,6 +21,8 @@ import cards.Card;
  */
 public class VoodooWitch implements Action {
 
+	public static final String NAME = "Voodoo Witch";
+	
 	@Override
 	public GameState doAction(GameState state, Card card, int time) {
 		
@@ -98,7 +100,7 @@ public class VoodooWitch implements Action {
 
 	@Override
 	public String getName() {
-		return "Voodoo Witch";
+		return NAME;
 	}
 
 	@Override

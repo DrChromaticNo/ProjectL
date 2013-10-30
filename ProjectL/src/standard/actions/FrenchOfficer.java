@@ -22,6 +22,8 @@ import cards.Card;
  */
 public class FrenchOfficer implements Action {
 
+	public static final String NAME = "French Officer";
+	
 	@Override
 	public GameState doAction(GameState state, Card card, int time) {
 		
@@ -107,7 +109,7 @@ public class FrenchOfficer implements Action {
 
 	@Override
 	public String getName() {
-		return "French Officer";
+		return NAME;
 	}
 
 	@Override
