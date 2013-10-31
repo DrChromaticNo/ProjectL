@@ -3,10 +3,14 @@ package ai;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 
 import main.GameState;
 import main.Time;
 import players.Player;
+import score.Loot;
+import score.Treasure;
 import cards.Card;
 
 /**
@@ -275,6 +279,40 @@ public class DepthEstAI implements AI {
 					}
 				}
 				
+				//Here is the ordering of the list of states with the estimator
+				
+				ArrayList<String> tList = new ArrayList<String>();
+				final HashMap<GameState, String> tMap = new HashMap<GameState, String>();
+				for(GameState s : states)
+				{
+					String t = diffStateTreasure(state, s, actionCard);
+					tList.add(t);
+					tMap.put(s, t);
+				}
+				
+				String[] orderedT = 
+						est.rankTreasures(state, tList.toArray(new String[0]), actionCard);
+				
+				//Create a map that maps the treasures to their index in the sorted array
+				ArrayList<GameState> stateList = new ArrayList<GameState>(tMap.keySet());
+				final HashMap<String, Integer> indexes = new HashMap<String, Integer>();
+				for(int i = 0; i < orderedT.length; i++)
+				{
+					indexes.put(orderedT[i], i);
+				}
+				
+				//Sort gamestates by associated treasure's array index
+				Collections.sort(stateList, new Comparator<GameState>(){
+					@Override
+					public int compare(GameState arg0, GameState arg1) {
+						return (indexes.get(tMap.get(arg0)) - indexes.get(tMap.get(arg1)));
+					}
+					
+				});
+				
+				//Now that we've sorted the states, we can use them
+				
+				states = stateList.toArray(states);
 				
 				//Do alpha beta stuff on the resulting sets
 				if(faction.equals(actionCard.getFaction()))
@@ -585,5 +623,25 @@ public class DepthEstAI implements AI {
 		}
 		
 		return state;
+	}
+	
+	private String diffStateTreasure(GameState old, GameState curr, Card card)
+	{
+		Color faction = card.getFaction();
+		Loot oldLoot = old.getPlayer(faction).getLoot();
+		Loot currLoot = curr.getPlayer(faction).getLoot();
+		
+		if(oldLoot.equals(currLoot))
+			return null;
+		
+		for(String t : Treasure.allTreasures())
+		{
+			if(oldLoot.countTreasure(t) != currLoot.countTreasure(t))
+			{
+				return t;
+			}
+		}
+		
+		return null;
 	}
 }

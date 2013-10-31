@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Map;
 
 import ai.Estimator;
 
@@ -66,6 +65,7 @@ public class StandardEstimator implements Estimator {
 			case FrenchOfficer.NAME: estimate = frenchofficerEst(state,card);
 				break;
 			case VoodooWitch.NAME: estimate = voodoowitchEst(state,card);
+				break;
 			}
 		}
 		
@@ -349,36 +349,51 @@ public class StandardEstimator implements Estimator {
 	public int treasureValue(GameState state, Card card, String treasure) {
 		int value = 0;
 		//First, we get the base value of the treasure
-		switch(treasure)
+		if(treasure != null)
 		{
-			case Treasure.CHEST: value+=5;
-			case Treasure.JEWEL: value+=3;
-			case Treasure.MAP: if(state.getPlayer(card.getFaction())
-					.getLoot().countTreasure(Treasure.MAP)%3 == 2)
-				     {
-						value+=12; 
-				     }
-					else
-					{
-						value+=0;
-					}
-			case Treasure.GOODS: value+=1;
-			case Treasure.OFFICER: value+=0;
-			case Treasure.SABER: value+=0;
-			case Treasure.RELIC: value+=-3;
+			switch(treasure)
+			{
+				case Treasure.CHEST: value+=5; break;
+				case Treasure.JEWEL: value+=3; break;
+				case Treasure.MAP: if(state.getPlayer(card.getFaction())
+						.getLoot().countTreasure(Treasure.MAP)%3 == 2)
+					     {
+							value+=12; 
+					     }
+						else
+						{
+							if(state.getDeck().getCardName(card).equals(Waitress.NAME))
+							{
+								value+=3;
+							}
+							else
+							{
+								value+=0;
+							}
+						} break;
+				case Treasure.GOODS: value+=1; break;
+				case Treasure.OFFICER: value+=0; break;
+				case Treasure.SABER: value+=0; break;
+				case Treasure.RELIC: value+=-3; break;
+			}
+			
+			//Now, we modify it based on the value you lose (or gain) by having either of these cards killed
+			if(treasure.equals(Treasure.OFFICER))
+			{
+				if(state.getDeck().getCardName(card).equals(Preacher.NAME))
+				{
+					value+=-5;
+				}
+				else if(state.getDeck().getCardName(card).equals(Carpenter.NAME))
+				{
+					value+=-10;
+				}
+			}
 		}
-		
-		//Now, we modify it based on the value you lose (or gain) by having either of these cards killed
-		if(treasure.equals(Treasure.OFFICER))
+		else
 		{
-			if(card.getValue() == 6)
-			{
-				value+=-5;
-			}
-			else if(card.getValue() == 9)
-			{
-				value+=-10;
-			}
+			//The null value represents not picking a treasure
+			value+=0;
 		}
 		
 		return value;
@@ -410,28 +425,30 @@ public class StandardEstimator implements Estimator {
 	}
 
 	@Override
-	public GameState[] rankTreasures(Map<GameState, String> treasureMap, Card card) {
-		ArrayList<GameState> list = new ArrayList<GameState>();
-		for(GameState state : treasureMap.keySet())
+	public String[] rankTreasures(GameState state, String[] treasures, Card card) {
+		
+		ArrayList<String> treasureList = new ArrayList<String>();
+		
+		for(String t : treasures)
 		{
-			list.add(state);
+			treasureList.add(t);
 		}
 		
-		final HashMap<GameState, Integer> map = new HashMap<GameState, Integer>();
+		final HashMap<String, Integer> map = new HashMap<String, Integer>();
 		
-		for(GameState state : treasureMap.keySet())
+		for(String t : treasures)
 		{
-			map.put(state, treasureValue(state, card, treasureMap.get(state)));
+			map.put(t, treasureValue(state, card, t));
 		}
 		
 		//we sort the arraylist with respect to the estimator class
-		Collections.sort(list, new Comparator<GameState>() {
+		Collections.sort(treasureList, new Comparator<String>() {
 			@Override
-			public int compare(main.GameState arg0, main.GameState arg1) {
+			public int compare(String arg0, String arg1) {
 				return -1*(map.get(arg0) - map.get(arg1));
 			}});
 		
-		return list.toArray(new GameState[map.keySet().size()]);
+		return treasureList.toArray(new String[map.keySet().size()]);
 	}
 
 }

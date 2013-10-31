@@ -1,7 +1,5 @@
 package ai;
 
-import java.util.Map;
-
 import cards.Card;
 import main.GameState;
 
@@ -42,9 +40,10 @@ public interface Estimator {
 	/**
 	 * Returns an ordered array from greatest to least of the ranking associated with picking each treasure
 	 * on state
-	 * @param treasureMap the map of resultant states to the treasures that created them
+	 * @param state the state to choose the treasure in
+	 * @param treasures the potential treasures to choose from
 	 * @param card the card that is being picking this treasure
 	 * @return an ordered array showing which treasures are ranked highest to lowest
 	 */
-	public GameState[] rankTreasures(Map<GameState,String> treasureMap, Card card);
+	public String[] rankTreasures(GameState state, String[] treasures, Card card);
 }
