@@ -392,12 +392,41 @@ public class Game {
 				throw new RuntimeException("Board isn't clear in night phase");
 			}
 			
-			Player[] stateList = state.getPlayerList();
+			final Player[] stateList = state.getPlayerList();
+			
+			ExecutorService nightPhaseLauncher = 
+					Executors.newFixedThreadPool(stateList.length);
+			
+			@SuppressWarnings("unchecked")
+			Future<Player>[] playerFutures = new Future[stateList.length];
+			
 			Player[] endList = new Player[stateList.length];
 			
+			//Setup threads to do the night state for each player
 			for(int i = 0; i < stateList.length; i++)
 			{
-				endList[i] = nightPhaseHelper(new GameState(state), stateList[i].getFaction());
+				final Player player = stateList[i];
+				final GameState pState = new GameState(state);
+				
+				playerFutures[i] = nightPhaseLauncher.submit(new Callable<Player>(){
+					@Override
+					public Player call() throws Exception {
+						return nightPhaseHelper(pState, player.getFaction());
+					}
+					
+				});
+			}
+			
+			//Collect the night phase results and reassign the player list
+			for(int i = 0; i < endList.length; i++)
+			{
+				try {
+					endList[i] = playerFutures[i].get();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					e.printStackTrace();
+				}
 			}
 			
 			state.setPlayerList(endList);
