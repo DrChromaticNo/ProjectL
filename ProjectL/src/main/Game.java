@@ -14,6 +14,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import players.Faction;
 import players.Player;
@@ -151,13 +156,43 @@ public class Game {
 	 * Gathers cards from the players and puts them on the board
 	 * @param state the current state of the game
 	 */
-	private static void pickCards(GameState state)
+	private static void pickCards(final GameState state)
 	{
-		HashSet<Card> chosenCards = new HashSet<Card>();
+		int players = state.getPlayerList().length;
 		
-		for(Player p : state.getPlayerList())
+		HashSet<Card> chosenCards = new HashSet<Card>();
+		ExecutorService cardPicker = 
+				Executors.newFixedThreadPool(players);
+		
+		@SuppressWarnings("unchecked")
+		Future<Card>[] cardFutures = new Future[players];
+		
+		int index = 0;
+		
+		//We launch new threads for each players card
+		for(final Player p : state.getPlayerList())
 		{
-			Card choice = p.pickCard(state);
+			cardFutures[index] = cardPicker.submit(new Callable<Card>(){
+				@Override
+				public Card call() throws Exception {
+					return p.pickCard(state);
+				}
+				
+			});
+			index++;
+		}
+		
+		//Now that all the threads are launched, we collect the results
+		for(Future<Card> f : cardFutures)
+		{
+			Card choice = null;
+			try {
+				choice = f.get();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
 			if(choice != null)
 			{
 				chosenCards.add(choice);
