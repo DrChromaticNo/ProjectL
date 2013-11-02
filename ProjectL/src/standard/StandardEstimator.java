@@ -16,6 +16,7 @@ import standard.actions.Barkeep;
 import standard.actions.Beggar;
 import standard.actions.CabinBoy;
 import standard.actions.Carpenter;
+import standard.actions.FreedSlave;
 import standard.actions.FrenchOfficer;
 import standard.actions.Monkey;
 import standard.actions.Parrot;
@@ -66,12 +67,34 @@ public class StandardEstimator implements Estimator {
 				break;
 			case VoodooWitch.NAME: estimate = voodoowitchEst(state,card);
 				break;
+			case FreedSlave.NAME: estimate = freedslaveEst(state,card);
+				break;
 			}
 		}
 		
 		return estimate + card.getValue();
 	}
 	
+	/**
+	 * The estimate for the freed slave card
+	 * @param state state the freed slave is being played in
+	 * @param card the card being played
+	 * @return the estimate for the freed slave
+	 */
+	private int freedslaveEst(GameState state, Card card) {
+		Color faction = card.getFaction();
+		int est = 0;
+		
+		for(Card c : state.getPlayer(faction).getDen())
+		{
+			if(c.getValue() > card.getValue())
+			{
+				est++;
+			}
+		}
+		return est;
+	}
+
 	/**
 	 * The estimate for the voodoo witch card
 	 * @param state state the voodoo witch is being played in

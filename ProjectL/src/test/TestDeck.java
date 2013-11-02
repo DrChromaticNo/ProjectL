@@ -48,50 +48,15 @@ public class TestDeck implements Deck {
 
 	@Override
 	public ArrayList<Integer> allCards() {
-		ArrayList<Integer> cards = new ArrayList<Integer>(30);
-		for(int i = 0; i < 3; i++)
+		int totalCards = 12;
+		ArrayList<Integer> cards = new ArrayList<Integer>(totalCards*2);
+		for(int i = 1; i < totalCards+1; i++)
 		{
-			cards.add(new Integer(1));
+			cards.add(i);
 		}
-		for(int i = 3; i < 6; i++)
+		for(int i = totalCards+1; i < (totalCards*2)+1; i++)
 		{
-			cards.add(new Integer(2));
-		}
-		for(int i = 6; i < 9; i++)
-		{
-			cards.add(new Integer(3));
-		}
-		for(int i = 9; i < 12; i++)
-		{
-			cards.add(new Integer(4));
-		}
-		for(int i = 12; i < 15; i++)
-		{
-			cards.add(new Integer(5));
-		}
-		for(int i = 15; i < 18; i++)
-		{
-			cards.add(new Integer(6));
-		}
-		for(int i = 18; i < 21; i++)
-		{
-			cards.add(new Integer(7));
-		}
-		for(int i = 21; i < 24; i++)
-		{
-			cards.add(new Integer(8));
-		}
-		for(int i = 24; i < 27; i++)
-		{
-			cards.add(new Integer(9));
-		}
-		for(int i = 27; i < 29; i++)
-		{
-			cards.add(new Integer(11));
-		}
-		for(int i = 29; i < 30; i++)
-		{
-			cards.add(new Integer(10));
+			cards.add(i-totalCards);
 		}
 		return cards;
 	}
@@ -205,6 +170,7 @@ public class TestDeck implements Deck {
 		map.put(9, new Carpenter());
 		map.put(10, new FrenchOfficer());
 		map.put(11, new VoodooWitch());
+		map.put(12, new FreedSlave());
 		
 		return map;
 	}
