@@ -199,6 +199,8 @@ public class Game {
 			}
 		}
 		
+		cardPicker.shutdown();
+		
 		//Now that we've collected all the cards, remove them from the players' hands and
 		//put them on the board
 		for(Card c : chosenCards)
@@ -428,6 +430,8 @@ public class Game {
 					e.printStackTrace();
 				}
 			}
+			
+			nightPhaseLauncher.shutdown();
 			
 			state.setPlayerList(endList);
 			
