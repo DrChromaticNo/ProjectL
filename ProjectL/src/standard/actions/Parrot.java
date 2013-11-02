@@ -63,7 +63,7 @@ public class Parrot implements Action {
 			end.getBoard().removeCard(card);
 			end.getPlayer(faction).addToDiscard(card);
 			state.messageAllGUIs(Faction.getPirateName(faction) + "'s " +
-					"Parrot died but nothing could take its place");
+					"Parrot (" + card.abbreviate() + ") died but nothing could take its place");
 			return end;
 		}
 		
@@ -74,7 +74,8 @@ public class Parrot implements Action {
 			{
 				GameState choice = getParrotState(state, card, c);
 				choiceMap.put(choice, 
-						Faction.getPirateName(faction) + "'s Parrot died and " + c.abbreviate() + 
+						Faction.getPirateName(faction) + "'s Parrot (" + card.abbreviate() + 
+						") died and " + c.abbreviate() + 
 						" took its place");
 			}
 			GameState result = 
@@ -89,7 +90,8 @@ public class Parrot implements Action {
 					p.getHand().toArray(new Card[0]));
 			GameState end = getParrotState(state, card, choice);
 			
-			state.messageAllGUIs(Faction.getPirateName(faction) + "'s Parrot died and " + choice.abbreviate() + 
+			state.messageAllGUIs(Faction.getPirateName(faction) + "'s Parrot (" + card.abbreviate() + 
+					") died and " + choice.abbreviate() + 
 					" took its place");
 			
 			return end;

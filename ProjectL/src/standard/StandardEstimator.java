@@ -14,6 +14,7 @@ import score.Loot;
 import score.Treasure;
 import standard.actions.Barkeep;
 import standard.actions.Beggar;
+import standard.actions.Brute;
 import standard.actions.CabinBoy;
 import standard.actions.Carpenter;
 import standard.actions.FreedSlave;
@@ -72,12 +73,25 @@ public class StandardEstimator implements Estimator {
 				break;
 			case Mutineer.NAME: estimate = mutineerEst(state,card);
 				break;
+			case Brute.NAME: estimate = bruteEst(state,card);
+				break;
 			}
 		}
 		
 		return estimate + card.getValue();
 	}
 	
+	/**
+	 * The estimate for the brute card
+	 * @param state state the brute is being played in
+	 * @param card the card being played
+	 * @return the estimate for the brute
+	 */
+	private int bruteEst(GameState state, Card card) {
+		//Not sure what to do with this...
+		return 0;
+	}
+
 	/**
 	 * The estimate for the mutineer card
 	 * @param state state the mutineer is being played in
@@ -158,7 +172,7 @@ public class StandardEstimator implements Estimator {
 	private int parrotEst(GameState state, Card card) {
 		//The reason that the parrot is a min value is because it is essentially identical to another card
 		//So you should always play that one instead (unless you want a lot of cards to be in the discard...)
-		return Integer.MIN_VALUE;
+		return -100000;
 	}
 
 	/**
