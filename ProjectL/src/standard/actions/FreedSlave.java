@@ -70,6 +70,8 @@ public class FreedSlave implements Action {
 			}
 		}
 		
+		player.addGold(extraGold);
+		
 		if(output)
 		{
 			end.messageAllGUIs("The Freed Slave (" + card.abbreviate() + ") gives " 
