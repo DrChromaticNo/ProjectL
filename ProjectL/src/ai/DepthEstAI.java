@@ -117,7 +117,7 @@ public class DepthEstAI implements AI {
 	 */
 	private int alphabetaScore(GameState state, Color faction)
 	{
-		state = state.getCounter().score(state);
+		state = state.getCounter().score(state, false);
 		
 		int playerScore = 0;
 		Color maxPlayer = null;

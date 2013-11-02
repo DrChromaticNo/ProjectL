@@ -299,7 +299,7 @@ public class Game {
 			}
 		}
 		
-		state = state.getCounter().score(new GameState(state));
+		state = state.getCounter().score(new GameState(state), true);
 		
 		weekendClear(state);
 		
