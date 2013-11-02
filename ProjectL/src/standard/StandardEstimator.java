@@ -19,6 +19,7 @@ import standard.actions.Carpenter;
 import standard.actions.FreedSlave;
 import standard.actions.FrenchOfficer;
 import standard.actions.Monkey;
+import standard.actions.Mutineer;
 import standard.actions.Parrot;
 import standard.actions.Preacher;
 import standard.actions.Recruiter;
@@ -69,12 +70,32 @@ public class StandardEstimator implements Estimator {
 				break;
 			case FreedSlave.NAME: estimate = freedslaveEst(state,card);
 				break;
+			case Mutineer.NAME: estimate = mutineerEst(state,card);
+				break;
 			}
 		}
 		
 		return estimate + card.getValue();
 	}
 	
+	/**
+	 * The estimate for the mutineer card
+	 * @param state state the mutineer is being played in
+	 * @param card the card being played
+	 * @return the estimate for the mutineer
+	 */
+	private int mutineerEst(GameState state, Card card) {
+		int day = state.getDay();
+		
+		int span = 6-day; //the number of nights the mutineer is optimally active
+		
+		int denSize = state.getPlayer(card.getFaction()).getDen().size();
+		
+		//We either run of time to kill people,
+		//or run out of people to kill
+		return Math.min(span, denSize)*2;
+	}
+
 	/**
 	 * The estimate for the freed slave card
 	 * @param state state the freed slave is being played in
