@@ -21,7 +21,7 @@ public class StandardScoreCounter implements ScoreCounter {
 		for(Player p : state.getPlayerList())
 		{
 			String report = "";
-			report = report + "-" + Faction.getPirateName(p.getFaction()) + " Score Report-\n";
+			report = report + "--" + Faction.getPirateName(p.getFaction()) + " Score Report--\n";
 			int posGold = 0;
 			int negGold = 0;
 			
