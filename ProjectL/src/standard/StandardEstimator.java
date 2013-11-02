@@ -88,8 +88,24 @@ public class StandardEstimator implements Estimator {
 	 * @return the estimate for the brute
 	 */
 	private int bruteEst(GameState state, Card card) {
-		//Not sure what to do with this...
-		return 0;
+		int est = 0;
+		
+		//We see if the brute will actually knock somebody out or not
+		for(Player p : state.getPlayerList())
+		{
+			if(!p.getFaction().equals(card.getFaction()))
+			{
+				for(Card c : p.getHand())
+				{
+					if(c.getValue() >= card.getValue())
+						est++;
+					else
+						est--;
+				}
+			}
+		}
+		
+		return est;
 	}
 
 	/**
