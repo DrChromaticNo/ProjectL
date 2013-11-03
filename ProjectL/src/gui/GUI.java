@@ -29,7 +29,7 @@ public interface GUI {
 	 * Displays the passed message in the GUI in a popup
 	 * @param message the message to be displayed
 	 */
-	public void displayDialog(String message);
+	public void displayDialog(String title, String message);
 	
 	/**
 	 * Prompts the player to choose from an array of cards
