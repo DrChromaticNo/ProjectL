@@ -843,4 +843,11 @@ public class TestGUI implements GUI {
 		return panel;
 	}
 
+	@Override
+	public void displayDialog(String message) {
+		JOptionPane.showOptionDialog(null, message, "Message",
+		        JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+		        null, new String[]{"ok"}, "ok");
+	}
+
 }

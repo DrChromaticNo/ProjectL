@@ -18,7 +18,7 @@ public class StandardScoreCounter implements ScoreCounter {
 	public GameState score(GameState state, boolean output) {
 		
 		//Score the cards in the players' den
-		for(Player p : state.getPlayerList())
+		for(final Player p : state.getPlayerList())
 		{
 			String report = "";
 			report = report + "--" + Faction.getPirateName(p.getFaction()) + " Score Report--\n";
@@ -125,7 +125,13 @@ public class StandardScoreCounter implements ScoreCounter {
 			//If this is a player and we are displaying output, we pop up a window
 			if(output && !p.checkCPU())
 			{
-				p.getGUI().makeChoice(report, new String[]{"ok"});
+				final String displayMsg = report;
+				Thread t = new Thread() {
+			        public void run () {
+			        	p.getGUI().displayDialog(displayMsg);
+			        }
+			    };
+			    t.start();
 			}
 		}
 		

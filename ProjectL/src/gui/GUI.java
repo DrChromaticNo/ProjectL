@@ -26,6 +26,12 @@ public interface GUI {
 	public void displayMessage(String message);
 	
 	/**
+	 * Displays the passed message in the GUI in a popup
+	 * @param message the message to be displayed
+	 */
+	public void displayDialog(String message);
+	
+	/**
 	 * Prompts the player to choose from an array of cards
 	 * @param prompt the text prompt for the choice
 	 * @param cards the cards to be chosen from
