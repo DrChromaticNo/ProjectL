@@ -203,13 +203,13 @@ public class GameState {
 	 * Sends the given message to all the GUIs
 	 * @param message the message to display in all the GUIs
 	 */
-	public void messageAllGUIs(String message)
+	public void log(String message)
 	{
 		for(Player p : pList)
 		{
 			if(!p.checkCPU())
 			{
-				p.getGUI().displayMessage(message);
+				p.getGUI().displayLogMessage(message);
 			}
 		}
 	}

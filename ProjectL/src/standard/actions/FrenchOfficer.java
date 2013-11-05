@@ -59,7 +59,7 @@ public class FrenchOfficer implements Action {
 		{
 			if(output)
 			{
-				state.messageAllGUIs(Faction.getPirateName(faction) + " has " + gold + " gold so the " +
+				state.log(Faction.getPirateName(faction) + " has " + gold + " gold so the " +
 					"French Officer (" + card.abbreviate() + ") does nothing");
 			}
 		}
@@ -69,7 +69,7 @@ public class FrenchOfficer implements Action {
 			moreGold.getPlayer(faction).addGold(5);
 			if(output)
 			{
-				state.messageAllGUIs(Faction.getPirateName(faction) + " has " + gold + " gold so the " +
+				state.log(Faction.getPirateName(faction) + " has " + gold + " gold so the " +
 					"French Officer (" + card.abbreviate() + ") adds 5 gold");
 			}
 			state = moreGold;

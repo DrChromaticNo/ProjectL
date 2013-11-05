@@ -24,7 +24,7 @@ public class CabinBoy implements Action {
 		
 		if(time == Time.DUSK)
 		{
-			state.messageAllGUIs("The Cabin Boy (" + card.abbreviate() + ") chooses no treasures");
+			state.log("The Cabin Boy (" + card.abbreviate() + ") chooses no treasures");
 		}
 		
 		return state; //The cabin boy never does anything at day, dusk, or night

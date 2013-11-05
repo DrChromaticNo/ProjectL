@@ -49,7 +49,7 @@ public class Beggar implements Action {
 		
 		if(highest.equals(card.getFaction())) //if that player is us we do nothing
 		{
-			state.messageAllGUIs(("The Beggar (" 
+			state.log(("The Beggar (" 
 					+ card.abbreviate() + ") is the card of highest rank so nothing happens"));
 			
 			return state;
@@ -58,7 +58,7 @@ public class Beggar implements Action {
 		{
 			if(state.getPlayer(highest).getGold() >= 3)
 			{
-				state.messageAllGUIs(("The Beggar (" 
+				state.log(("The Beggar (" 
 						+ card.abbreviate() + ") gets 3 gold from " + Faction.getPirateName(highest)));
 				state.getPlayer(highest).addGold(-3);
 				state.getPlayer(card.getFaction()).addGold(3);
@@ -67,7 +67,7 @@ public class Beggar implements Action {
 			else
 			{
 				int smallGold = state.getPlayer(highest).getGold();
-				state.messageAllGUIs("The Beggar (" 
+				state.log("The Beggar (" 
 						+ card.abbreviate() + ") gets " + smallGold 
 						+ " gold from " + Faction.getPirateName(highest));
 				state.getPlayer(highest).addGold(-smallGold);

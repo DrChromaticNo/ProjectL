@@ -683,7 +683,7 @@ public class TestGUI implements GUI {
 	}
 
 	@Override
-	public synchronized void displayMessage(final String message) {
+	public synchronized void displayLogMessage(final String message) {
 		
 		//Manages the field to give enough room for the scrollbar, if visible
 		if(logScrollPane.getVerticalScrollBar().isShowing())

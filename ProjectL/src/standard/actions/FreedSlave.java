@@ -74,7 +74,7 @@ public class FreedSlave implements Action {
 		
 		if(output)
 		{
-			end.messageAllGUIs("The Freed Slave (" + card.abbreviate() + ") gives " 
+			end.log("The Freed Slave (" + card.abbreviate() + ") gives " 
 					+ Faction.getPirateName(faction) + " " + extraGold + " gold");
 		}
 		

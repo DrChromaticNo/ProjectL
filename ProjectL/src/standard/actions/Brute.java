@@ -73,12 +73,12 @@ public class Brute implements Action {
 		{
 			if(card.equals(highest))
 			{
-				end.messageAllGUIs(Faction.getPirateName(faction) + "'s Brute (" 
+				end.log(Faction.getPirateName(faction) + "'s Brute (" 
 						+ card.abbreviate() + ") knocked himself out!");
 			}
 			else
 			{
-				end.messageAllGUIs(Faction.getPirateName(faction) + "'s Brute (" 
+				end.log(Faction.getPirateName(faction) + "'s Brute (" 
 						+ card.abbreviate() + ") knocked out " + highest.abbreviate() + "!");
 			}
 		}

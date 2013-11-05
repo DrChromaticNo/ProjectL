@@ -62,7 +62,7 @@ public class VoodooWitch implements Action {
 		
 		if(output)
 		{
-			state.messageAllGUIs("The Voodoo Witch (" + card.abbreviate() + ") gives " 
+			state.log("The Voodoo Witch (" + card.abbreviate() + ") gives " 
 					+ Faction.getPirateName(faction) + " " + 2*discards + " gold");
 		}
 		

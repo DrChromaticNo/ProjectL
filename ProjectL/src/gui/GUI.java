@@ -20,10 +20,10 @@ public interface GUI {
 	public void update(GameState state);
 	
 	/**
-	 * Displays the passed message in the GUI
+	 * Displays the passed message in the GUI log
 	 * @param message the message to be displayed
 	 */
-	public void displayMessage(String message);
+	public void displayLogMessage(String message);
 	
 	/**
 	 * Displays the passed message in the GUI in a popup

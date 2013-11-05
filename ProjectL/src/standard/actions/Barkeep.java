@@ -33,7 +33,7 @@ public class Barkeep implements Action {
 		}
 		else if(time == Time.NIGHT)
 		{
-			state.messageAllGUIs(("The Barkeep (" + card.abbreviate() + ") gives " 
+			state.log(("The Barkeep (" + card.abbreviate() + ") gives " 
 					+ Faction.getPirateName(card.getFaction()) + " 1 gold"));
 			
 			state = barNight(state, card);

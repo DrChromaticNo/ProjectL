@@ -54,7 +54,7 @@ public class Recruiter implements Action {
 			GameState choice = state.getPlayer(faction)
 					.chooseState(choiceMap.keySet().toArray(new GameState[0]), card);
 			
-			state.messageAllGUIs(choiceMap.get(choice));
+			state.log(choiceMap.get(choice));
 			return choice;
 		}
 		else
@@ -64,7 +64,7 @@ public class Recruiter implements Action {
 				Player p = state.getPlayer(faction);
 				if(p.getDen().isEmpty()) //there are no pirates in the den to recruit
 				{
-					state.messageAllGUIs("The Recruiter (" + card.abbreviate() + 
+					state.log("The Recruiter (" + card.abbreviate() + 
 							") had nobody to recruit");
 					return state;
 				}
@@ -76,7 +76,7 @@ public class Recruiter implements Action {
 				{
 					if(c.equals(choice)) //we remove the card chosen and add it back to the hand
 					{
-						state.messageAllGUIs("The Recruiter (" + card.abbreviate() + 
+						state.log("The Recruiter (" + card.abbreviate() + 
 								") recruited " + c.abbreviate() + " from " + Faction.getPirateName(faction) +
 								"'s den to their hand");
 						state.getPlayer(faction).removeFromDen(c);

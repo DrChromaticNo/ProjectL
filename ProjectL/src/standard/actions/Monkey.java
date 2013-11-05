@@ -91,7 +91,7 @@ public class Monkey implements Action {
 			
 			if(output)
 			{
-				state.messageAllGUIs("The Monkey" + " (" + card.abbreviate() + 
+				state.log("The Monkey" + " (" + card.abbreviate() + 
 					") transferred " + relics + 
 					" relic(s) to " + Faction.getPirateName(leftP.getFaction()));
 			}

@@ -67,7 +67,7 @@ public class Waitress implements Action {
 			
 			if(sell != null && sell.equals(choice))
 			{
-				state.messageAllGUIs("The Waitress (" + card.abbreviate() + ") sold 1 map for 3 gold.");
+				state.log("The Waitress (" + card.abbreviate() + ") sold 1 map for 3 gold.");
 			}
 			
 			return choice;
@@ -81,7 +81,7 @@ public class Waitress implements Action {
 				
 				if(ans.equals("Yes"))
 				{
-					state.messageAllGUIs("The Waitress (" + card.abbreviate() + ") sold 1 map for 3 gold.");
+					state.log("The Waitress (" + card.abbreviate() + ") sold 1 map for 3 gold.");
 					return choices[1];
 				}
 				else

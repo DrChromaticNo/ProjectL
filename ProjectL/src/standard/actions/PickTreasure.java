@@ -33,7 +33,7 @@ public class PickTreasure {
 			player.getLoot().addLoot(choice, 1);
 			if(!choice.equals(Treasure.SABER))
 			{
-				state.messageAllGUIs(Faction.getPirateName(faction) + " chose " + choice);
+				state.log(Faction.getPirateName(faction) + " chose " + choice);
 			}
 			
 			//There are a few special cases that we need to case on (with standard rules)
@@ -55,7 +55,7 @@ public class PickTreasure {
 			GameState choice = state.getPlayer(faction)
 					.chooseState(choiceMap.keySet().toArray(new GameState[0]), card);
 			
-			state.messageAllGUIs(choiceMap.get(choice));
+			state.log(choiceMap.get(choice));
 			
 			return choice;
 		}
@@ -128,7 +128,7 @@ public class PickTreasure {
 					
 				if(leftSet.isEmpty() && rightSet.isEmpty()) //if there are none we just return
 				{
-					state.messageAllGUIs(Faction.getPirateName(faction) + " chose a saber" +
+					state.log(Faction.getPirateName(faction) + " chose a saber" +
 							" but couldn't kill anyone");
 					return state;
 				}
@@ -149,7 +149,7 @@ public class PickTreasure {
 					{
 						state.getPlayer(leftP.getFaction()).removeFromDen(c);
 						state.getPlayer(leftP.getFaction()).addToDiscard(c);
-						state.messageAllGUIs(Faction.getPirateName(faction) + " chose a saber" +
+						state.log(Faction.getPirateName(faction) + " chose a saber" +
 								" and killed " + c.abbreviate());
 						return state;
 					}
@@ -161,7 +161,7 @@ public class PickTreasure {
 					{
 						state.getPlayer(rightP.getFaction()).removeFromDen(c);
 						state.getPlayer(rightP.getFaction()).addToDiscard(c);
-						state.messageAllGUIs(Faction.getPirateName(faction) + " chose a saber" +
+						state.log(Faction.getPirateName(faction) + " chose a saber" +
 								" and killed " + c.abbreviate());
 						return state;
 					}

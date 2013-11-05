@@ -68,7 +68,7 @@ public class Mutineer implements Action {
 		{
 			if(output)
 			{
-				end.messageAllGUIs("The Mutineer (" + card.abbreviate() + 
+				end.log("The Mutineer (" + card.abbreviate() + 
 						") was the only card in the den, so nothing happens");
 			}
 			
@@ -94,7 +94,7 @@ public class Mutineer implements Action {
 		
 		if(output)
 		{
-			end.messageAllGUIs("The Mutineer (" + card.abbreviate() + 
+			end.log("The Mutineer (" + card.abbreviate() + 
 					") killed " + least.abbreviate() + " and gave " + Faction.getPirateName(faction)
 					+ " 2 gold");
 		}

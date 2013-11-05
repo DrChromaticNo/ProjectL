@@ -53,7 +53,7 @@ public class Preacher implements Action {
 			GameState choice = state.getPlayer(card.getFaction())
 					.chooseState(choiceMap.keySet().toArray(new GameState[0]), card);
 			
-			state.messageAllGUIs(choiceMap.get(choice));
+			state.log(choiceMap.get(choice));
 			
 			return choice;
 		}
@@ -73,7 +73,7 @@ public class Preacher implements Action {
 				
 			if(allEmpty)
 			{
-				state.messageAllGUIs("The Preacher (" + card.abbreviate() + 
+				state.log("The Preacher (" + card.abbreviate() + 
 						") had no treasures to choose from");
 				return state;
 			}
@@ -81,7 +81,7 @@ public class Preacher implements Action {
 			String treasure = state.getPlayer(faction).getGUI().makeChoice("Choose one treasure to keep, " +
 					"the rest will be discarded:", bag);
 	
-			state.messageAllGUIs("The Preacher (" + card.abbreviate() + 
+			state.log("The Preacher (" + card.abbreviate() + 
 					") discarded all treasures besides 1 " + treasure);
 			
 			for(String s : Treasure.allTreasures())

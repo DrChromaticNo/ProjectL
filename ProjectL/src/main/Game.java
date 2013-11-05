@@ -52,7 +52,7 @@ public class Game {
 		state.launchGUIs();
 		
 		//Hello!
-		state.messageAllGUIs("The game is starting!\nLook for a log of game events here");
+		state.log("The game is starting!\nLook for a log of game events here");
 		
 		//get the list of all the drawable cards
 		ArrayList<Integer> availibleCards = state.getDeck().allCards();
@@ -99,7 +99,7 @@ public class Game {
 		
 		for(Player p : winners)
 		{
-			state.messageAllGUIs((Faction.getPirateName(p.getFaction()) + 
+			state.log((Faction.getPirateName(p.getFaction()) + 
 					" won with a score of " + p.getScore() + "!"));
 		}
 		
@@ -287,7 +287,7 @@ public class Game {
 			if(state.getTime() == Time.PICK_CARDS)
 			{
 				pickCards(state);
-				state.messageAllGUIs("~DAY PHASE (" + (day+1) + ")~");
+				state.log("~DAY PHASE (" + (day+1) + ")~");
 				state.setTime(Time.DAY);
 				state.updateGUIs();
 			}
@@ -328,7 +328,7 @@ public class Game {
 			
 			if(index >= deck.length)
 			{
-				state.messageAllGUIs("~DUSK PHASE~");
+				state.log("~DUSK PHASE~");
 				state.setTime(Time.DUSK);
 			}
 			else
@@ -364,7 +364,7 @@ public class Game {
 				}
 				state.getBoard().clearDeck();
 				
-				state.messageAllGUIs("~NIGHT PHASE~");
+				state.log("~NIGHT PHASE~");
 				state.setTime(Time.NIGHT);
 			}
 			else
