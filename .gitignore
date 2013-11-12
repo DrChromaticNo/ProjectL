@@ -16,6 +16,8 @@ local.properties
 .settings/
 .loadpath
 UMUC Stuff
+UMUC C++
+UMUC C+
 
 # External tool builders
 .externalToolBuilders/

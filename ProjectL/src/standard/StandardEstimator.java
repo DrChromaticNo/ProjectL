@@ -19,6 +19,7 @@ import standard.actions.CabinBoy;
 import standard.actions.Carpenter;
 import standard.actions.FreedSlave;
 import standard.actions.FrenchOfficer;
+import standard.actions.Gunner;
 import standard.actions.Monkey;
 import standard.actions.Mutineer;
 import standard.actions.Parrot;
@@ -75,12 +76,25 @@ public class StandardEstimator implements Estimator {
 				break;
 			case Brute.NAME: estimate = bruteEst(state,card);
 				break;
+			case Gunner.NAME: estimate = gunnerEst(state,card);
+				break;
 			}
 		}
 		
 		return estimate + card.getValue();
 	}
 	
+	/**
+	 * The estimate for the gunner card
+	 * @param state state the gunner is being played in
+	 * @param card the card being played
+	 * @return the estimate for the gunner
+	 */
+	private int gunnerEst(GameState state, Card card) {
+		// Need to use however I estimate sabers, nothing right now
+		return 0;
+	}
+
 	/**
 	 * The estimate for the brute card
 	 * @param state state the brute is being played in

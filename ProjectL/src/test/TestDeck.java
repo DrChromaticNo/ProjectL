@@ -48,13 +48,13 @@ public class TestDeck implements Deck {
 
 	@Override
 	public ArrayList<Integer> allCards() {
-		int totalCards = 14;
+		int totalCards = 15;
 		ArrayList<Integer> cards = new ArrayList<Integer>(totalCards*2);
 		for(int i = 1; i < totalCards+1; i++)
 		{
 			cards.add(i);
 		}
-		for(int i = totalCards+1; i < (totalCards*2)+1; i++)
+		for(int i = totalCards+1; i < 30; i++)
 		{
 			cards.add(i-totalCards);
 		}
@@ -173,6 +173,7 @@ public class TestDeck implements Deck {
 		map.put(12, new FreedSlave());
 		map.put(13, new Mutineer());
 		map.put(14, new Brute());
+		map.put(15, new Gunner());
 		
 		return map;
 	}
