@@ -59,4 +59,39 @@ public class CardInfo implements Serializable {
 		return desc;
 	}
 	
+	@Override
+	public boolean equals(Object arg0)
+	{
+		if(arg0 instanceof CardInfo)
+		{
+			CardInfo info2 = (CardInfo) arg0;
+			if(this.faction.equals(info2.faction))
+			{
+				if(this.value == info2.value)
+				{
+					if(this.silver == info2.silver)
+					{
+						if(this.abbrv.equals(info2.abbrv))
+						{
+							if(this.name.equals(info2.name))
+							{
+								if(this.desc.equals(info2.desc))
+								{
+									return true;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return faction.hashCode()*value*silver*abbrv.hashCode()*name.hashCode()*desc.hashCode();
+	}
+	
 }

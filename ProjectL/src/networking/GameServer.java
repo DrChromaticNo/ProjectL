@@ -3,7 +3,6 @@ package networking;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -49,17 +48,12 @@ public class GameServer {
 	public void writeGameState (GameInfo state)
 	{
 	    try {
-			PrintWriter printOut =
-			        new PrintWriter(client.getOutputStream(), true);
-			printOut.write(GAMESTATE);
-			printOut.flush();
-			printOut.close();
-			
 			ObjectOutputStream objOut =
 					new ObjectOutputStream(client.getOutputStream());
+			objOut.writeObject(GAMESTATE);
 			objOut.writeObject(state);
 			objOut.flush();
-			objOut.close();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -73,23 +67,20 @@ public class GameServer {
 	 */
 	public CardInfo writeCardChoice(String prompt, CardInfo[] choices)
 	{
-		PrintWriter printOut;
 		try {
-			printOut = new PrintWriter(client.getOutputStream(), true);
-			printOut.write(CARD_CHOICE);
-			printOut.flush();
-			printOut.close();
-			
 			ObjectOutputStream objOut =
 					new ObjectOutputStream(client.getOutputStream());
+			objOut.writeObject(CARD_CHOICE);
+			
 			objOut.writeObject(prompt);
 			objOut.writeObject(choices);
 			objOut.flush();
-			objOut.close();
 			
 			ObjectInputStream objIn =
 					new ObjectInputStream(client.getInputStream());
 			CardInfo info = (CardInfo) objIn.readObject();
+			
+			objOut.close();
 			objIn.close();
 			
 			return info;
@@ -110,23 +101,20 @@ public class GameServer {
 	 */
 	public String writeTreasureChoice(String prompt, Loot loot)
 	{
-		PrintWriter printOut;
 		try {
-			printOut = new PrintWriter(client.getOutputStream(), true);
-			printOut.write(TREASURE_CHOICE);
-			printOut.flush();
-			printOut.close();
-			
 			ObjectOutputStream objOut =
 					new ObjectOutputStream(client.getOutputStream());
+			objOut.writeObject(TREASURE_CHOICE);
+
 			objOut.writeObject(prompt);
 			objOut.writeObject(loot);
 			objOut.flush();
-			objOut.close();
 			
 			ObjectInputStream objIn =
 					new ObjectInputStream(client.getInputStream());
 			String choice = (String) objIn.readObject();
+			
+			objOut.close();
 			objIn.close();
 			
 			return choice;
@@ -147,23 +135,20 @@ public class GameServer {
 	 */
 	public String writeGeneralChoice(String prompt, String[] choices)
 	{
-		PrintWriter printOut;
 		try {
-			printOut = new PrintWriter(client.getOutputStream(), true);
-			printOut.write(GENERAL_CHOICE);
-			printOut.flush();
-			printOut.close();
-			
 			ObjectOutputStream objOut =
 					new ObjectOutputStream(client.getOutputStream());
+			objOut.writeObject(GENERAL_CHOICE);
+			
 			objOut.writeObject(prompt);
 			objOut.writeObject(choices);
 			objOut.flush();
-			objOut.close();
 			
 			ObjectInputStream objIn =
 					new ObjectInputStream(client.getInputStream());
 			String choice = (String) objIn.readObject();
+			
+			objOut.close();
 			objIn.close();
 			
 			return choice;
@@ -182,15 +167,15 @@ public class GameServer {
 	 */
 	public void writeLog(String message)
 	{
-		PrintWriter printOut;
 		try {
-			printOut = new PrintWriter(client.getOutputStream(), true);
-			printOut.write(LOG);
-			printOut.write(message);
-			printOut.flush();
-			printOut.close();
+			ObjectOutputStream objOut =
+					new ObjectOutputStream(client.getOutputStream());
+			
+			objOut.writeObject(LOG);
+			objOut.writeObject(message);
+			
+			objOut.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -202,14 +187,14 @@ public class GameServer {
 	 */
 	public void writeDialog(String title, String message)
 	{
-		PrintWriter printOut;
 		try {
-			printOut = new PrintWriter(client.getOutputStream(), true);
-			printOut.write(DIALOG);
-			printOut.write(title);
-			printOut.write(message);
-			printOut.flush();
-			printOut.close();
+			ObjectOutputStream objOut =
+					new ObjectOutputStream(client.getOutputStream());
+			
+			objOut.writeObject(DIALOG);
+			objOut.writeObject(title);
+			objOut.writeObject(message);
+			objOut.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -220,12 +205,11 @@ public class GameServer {
 	 */
 	public void writeLaunchCommand()
 	{
-		PrintWriter printOut;
 		try {
-			printOut = new PrintWriter(client.getOutputStream(), true);
-			printOut.write(LAUNCH);
-			printOut.flush();
-			printOut.close();
+			ObjectOutputStream objOut =
+					new ObjectOutputStream(client.getOutputStream());
+			objOut.writeObject(LAUNCH);
+			objOut.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

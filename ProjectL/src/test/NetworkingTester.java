@@ -34,6 +34,7 @@ public class NetworkingTester {
 	        public void run () {
 	        	while(true)
 	        	{
+		        	client.connect();
 	        		client.read();
 	        	}
 	        }

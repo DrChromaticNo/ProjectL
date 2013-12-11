@@ -2,9 +2,7 @@ package networking;
 
 import gui.GUI;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream; 
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -19,6 +17,7 @@ public class GameClient {
 	private Socket socket;
 	private boolean connected;
 	private GUI g;
+	private ObjectInputStream objIn;
 	
 	public GameClient(int port, String name, GUI g)
 	{
@@ -45,10 +44,8 @@ public class GameClient {
 		if(connected)
 		{
 			try {
-				BufferedReader in = new BufferedReader(
-				        new InputStreamReader(socket.getInputStream()));
-				String line = in.readLine();
-				in.close();
+				objIn = new ObjectInputStream(socket.getInputStream());
+				String line = (String) objIn.readObject();
 				
 				switch(line){
 				case GameServer.GAMESTATE: {
@@ -62,7 +59,6 @@ public class GameClient {
 							new ObjectOutputStream(socket.getOutputStream());
 					objOut.writeObject(choice);
 					objOut.flush();
-					objOut.close();
 					break;
 				}
 				
@@ -72,7 +68,6 @@ public class GameClient {
 							new ObjectOutputStream(socket.getOutputStream());
 					objOut.writeObject(choice);
 					objOut.flush();
-					objOut.close();
 					break;
 				}
 				
@@ -82,7 +77,6 @@ public class GameClient {
 							new ObjectOutputStream(socket.getOutputStream());
 					objOut.writeObject(choice);
 					objOut.flush();
-					objOut.close();
 					break;
 				}
 				
@@ -102,9 +96,11 @@ public class GameClient {
 				}
 				
 				};
-			} catch (IOException e) {
+			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
+			
+			connected = false;
 		}
 	}
 	
@@ -117,9 +113,9 @@ public class GameClient {
 		if(connected)
 		{
 			try {
-				ObjectInputStream objIn =
-						new ObjectInputStream(socket.getInputStream());
 				GameInfo info = (GameInfo) objIn.readObject();
+				
+				objIn.close();
 				return info;
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
@@ -137,8 +133,6 @@ public class GameClient {
 		if(connected)
 		{
 			try {
-				ObjectInputStream objIn =
-						new ObjectInputStream(socket.getInputStream());
 				String prompt = (String) objIn.readObject();
 				CardInfo[] infos = (CardInfo[]) objIn.readObject();
 				
@@ -159,8 +153,6 @@ public class GameClient {
 		if(connected)
 		{
 			try {
-				ObjectInputStream objIn =
-						new ObjectInputStream(socket.getInputStream());
 				String prompt = (String) objIn.readObject();
 				Loot loot = (Loot) objIn.readObject();
 				
@@ -181,8 +173,6 @@ public class GameClient {
 		if(connected)
 		{
 			try {
-				ObjectInputStream objIn =
-						new ObjectInputStream(socket.getInputStream());
 				String prompt = (String) objIn.readObject();
 				String[] choices = (String[]) objIn.readObject();
 				
@@ -199,11 +189,10 @@ public class GameClient {
 	 */
 	public void readLog()
 	{
-		ObjectInputStream objIn;
 		try {
-			objIn = new ObjectInputStream(socket.getInputStream());
 			String message = (String) objIn.readObject();
 			
+			objIn.close();
 			g.displayLogMessage(message);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -218,12 +207,11 @@ public class GameClient {
 	 */
 	public void readDialog()
 	{
-		ObjectInputStream objIn;
 		try {
-			objIn = new ObjectInputStream(socket.getInputStream());
 			String title = (String) objIn.readObject();
 			String message = (String) objIn.readObject();
 			
+			objIn.close();
 			g.displayDialog(title, message);
 		} catch (IOException e) {
 			e.printStackTrace();
