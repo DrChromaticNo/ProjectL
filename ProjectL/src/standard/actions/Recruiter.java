@@ -69,8 +69,8 @@ public class Recruiter implements Action {
 					return state;
 				}
 				
-				Card choice = p.getGUI().makeChoice("Choose one of these cards to recruit from your den:",
-						p.getDen().toArray(new Card[0]));
+				Card choice = GUIInterfacer.makeCardChoice("Choose one of these cards to recruit from your den:",
+						p.getDen().toArray(new Card[0]), p.getGUI());
 				
 				for(Card c : p.getDen())
 				{

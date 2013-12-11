@@ -138,10 +138,10 @@ public class PickTreasure {
 				HashSet<Card> total = new HashSet<Card>(leftSet);
 				total.addAll(rightSet);
 				
-				Card choice = state.getPlayer(faction).getGUI().makeChoice("Since you chose a saber, " +
+				Card choice = GUIInterfacer.makeCardChoice("Since you chose a saber, " +
 						"choose a pirate in one of your neighbor's dens to kill:", 
-						total.toArray(new Card[total.size()]));
-				
+						total.toArray(new Card[total.size()]),
+						state.getPlayer(faction).getGUI());
 				
 				for(Card c : leftSet)
 				{

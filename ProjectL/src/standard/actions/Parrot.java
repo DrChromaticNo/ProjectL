@@ -84,10 +84,10 @@ public class Parrot implements Action {
 			return result;
 		}
 		else
-		{
+		{	
+			Card choice = GUIInterfacer.makeCardChoice("Choose a card from your hand to replace the parrot: ",
+					p.getHand().toArray(new Card[0]), p.getGUI());
 			
-			Card choice = p.getGUI().makeChoice("Choose a card from your hand to replace the parrot: ",
-					p.getHand().toArray(new Card[0]));
 			GameState end = getParrotState(state, card, choice);
 			
 			state.log(Faction.getPirateName(faction) + "'s Parrot (" + card.abbreviate() + 

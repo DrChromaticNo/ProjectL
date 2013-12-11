@@ -106,9 +106,9 @@ public class Gunner implements Action {
 			log = log + " killed " + map.get(endState) + "!";
 		}
 		else
-		{
-			Card choice = endState.getPlayer(faction).getGUI()
-					.makeChoice("Choose a card for the Gunner to shoot:", possibleArray);
+		{	
+			Card choice = GUIInterfacer.makeCardChoice("Choose a card for the Gunner to shoot:", possibleArray, 
+					endState.getPlayer(faction).getGUI());
 			
 			Player widower = endState.getPlayer(choice.getFaction());
 			widower.removeFromDen(choice);
