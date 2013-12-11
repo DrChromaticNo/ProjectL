@@ -32,6 +32,10 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import networking.CardInfo;
+import networking.GameInfo;
+import networking.PlayerInfo;
+
 import cards.Card;
 
 import players.Faction;
@@ -62,7 +66,7 @@ public class TestGUI implements GUI {
 	//The frame which holds the previous 3 panels
 	private JFrame playerScreen;
 	//The gamestate that this UI will pull its info from
-	private GameState latest;
+	private GameInfo latest;
 	//The object to serve the various icons
 	private IconServer iServer;
 	//A map to help connect treasures to icons that represent them
@@ -70,7 +74,7 @@ public class TestGUI implements GUI {
 	//The component that spawns all user prompt dialogs
 	private JOptionPane dialogSpawner;
 	//The cache to hold the icons
-	private Cache<Card,Icon> iconCache;
+	private Cache<CardInfo,Icon> iconCache;
 	
 	private static final int GUI_WIDTH = 800;
 	private static final int GUI_HEIGHT = 660;
@@ -84,7 +88,7 @@ public class TestGUI implements GUI {
 	public TestGUI(Color faction)
 	{
 		//Setting up the icon cache
-		iconCache = new Cache<Card,Icon>(ICON_CACHE_SIZE);
+		iconCache = new Cache<CardInfo,Icon>(ICON_CACHE_SIZE);
 		
 		//Handling the main player GUI
 		this.faction = faction;
@@ -158,8 +162,8 @@ public class TestGUI implements GUI {
 	}
 	
 	@Override
-	public void update(GameState state) {
-		latest = new GameState(state);
+	public void update(GameInfo state) {
+		latest = state;
 		Thread t = new Thread() {
 
 	        public void run () {
@@ -189,7 +193,7 @@ public class TestGUI implements GUI {
 	private void updateOpponentPanel()
 	{
 		opponentPanel.removeAll();
-		Player[] playerList = latest.getPlayerList();
+		PlayerInfo[] playerList = latest.getPList();
 		
 		int index = 0;
 		
@@ -200,7 +204,7 @@ public class TestGUI implements GUI {
 		
 		int end = index;
 		int writer = 0;
-		Player[] opponentList = new Player[playerList.length-1];
+		PlayerInfo[] opponentList = new PlayerInfo[playerList.length-1];
 		index--;
 		while(end != index)
 		{
@@ -219,7 +223,7 @@ public class TestGUI implements GUI {
 		opponentPanel.setLayout(
 				new GridLayout(1, opponentList.length));
 		
-		for(Player p : opponentList)
+		for(PlayerInfo p : opponentList)
 		{
 			opponentPanel.add(getOpponentPortrait(p));
 		}
@@ -232,7 +236,7 @@ public class TestGUI implements GUI {
 	 * @param player the panel is being generated for
 	 * @return the panel displaying the data relevant to the given player, as an opponent
 	 */
-	private JPanel getOpponentPortrait(Player player)
+	private JPanel getOpponentPortrait(PlayerInfo player)
 	{
 		JPanel panel = new JPanel();
 		
@@ -252,7 +256,7 @@ public class TestGUI implements GUI {
 			label.setHorizontalAlignment(SwingConstants.CENTER);
 			panel.add(label);
 			panel.add(getCardGroupDisplayPanel(player
-					.getDen().toArray(new Card[0])));
+					.getDen().toArray(new CardInfo[0])));
 		}
 		
 		panel.setBorder(BorderFactory
@@ -269,14 +273,14 @@ public class TestGUI implements GUI {
 		gamePanel.removeAll();
 		gamePanel.setLayout(new GridLayout(2,6));
 		
-		Card[] deck = latest.getBoard().getDeck();
+		CardInfo[] deck = latest.getBoard().getDeck();
 		
 		for(int i = 0; i < 6-deck.length; i++)
 		{
 			gamePanel.add(new JLabel());
 		}
 	
-		for(Card c : deck)
+		for(CardInfo c : deck)
 		{
 			JLabel label = getClickableCardLabel(c);
 			
@@ -289,7 +293,7 @@ public class TestGUI implements GUI {
 		{
 			
 			JPanel panel = getTreasureDisplayPanel(latest
-					.getBoard().getLoot(i), 6);
+					.getBoard().getLoot()[i], 6);
 			
 			if(latest.getDay() == i)
 			{
@@ -311,7 +315,7 @@ public class TestGUI implements GUI {
 	 */
 	private void updatePlayerPanel()
 	{
-		Player player = latest.getPlayer(faction);
+		PlayerInfo player = latest.getPlayer(faction);
 		playerPanel.removeAll();
 		playerPanel.setLayout(new FlowLayout());
 		
@@ -331,7 +335,7 @@ public class TestGUI implements GUI {
 	 * Updates the discard pile in the player panel
 	 * @param player the player whose discard pile is being updated
 	 */
-	private void updatePlayerDiscardPile(Player player)
+	private void updatePlayerDiscardPile(PlayerInfo player)
 	{
 		if(player.getDiscard().isEmpty())
 		{
@@ -343,7 +347,7 @@ public class TestGUI implements GUI {
 			discardPile.setLayout(new BoxLayout(discardPile, BoxLayout.Y_AXIS));
 			discardPile.add(new JLabel("Discard", SwingConstants.CENTER));
 			discardPile.add(getCardGroupDisplayPanel(player.getDiscard()
-					.toArray(new Card[0])));
+					.toArray(new CardInfo[0])));
 			
 			playerPanel.add(discardPile);
 		}
@@ -353,7 +357,7 @@ public class TestGUI implements GUI {
 	 * Updates the display which houses the gold, score, and log button
 	 * @param player the player who owns the display
 	 */
-	private void updatePlayerGoldScoreLog(Player player)
+	private void updatePlayerGoldScoreLog(PlayerInfo player)
 	{
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -399,7 +403,7 @@ public class TestGUI implements GUI {
 	 * Displays the player name, score, and gold counter
 	 * @param player the player whose gold score and name are being updated
 	 */
-	private JPanel getGoldScoreDisplayPanel(Player player)
+	private JPanel getGoldScoreDisplayPanel(PlayerInfo player)
 	{
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -480,7 +484,7 @@ public class TestGUI implements GUI {
 	 * Updates the den and hand display for the given player on the player panel
 	 * @param player the player whose den and hand need to be updated
 	 */
-	private void updatePlayerDenAndHand(Player player)
+	private void updatePlayerDenAndHand(PlayerInfo player)
 	{
 		JPanel denAndHand = new JPanel();
 		
@@ -496,7 +500,7 @@ public class TestGUI implements GUI {
 			denAndHand.add(new JLabel("Hand"),
 					SwingConstants.CENTER);
 			denAndHand.add(getCardGroupDisplayPanel(player.getHand()
-					.toArray(new Card[0])));
+					.toArray(new CardInfo[0])));
 		}
 		
 		if(player.getDen().isEmpty())
@@ -509,7 +513,7 @@ public class TestGUI implements GUI {
 			denAndHand.add(new JLabel("Den",
 					SwingConstants.CENTER));
 			denAndHand.add(getCardGroupDisplayPanel(player.getDen()
-					.toArray(new Card[0])));
+					.toArray(new CardInfo[0])));
 		}
 		
 		playerPanel.add(denAndHand);
@@ -520,11 +524,11 @@ public class TestGUI implements GUI {
 	 * @param cards the cards whose icons will be displayed
 	 * @return the panel displaying a list of the card icons
 	 */
-	private JPanel getCardGroupDisplayPanel(Card[] cards)
+	private JPanel getCardGroupDisplayPanel(CardInfo[] cards)
 	{
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		
-		for(Card c : cards)
+		for(CardInfo c : cards)
 		{
 			JLabel label = getClickableCardLabel(c);
 			
@@ -539,7 +543,7 @@ public class TestGUI implements GUI {
 	 * @param c the card to get the clickable lavel for
 	 * @return the clickable label with the card icon
 	 */
-	private JLabel getClickableCardLabel(final Card c)
+	private JLabel getClickableCardLabel(final CardInfo c)
 	{
 		JLabel label = new JLabel();
 		
@@ -556,8 +560,7 @@ public class TestGUI implements GUI {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				
-				JFrame frame = new JFrame(latest
-						.getDeck().getCardName(c));
+				JFrame frame = new JFrame(c.getName());
 				
 				JPanel image = new JPanel();
 				frame.add(image);
@@ -658,7 +661,7 @@ public class TestGUI implements GUI {
 	 * @param card the card for which to display an icon
 	 * @return the icon corresponding to the card
 	 */
-	private Icon getCardIcon(Card card) {
+	private Icon getCardIcon(CardInfo card) {
 		
 		Icon icon = iconCache.get(card);
 		
@@ -747,12 +750,12 @@ public class TestGUI implements GUI {
 	}
 
 	@Override
-	public Card makeChoice(String prompt, Card[] cards) {
-		HashMap<Icon, Card> dict = new HashMap<Icon, Card>();
+	public CardInfo makeChoice(String prompt, CardInfo[] cards) {
+		HashMap<Icon, CardInfo> dict = new HashMap<Icon, CardInfo>();
 		Icon[] icons = new Icon[cards.length];
 		int index = 0;
 		
-		for(Card c : cards)
+		for(CardInfo c : cards)
 		{
 			ImageIcon icon = (ImageIcon) getCardIcon(c);
 			
@@ -814,15 +817,14 @@ public class TestGUI implements GUI {
 	 * @param card the card to get the info panel for
 	 * @return the info panel for that card
 	 */
-	private JPanel getFullCardInfoPanel(Card card)
+	private JPanel getFullCardInfoPanel(CardInfo card)
 	{
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
-		int silver = latest.getDeck()
-			.getSilverNum(card.getFaction(), card.getValue());
+		int silver = card.getSilver();
 		
-		String desc = latest.getDeck().getCardDesc(card);
+		String desc = card.getDesc();
 		
 		String valueInfo = "Value: " + card.getValue();
 		

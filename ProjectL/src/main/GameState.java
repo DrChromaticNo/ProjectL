@@ -2,6 +2,9 @@ package main;
 
 import java.awt.Color;
 
+import networking.GameInfo;
+import networking.PlayerInfo;
+
 import cards.Deck;
 
 import players.Player;
@@ -14,7 +17,6 @@ import score.TreasureBag;
  */
 
 public class GameState {
-
 	//note, the players are ordered in clockwise orientation (the turn order and seating)
 	private Player[] pList;
 	private Board board;
@@ -162,7 +164,7 @@ public class GameState {
 			if(!p.checkCPU())
 			{
 				human = true;
-				p.getGUI().update(this);
+				p.getGUI().update(getGI());
 			}
 		}
 		
@@ -183,6 +185,22 @@ public class GameState {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Spits out the game info that refers to this state
+	 * @return the GI corresponding to this state
+	 */
+	public GameInfo getGI()
+	{
+		PlayerInfo[] infos = new PlayerInfo[pList.length];
+		
+		for(int i = 0; i < pList.length; i++)
+		{
+			infos[i] = pList[i].getPI();
+		}
+		
+		return new GameInfo(infos, board.getBI(), week, day, time, drawCards);
 	}
 	
 	/**

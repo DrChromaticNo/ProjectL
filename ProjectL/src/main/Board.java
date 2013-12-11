@@ -1,7 +1,11 @@
 package main;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import networking.BoardInfo;
+import networking.CardInfo;
 
 import score.Loot;
 import score.Treasure;
@@ -130,6 +134,21 @@ public class Board {
 	@Override public int hashCode()
 	{
 		return deck.hashCode()*shipLoot.length;
+	}
+	
+	/**
+	 * Returns the boardinfo for this board
+	 * @return
+	 */
+	public BoardInfo getBI()
+	{
+		CardInfo[] cards = new CardInfo[deck.size()];
+		for(int i = 0; i < cards.length; i++)
+		{
+			cards[i] = deck.get(i).getCI();
+		}
+		
+		return new BoardInfo(cards, shipLoot);
 	}
 	
 }

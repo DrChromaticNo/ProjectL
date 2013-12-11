@@ -1,8 +1,8 @@
 package gui;
 
+import networking.CardInfo;
+import networking.GameInfo;
 import score.Loot;
-import cards.Card;
-import main.GameState;
 
 /**
  * Objects created with this interface should represent a given player's current status and should be able to
@@ -17,7 +17,7 @@ public interface GUI {
 	 * Updates the gui to reflect the passed state
 	 * @param state the state to update the gui to reflect
 	 */
-	public void update(GameState state);
+	public void update(GameInfo state);
 	
 	/**
 	 * Displays the passed message in the GUI log
@@ -37,7 +37,7 @@ public interface GUI {
 	 * @param cards the cards to be chosen from
 	 * @return the choice that the user makes
 	 */
-	public Card makeChoice(String prompt, Card[] cards);
+	public CardInfo makeChoice(String prompt, CardInfo[] cards);
 	
 	/**
 	 * Prompts the player to choose from a loot bag

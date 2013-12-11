@@ -6,6 +6,9 @@ import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
 
+import networking.CardInfo;
+import networking.PlayerInfo;
+
 import ai.AI;
 
 import main.GameState;
@@ -25,7 +28,7 @@ public class Player {
 
 	//which faction this player is
 	private Color faction;
-	// true if the player is a CPU, false if not (CPU not yet implemented so will always be false)
+	// true if the player is a CPU, false if not
 	private boolean CPU;
 	// the players current accessible gold
 	private int gold;
@@ -212,8 +215,23 @@ public class Player {
 		}
 		else
 		{	
-			chosenCard = gui.makeChoice
-					("Please choose a card from your hand to play:", cards);
+			CardInfo[] CIs = new CardInfo[cards.length];
+			for(int i = 0; i < cards.length; i++)
+			{
+				CIs[i] = cards[i].getCI();
+			}
+			
+			CardInfo chosenCI = gui.makeChoice
+					("Please choose a card from your hand to play:", CIs);
+			
+			for(Card c : cards)
+			{
+				if(c.getValue() == chosenCI.getValue())
+				{
+					chosenCard = c;
+					break;
+				}
+			}
 		}
 		
 		return chosenCard;
@@ -241,6 +259,28 @@ public class Player {
 	public AI getAI()
 	{
 		return ai;
+	}
+	
+	/**
+	 * Generates the playerinfo for this player
+	 * @return
+	 */
+	public PlayerInfo getPI()
+	{
+		HashSet<CardInfo> handCI = new HashSet<CardInfo>();
+		for(Card c : hand)
+			handCI.add(c.getCI());
+		
+		HashSet<CardInfo> denCI = new HashSet<CardInfo>();
+		for(Card c : den)
+			denCI.add(c.getCI());
+		
+		HashSet<CardInfo> discardCI = new HashSet<CardInfo>();
+		for(Card c : discard)
+			discardCI.add(c.getCI());
+		
+		return new PlayerInfo(faction, CPU, gold, 
+				score, loot, handCI, discardCI, denCI);
 	}
 	
 	@Override public boolean equals(Object other)

@@ -1,9 +1,11 @@
 package score;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Loot {
+public class Loot implements Serializable {
 
+	private static final long serialVersionUID = -9071743227697984746L;
 	private HashMap<String, Integer> loot;
 	
 	/**

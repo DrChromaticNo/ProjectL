@@ -2,6 +2,8 @@ package cards;
 
 import java.awt.Color;
 
+import networking.CardInfo;
+
 
 import main.GameState;
 import main.Time;
@@ -24,7 +26,7 @@ public class Card implements Comparable<Card>{
 	
 	/**
 	 * Initializes the card with the given faction, value, and deck
-	 * @param faction the faction to associte w/ this card
+	 * @param faction the faction to associate w/ this card
 	 * @param value the value to associate w/ this card
 	 * @param deck the deck this card "belongs to"
 	 */
@@ -272,6 +274,16 @@ public class Card implements Comparable<Card>{
 	public String toString()
 	{
 		return abbreviate();
+	}
+	
+	/**
+	 * Returns the CardInfo corresponding to this card
+	 * @return Returns the CardInfo corresponding to this card
+	 */
+	public CardInfo getCI()
+	{
+		return new CardInfo(faction, value, silverNum, abbreviate(), 
+				deck.getCardName(this), deck.getCardDesc(this));
 	}
 	
 }
