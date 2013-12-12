@@ -15,6 +15,7 @@ import main.GameState;
 
 import score.Loot;
 import score.Treasure;
+import standard.actions.GUIInterfacer;
 
 import cards.Card;
 
@@ -215,23 +216,8 @@ public class Player {
 		}
 		else
 		{	
-			CardInfo[] CIs = new CardInfo[cards.length];
-			for(int i = 0; i < cards.length; i++)
-			{
-				CIs[i] = cards[i].getCI();
-			}
-			
-			CardInfo chosenCI = gui.makeChoice
-					("Please choose a card from your hand to play:", CIs);
-			
-			for(Card c : cards)
-			{
-				if(c.getValue() == chosenCI.getValue())
-				{
-					chosenCard = c;
-					break;
-				}
-			}
+			chosenCard = GUIInterfacer.makeCardChoice("Please choose a card from your hand to play:",
+					cards, gui);
 		}
 		
 		return chosenCard;

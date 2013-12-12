@@ -32,9 +32,10 @@ public class NetworkingTester {
 		
 		Thread t = new Thread() {
 	        public void run () {
+	        	
+	        	client.connect();
 	        	while(true)
 	        	{
-		        	client.connect();
 	        		client.read();
 	        	}
 	        }

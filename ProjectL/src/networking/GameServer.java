@@ -80,9 +80,6 @@ public class GameServer {
 					new ObjectInputStream(client.getInputStream());
 			CardInfo info = (CardInfo) objIn.readObject();
 			
-			objOut.close();
-			objIn.close();
-			
 			return info;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -114,9 +111,6 @@ public class GameServer {
 					new ObjectInputStream(client.getInputStream());
 			String choice = (String) objIn.readObject();
 			
-			objOut.close();
-			objIn.close();
-			
 			return choice;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -147,9 +141,6 @@ public class GameServer {
 			ObjectInputStream objIn =
 					new ObjectInputStream(client.getInputStream());
 			String choice = (String) objIn.readObject();
-			
-			objOut.close();
-			objIn.close();
 			
 			return choice;
 		} catch (IOException e) {

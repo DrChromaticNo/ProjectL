@@ -99,8 +99,6 @@ public class GameClient {
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-			
-			connected = false;
 		}
 	}
 	
@@ -115,7 +113,6 @@ public class GameClient {
 			try {
 				GameInfo info = (GameInfo) objIn.readObject();
 				
-				objIn.close();
 				return info;
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
@@ -192,7 +189,6 @@ public class GameClient {
 		try {
 			String message = (String) objIn.readObject();
 			
-			objIn.close();
 			g.displayLogMessage(message);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -211,7 +207,6 @@ public class GameClient {
 			String title = (String) objIn.readObject();
 			String message = (String) objIn.readObject();
 			
-			objIn.close();
 			g.displayDialog(title, message);
 		} catch (IOException e) {
 			e.printStackTrace();

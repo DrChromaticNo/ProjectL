@@ -14,38 +14,31 @@ public class NetworkGUI implements GUI {
 	
 	@Override
 	public void update(GameInfo state) {
-		server.getClient();
 		server.writeGameState(state);
 	}
 
 	@Override
 	public void displayLogMessage(String message) {
-		server.getClient();
 		server.writeLog(message);
-		
 	}
 
 	@Override
 	public void displayDialog(String title, String message) {
-		server.getClient();
 		server.writeDialog(title, message);
 	}
 
 	@Override
 	public CardInfo makeChoice(String prompt, CardInfo[] cards) {
-		server.getClient();
 		return server.writeCardChoice(prompt, cards);
 	}
 
 	@Override
 	public String makeChoice(String prompt, Loot loot) {
-		server.getClient();
 		return server.writeTreasureChoice(prompt, loot);
 	}
 
 	@Override
 	public String makeChoice(String prompt, String[] choices) {
-		server.getClient();
 		return server.writeGeneralChoice(prompt, choices);
 	}
 

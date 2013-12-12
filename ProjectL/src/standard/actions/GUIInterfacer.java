@@ -29,7 +29,6 @@ public class GUIInterfacer {
 		
 		CardInfo choice = gui.makeChoice(text, infos);
 		
-		//This might be broken
 		return map.get(choice);
 	}
 	
