@@ -26,6 +26,7 @@ public class FrontMenu implements ActionListener {
 	private static final String MENU_TITLE = "Main Menu";
 	private static final String GAME_TITLE = "Libertalia";
 	private static final String PLAY_ACTION = "play";
+	private static final String JOIN_ACTION = "join";
 	private JFrame frame;
 	
 	/**
@@ -72,6 +73,8 @@ public class FrontMenu implements ActionListener {
 		JButton host = new JButton("Host");
 		
 		JButton join = new JButton("Join");
+		join.setActionCommand(JOIN_ACTION);
+		join.addActionListener(this);
 		
 		Dimension buttonDim = new Dimension(BUTTON_X, BUTTON_Y);
 		play.setPreferredSize(buttonDim);
@@ -121,18 +124,23 @@ public class FrontMenu implements ActionListener {
 		{
 			PlayMenu play = new PlayMenu();
 			play.launch();
-			
-			Thread t = new Thread() {
-		        public void run () {
-						SwingUtilities.invokeLater(new Runnable() {
-						    public void run () {
-						    	frame.dispose();
-						    }
-						});
-		        }
-		    };
-		    t.start();	
 		}
+		else if(arg0.getActionCommand().equals(JOIN_ACTION))
+		{
+			JoinMenu menu = new JoinMenu();
+			menu.launch();
+		}
+		
+		Thread t = new Thread() {
+	        public void run () {
+					SwingUtilities.invokeLater(new Runnable() {
+					    public void run () {
+					    	frame.dispose();
+					    }
+					});
+	        }
+	    };
+	    t.start();	
 	}
 	
 }
